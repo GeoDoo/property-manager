@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PropertyController {
     @GetMapping("/property")
     public Property property() {
-        int price = 450000;
+        var price = 450000;
 
         return new Property(price);
     }
