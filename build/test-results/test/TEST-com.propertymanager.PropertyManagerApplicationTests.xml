@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.propertymanager.PropertyManagerApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-03-24T19:32:30" hostname="georgioskarametas-MacBook-Pro" time="0.348">
+  <properties/>
+  <testcase name="contextLoads()" classname="com.propertymanager.PropertyManagerApplicationTests" time="0.348"/>
+  <system-out><![CDATA[19:32:22.929 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.propertymanager.PropertyManagerApplicationTests]: PropertyManagerApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+19:32:22.989 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.propertymanager.PropertyManagerApplication for test class com.propertymanager.PropertyManagerApplicationTests
+19:32:23.036 [Test worker] INFO org.testcontainers.images.PullPolicy -- Image pull policy will be performed by: DefaultPullPolicy()
+19:32:23.037 [Test worker] INFO org.testcontainers.utility.ImageNameSubstitutor -- Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+19:32:23.132 [Test worker] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Loaded org.testcontainers.dockerclient.UnixSocketClientProviderStrategy from ~/.testcontainers.properties, will try it first
+19:32:23.304 [Test worker] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Found Docker environment with local Unix socket (unix:///var/run/docker.sock)
+19:32:23.305 [Test worker] INFO org.testcontainers.DockerClientFactory -- Docker host IP address is localhost
+19:32:23.324 [Test worker] INFO org.testcontainers.DockerClientFactory -- Connected to docker: 
+  Server Version: 24.0.2
+  API Version: 1.43
+  Operating System: Docker Desktop
+  Total Memory: 7950 MB
+19:32:23.349 [Test worker] INFO tc.testcontainers/ryuk:0.6.0 -- Pulling docker image: testcontainers/ryuk:0.6.0. Please be patient; this may take some time but only needs to be done once.
+19:32:23.786 [Test worker] INFO org.testcontainers.utility.RegistryAuthLocator -- Credential helper/store (docker-credential-desktop) does not have credentials for https://index.docker.io/v1/
+19:32:25.318 [docker-java-stream--2052477011] INFO tc.testcontainers/ryuk:0.6.0 -- Starting to pull image
+19:32:25.341 [docker-java-stream--2052477011] INFO tc.testcontainers/ryuk:0.6.0 -- Pulling image layers:  0 pending,  0 downloaded,  0 extracted, (0 bytes/0 bytes)
+19:32:26.719 [docker-java-stream--2052477011] INFO tc.testcontainers/ryuk:0.6.0 -- Pulling image layers:  2 pending,  1 downloaded,  0 extracted, (3 MB/? MB)
+19:32:26.862 [docker-java-stream--2052477011] INFO tc.testcontainers/ryuk:0.6.0 -- Pulling image layers:  1 pending,  2 downloaded,  0 extracted, (5 MB/? MB)
+19:32:26.902 [docker-java-stream--2052477011] INFO tc.testcontainers/ryuk:0.6.0 -- Pulling image layers:  0 pending,  3 downloaded,  0 extracted, (5 MB/6 MB)
+19:32:27.045 [docker-java-stream--2052477011] INFO tc.testcontainers/ryuk:0.6.0 -- Pulling image layers:  0 pending,  3 downloaded,  1 extracted, (5 MB/6 MB)
+19:32:27.184 [docker-java-stream--2052477011] INFO tc.testcontainers/ryuk:0.6.0 -- Pulling image layers:  0 pending,  3 downloaded,  2 extracted, (5 MB/6 MB)
+19:32:27.240 [docker-java-stream--2052477011] INFO tc.testcontainers/ryuk:0.6.0 -- Pulling image layers:  0 pending,  3 downloaded,  3 extracted, (6 MB/6 MB)
+19:32:27.251 [docker-java-stream--2052477011] INFO tc.testcontainers/ryuk:0.6.0 -- Pull complete. 3 layers, pulled in 1s (downloaded 6 MB at 6 MB/s)
+19:32:27.251 [Test worker] INFO tc.testcontainers/ryuk:0.6.0 -- Image testcontainers/ryuk:0.6.0 pull took PT3.89981S
+19:32:27.273 [Test worker] INFO tc.testcontainers/ryuk:0.6.0 -- Creating container for image: testcontainers/ryuk:0.6.0
+19:32:27.387 [Test worker] INFO tc.testcontainers/ryuk:0.6.0 -- Container testcontainers/ryuk:0.6.0 is starting: cbd0f531e9e41a86cfffa1262512bebd1345cf717cf1b8d70c86ca3590a0e5d2
+19:32:27.663 [Test worker] INFO tc.testcontainers/ryuk:0.6.0 -- Container testcontainers/ryuk:0.6.0 started in PT0.389908S
+19:32:27.669 [Test worker] INFO org.testcontainers.utility.RyukResourceReaper -- Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+19:32:27.670 [Test worker] INFO org.testcontainers.DockerClientFactory -- Checking the system...
+19:32:27.670 [Test worker] INFO org.testcontainers.DockerClientFactory -- ✔︎ Docker server version should be at least 1.6.0
+19:32:27.670 [Test worker] INFO tc.postgres:14-alpine -- Creating container for image: postgres:14-alpine
+19:32:27.705 [Test worker] INFO tc.postgres:14-alpine -- Container postgres:14-alpine is starting: d11acba316267fec043886ce4f90759d8ade15a596a1664c7d8c7d12d6fa4623
+19:32:29.103 [Test worker] INFO tc.postgres:14-alpine -- Container postgres:14-alpine started in PT1.432123S
+19:32:29.104 [Test worker] INFO tc.postgres:14-alpine -- Container is started (JDBC URL: jdbc:postgresql://localhost:54593/test?loggerLevel=OFF)
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.3)
+
+2025-03-24T19:32:29.436Z  INFO 85744 --- [    Test worker] c.p.PropertyManagerApplicationTests      : Starting PropertyManagerApplicationTests using Java 21.0.3 with PID 85744 (started by georgios.karametas in /Users/georgios.karametas/Dev/property-manager)
+2025-03-24T19:32:29.437Z  INFO 85744 --- [    Test worker] c.p.PropertyManagerApplicationTests      : No active profile set, falling back to 1 default profile: "default"
+2025-03-24T19:32:29.708Z  INFO 85744 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-03-24T19:32:29.730Z  INFO 85744 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 18 ms. Found 1 JPA repository interface.
+2025-03-24T19:32:29.927Z  INFO 85744 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-03-24T19:32:29.949Z  INFO 85744 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2025-03-24T19:32:29.961Z  INFO 85744 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-03-24T19:32:30.059Z  INFO 85744 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-03-24T19:32:30.070Z  INFO 85744 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-03-24T19:32:30.187Z  INFO 85744 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@5ea0a7a9
+2025-03-24T19:32:30.188Z  INFO 85744 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-03-24T19:32:30.205Z  WARN 85744 --- [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-03-24T19:32:30.543Z  INFO 85744 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: 
+    create table properties (
+        id bigserial not null,
+        address varchar(255),
+        bathrooms integer,
+        bedrooms integer,
+        price numeric(38,2),
+        square_footage float(53),
+        primary key (id)
+    )
+2025-03-24T19:32:30.602Z  INFO 85744 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-03-24T19:32:30.672Z  WARN 85744 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-03-24T19:32:30.927Z  INFO 85744 --- [    Test worker] c.p.PropertyManagerApplicationTests      : Started PropertyManagerApplicationTests in 1.795 seconds (process running for 8.449)
+]]></system-out>
+  <system-err><![CDATA[WARNING: A Java agent has been loaded dynamically (/Users/georgios.karametas/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy-agent/1.14.12/be4984cb6fd1ef1d11f218a648889dfda44b8a15/byte-buddy-agent-1.14.12.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+</testsuite>
