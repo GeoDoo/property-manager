@@ -3,9 +3,13 @@ package com.propertyManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.vault.core.VaultTemplate;
+import org.springframework.vault.core.lease.SecretLeaseContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -31,14 +35,20 @@ class ApplicationTests {
 			.withEnv("VAULT_DEV_ROOT_TOKEN_ID", "dev-token")
 			.withEnv("VAULT_DEV_LISTEN_ADDRESS", "0.0.0.0:8200");
 
+	@TestConfiguration
+	static class TestConfig {
+		@Bean
+		SecretLeaseContainer secretLeaseContainer(VaultTemplate vaultTemplate) {
+			return new SecretLeaseContainer(vaultTemplate);
+		}
+	}
+
 	@DynamicPropertySource
 	static void registerProperties(DynamicPropertyRegistry registry) {
-		// Database properties
 		registry.add("spring.datasource.url", postgres::getJdbcUrl);
 		registry.add("spring.datasource.username", postgres::getUsername);
 		registry.add("spring.datasource.password", postgres::getPassword);
 		
-		// Vault properties
 		registry.add("spring.cloud.vault.host", () -> "localhost");
 		registry.add("spring.cloud.vault.port", () -> vault.getMappedPort(8200));
 		registry.add("spring.cloud.vault.scheme", () -> "http");
