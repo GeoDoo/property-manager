@@ -7,8 +7,9 @@ volumes:
 services:
   postgres:
     image: postgres
+    platform: linux/amd64
     ports:
-      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+      - 5444:${POSTGRES_PORT}
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -28,4 +29,4 @@ services:
       - ./volumes/vault/config:/vault/config
     cap_add:
       - IPC_LOCK
-    entrypoint: vault server -config=/vault/config/vault.json
+    entrypoint: vault server -config=/vault/config/vault.hcl
