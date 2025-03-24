@@ -33,7 +33,8 @@ class ApplicationTests {
 	static GenericContainer<?> vault = new GenericContainer<>("hashicorp/vault:1.13")
 			.withExposedPorts(8200)
 			.withEnv("VAULT_DEV_ROOT_TOKEN_ID", "dev-token")
-			.withEnv("VAULT_DEV_LISTEN_ADDRESS", "0.0.0.0:8200");
+			.withEnv("VAULT_DEV_LISTEN_ADDRESS", "0.0.0.0:8200")
+			.withCommand("vault", "server", "-dev");
 
 	@TestConfiguration
 	static class TestConfig {
