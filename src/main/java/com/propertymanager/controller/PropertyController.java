@@ -4,8 +4,6 @@ import com.propertymanager.entity.Property;
 import com.propertymanager.repository.PropertyRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import jakarta.validation.Valid;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -13,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/properties")
-@Validated
+@CrossOrigin(origins = "*")  // Added for development
 public class PropertyController {
 
     private final PropertyRepository propertyRepository;
@@ -38,21 +36,20 @@ public class PropertyController {
     public ResponseEntity<Property> createProperty(@RequestBody Property property) {
         Property savedProperty = propertyRepository.save(property);
         URI location = ServletUriComponentsBuilder
-            .fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(savedProperty.getId())
-            .toUri();
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedProperty.getId())
+                .toUri();
         return ResponseEntity.created(location).body(savedProperty);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Property> updateProperty(
-            @PathVariable Long id,
-            @Valid @RequestBody Property property) {
+    public ResponseEntity<Property> updateProperty(@PathVariable Long id, @RequestBody Property property) {
         return propertyRepository.findById(id)
                 .map(existingProperty -> {
                     property.setId(id);
-                    return ResponseEntity.ok(propertyRepository.save(property));
+                    Property updatedProperty = propertyRepository.save(property);
+                    return ResponseEntity.ok(updatedProperty);
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
