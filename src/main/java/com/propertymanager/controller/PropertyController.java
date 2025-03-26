@@ -6,7 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -33,8 +35,14 @@ public class PropertyController {
     }
 
     @PostMapping
-    public Property createProperty(@Valid @RequestBody Property property) {
-        return propertyRepository.save(property);
+    public ResponseEntity<Property> createProperty(@RequestBody Property property) {
+        Property savedProperty = propertyRepository.save(property);
+        URI location = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(savedProperty.getId())
+            .toUri();
+        return ResponseEntity.created(location).body(savedProperty);
     }
 
     @PutMapping("/{id}")
@@ -51,11 +59,10 @@ public class PropertyController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProperty(@PathVariable Long id) {
-        return propertyRepository.findById(id)
-                .map(property -> {
-                    propertyRepository.delete(property);
-                    return ResponseEntity.ok().<Void>build();
-                })
-                .orElse(ResponseEntity.notFound().build());
+        if (!propertyRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        propertyRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 } 

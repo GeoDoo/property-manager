@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.propertymanager.controller.PropertyControllerTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2025-03-26T10:48:38" hostname="59456e8701d6" time="1.701">
+<testsuite name="com.propertymanager.controller.PropertyControllerTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2025-03-26T10:54:50" hostname="dd384d864225" time="2.167">
   <properties/>
-  <testcase name="getAllProperties_ShouldReturnProperties()" classname="com.propertymanager.controller.PropertyControllerTest" time="1.312"/>
-  <testcase name="getPropertyById_WhenNotExists_ShouldReturn404()" classname="com.propertymanager.controller.PropertyControllerTest" time="0.076"/>
-  <testcase name="getPropertyById_WhenExists_ShouldReturnProperty()" classname="com.propertymanager.controller.PropertyControllerTest" time="0.004"/>
-  <testcase name="createProperty_ShouldReturnCreatedProperty()" classname="com.propertymanager.controller.PropertyControllerTest" time="0.304"/>
-  <system-out><![CDATA[2025-03-26T10:48:36.931Z  INFO 145 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.propertymanager.controller.PropertyControllerTest]: PropertyControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2025-03-26T10:48:37.032Z  INFO 145 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.propertymanager.PropertyManagerApplication for test class com.propertymanager.controller.PropertyControllerTest
+  <testcase name="deleteProperty_WhenExists_ShouldReturn204()" classname="com.propertymanager.controller.PropertyControllerTest" time="1.026"/>
+  <testcase name="getAllProperties_ShouldReturnProperties()" classname="com.propertymanager.controller.PropertyControllerTest" time="0.63"/>
+  <testcase name="deleteProperty_WhenNotExists_ShouldReturn404()" classname="com.propertymanager.controller.PropertyControllerTest" time="0.009"/>
+  <testcase name="getPropertyById_WhenNotExists_ShouldReturn404()" classname="com.propertymanager.controller.PropertyControllerTest" time="0.005"/>
+  <testcase name="getPropertyById_WhenExists_ShouldReturnProperty()" classname="com.propertymanager.controller.PropertyControllerTest" time="0.005"/>
+  <testcase name="updateProperty_WhenNotExists_ShouldReturn404()" classname="com.propertymanager.controller.PropertyControllerTest" time="0.452"/>
+  <testcase name="updateProperty_WhenExists_ShouldReturnUpdatedProperty()" classname="com.propertymanager.controller.PropertyControllerTest" time="0.011"/>
+  <testcase name="createProperty_ShouldReturnCreatedProperty()" classname="com.propertymanager.controller.PropertyControllerTest" time="0.02"/>
+  <system-out><![CDATA[10:54:35.839 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.propertymanager.controller.PropertyControllerTest]: PropertyControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+10:54:36.677 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.propertymanager.PropertyManagerApplication for test class com.propertymanager.controller.PropertyControllerTest
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -16,12 +20,86 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.2.3)
 
-2025-03-26T10:48:37.210Z  INFO 145 --- [    Test worker] c.p.controller.PropertyControllerTest    : Starting PropertyControllerTest using Java 17.0.14 with PID 145 (started by root in /app)
-2025-03-26T10:48:37.211Z  INFO 145 --- [    Test worker] c.p.controller.PropertyControllerTest    : The following 1 profile is active: "test"
-2025-03-26T10:48:38.766Z  INFO 145 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
-2025-03-26T10:48:38.767Z  INFO 145 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
-2025-03-26T10:48:38.770Z  INFO 145 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
-2025-03-26T10:48:38.795Z  INFO 145 --- [    Test worker] c.p.controller.PropertyControllerTest    : Started PropertyControllerTest in 1.755 seconds (process running for 32.212)
+2025-03-26T10:54:39.561Z  INFO 153 --- [    Test worker] c.p.controller.PropertyControllerTest    : Starting PropertyControllerTest using Java 17.0.14 with PID 153 (started by root in /app)
+2025-03-26T10:54:39.569Z  INFO 153 --- [    Test worker] c.p.controller.PropertyControllerTest    : The following 1 profile is active: "test"
+2025-03-26T10:54:50.063Z  INFO 153 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-03-26T10:54:50.063Z  INFO 153 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-03-26T10:54:50.068Z  INFO 153 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 4 ms
+2025-03-26T10:54:50.138Z  INFO 153 --- [    Test worker] c.p.controller.PropertyControllerTest    : Started PropertyControllerTest in 12.933 seconds (process running for 16.917)
+
+MockHttpServletRequest:
+      HTTP Method = DELETE
+      Request URI = /api/properties/1
+       Parameters = {}
+          Headers = []
+             Body = null
+    Session Attrs = {}
+
+Handler:
+             Type = com.propertymanager.controller.PropertyController
+           Method = com.propertymanager.controller.PropertyController#deleteProperty(Long)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 204
+    Error message = null
+          Headers = []
+     Content type = null
+             Body = 
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+
+MockHttpServletRequest:
+      HTTP Method = POST
+      Request URI = /api/properties
+       Parameters = {}
+          Headers = [Content-Type:"application/json;charset=UTF-8", Content-Length:"119"]
+             Body = {"id":1,"address":"123 Test St","price":250000.00,"bedrooms":3,"bathrooms":2,"squareFootage":2000.0,"description":null}
+    Session Attrs = {}
+
+Handler:
+             Type = com.propertymanager.controller.PropertyController
+           Method = com.propertymanager.controller.PropertyController#createProperty(Property)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 201
+    Error message = null
+          Headers = [Location:"http://localhost/api/properties/1", Content-Type:"application/json"]
+     Content type = application/json
+             Body = {"id":1,"address":"123 Test St","price":250000.00,"bedrooms":3,"bathrooms":2,"squareFootage":2000.0,"description":null}
+    Forwarded URL = null
+   Redirected URL = http://localhost/api/properties/1
+          Cookies = []
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

@@ -1,5 +1,6 @@
 package com.propertymanager.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.propertymanager.entity.Property;
 import com.propertymanager.repository.PropertyRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,13 +10,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -24,6 +26,9 @@ class PropertyControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @MockBean
     private PropertyRepository propertyRepository;
@@ -69,12 +74,70 @@ class PropertyControllerTest {
 
     @Test
     void createProperty_ShouldReturnCreatedProperty() throws Exception {
-        when(propertyRepository.save(any(Property.class))).thenReturn(testProperty);
+        Property savedProperty = new Property();
+        savedProperty.setId(1L);
+        savedProperty.setAddress(testProperty.getAddress());
+        savedProperty.setPrice(testProperty.getPrice());
+        savedProperty.setBedrooms(testProperty.getBedrooms());
+        savedProperty.setBathrooms(testProperty.getBathrooms());
+        savedProperty.setSquareFootage(testProperty.getSquareFootage());
+
+        when(propertyRepository.save(any(Property.class))).thenReturn(savedProperty);
 
         mockMvc.perform(post("/api/properties")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"address\":\"123 Test St\",\"price\":250000.00,\"bedrooms\":3,\"bathrooms\":2,\"squareFootage\":2000.0}"))
-                .andExpect(status().isOk())
+                .content(objectMapper.writeValueAsString(testProperty)))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.address").value(testProperty.getAddress()));
+    }
+
+    @Test
+    void updateProperty_WhenExists_ShouldReturnUpdatedProperty() throws Exception {
+        when(propertyRepository.findById(1L)).thenReturn(Optional.of(testProperty));
+        when(propertyRepository.save(any(Property.class))).thenReturn(testProperty);
+
+        testProperty.setPrice(new BigDecimal("260000.00"));
+
+        mockMvc.perform(put("/api/properties/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(testProperty)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.price").value(260000.00));
+    }
+
+    @Test
+    void updateProperty_WhenNotExists_ShouldReturn404() throws Exception {
+        when(propertyRepository.findById(1L)).thenReturn(Optional.empty());
+
+        mockMvc.perform(put("/api/properties/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(testProperty)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void deleteProperty_WhenExists_ShouldReturn204() throws Exception {
+        Long propertyId = 1L;
+        when(propertyRepository.existsById(propertyId)).thenReturn(true);
+
+        mockMvc.perform(delete("/api/properties/{id}", propertyId))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isNoContent());
+
+        verify(propertyRepository).existsById(propertyId);
+        verify(propertyRepository).deleteById(propertyId);
+    }
+
+    @Test
+    void deleteProperty_WhenNotExists_ShouldReturn404() throws Exception {
+        when(propertyRepository.existsById(1L)).thenReturn(false);
+
+        mockMvc.perform(delete("/api/properties/1"))
+                .andExpect(status().isNotFound());
+
+        verify(propertyRepository, never()).deleteById(any());
     }
 } 
