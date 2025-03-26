@@ -6,20 +6,20 @@ interface PropertyCardProps {
 
 export const PropertyCard = ({ property }: PropertyCardProps) => {
     return (
-        <div className="property-card bg-white shadow-lg rounded-lg p-6">
-            <h3 className="text-xl font-bold mb-2">{property.address}</h3>
+        <div className="property-card">
+            <h3 className="property-title">{property.address}</h3>
             <div className="property-details">
-                <p className="text-lg font-semibold text-green-600">
+                <p className="property-price">
                     ${property.price.toLocaleString()}
                 </p>
-                <p className="text-gray-600">
+                <p className="property-info">
                     {property.bedrooms} beds • {property.bathrooms} baths
                 </p>
-                <p className="text-gray-600">
+                <p className="property-info">
                     {property.squareFootage.toLocaleString()} sq ft
                 </p>
                 {property.description && (
-                    <p className="text-gray-700 mt-2">{property.description}</p>
+                    <p className="property-description">{property.description}</p>
                 )}
             </div>
         </div>

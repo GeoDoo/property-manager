@@ -49,6 +49,7 @@
 
 header {
   margin-bottom: 2rem;
+  text-align: center;
 }
 
 h1 {
@@ -58,11 +59,17 @@ h1 {
 }
 
 .property-list {
-  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
 }
 
 .property-card {
-  border: 1px solid #e5e7eb;
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s;
 }
 
@@ -70,6 +77,27 @@ h1 {
   transform: translateY(-4px);
 }
 
-.property-details {
+.property-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.property-price {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2f9e44;
+  margin-bottom: 0.5rem;
+}
+
+.property-info {
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.property-description {
+  color: #444;
   margin-top: 1rem;
+  font-size: 0.9rem;
 }

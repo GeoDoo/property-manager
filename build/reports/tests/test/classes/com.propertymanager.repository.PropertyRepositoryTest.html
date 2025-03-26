@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.124s</div>
+<div class="counter">0.143s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,17 +79,17 @@
 </thead>
 <tr>
 <td class="success">delete_ShouldRemoveProperty_WithAutoCommit()</td>
-<td class="success">0.009s</td>
+<td class="success">0.013s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">findAll_ShouldReturnAllProperties_WithAutoCommit()</td>
-<td class="success">0.098s</td>
+<td class="success">0.111s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">findById_ShouldReturnProperty_WithAutoCommit()</td>
-<td class="success">0.004s</td>
+<td class="success">0.005s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -99,7 +99,7 @@
 </tr>
 <tr>
 <td class="success">save_ShouldPersistProperty_WithAutoCommit()</td>
-<td class="success">0.003s</td>
+<td class="success">0.004s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -112,8 +112,8 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>2025-03-26T09:46:10.060Z  INFO 69168 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.propertymanager.repository.PropertyRepositoryTest]: PropertyRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2025-03-26T09:46:10.076Z  INFO 69168 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.propertymanager.PropertyManagerApplication for test class com.propertymanager.repository.PropertyRepositoryTest
+<pre>2025-03-26T10:00:09.650Z  INFO 71965 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.propertymanager.repository.PropertyRepositoryTest]: PropertyRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-03-26T10:00:09.662Z  INFO 71965 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.propertymanager.PropertyManagerApplication for test class com.propertymanager.repository.PropertyRepositoryTest
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -123,18 +123,18 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.2.3)
 
-2025-03-26T09:46:10.102Z  INFO 69168 --- [    Test worker] c.p.repository.PropertyRepositoryTest    : Starting PropertyRepositoryTest using Java 21.0.3 with PID 69168 (started by georgios.karametas in /Users/georgios.karametas/Dev/property-manager)
-2025-03-26T09:46:10.102Z  INFO 69168 --- [    Test worker] c.p.repository.PropertyRepositoryTest    : The following 1 profile is active: &quot;test&quot;
-2025-03-26T09:46:10.163Z  INFO 69168 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2025-03-26T09:46:10.169Z  INFO 69168 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 6 ms. Found 1 JPA repository interface.
-2025-03-26T09:46:10.179Z  INFO 69168 --- [    Test worker] beddedDataSourceBeanFactoryPostProcessor : Replacing 'dataSource' DataSource bean with embedded version
-2025-03-26T09:46:10.191Z  INFO 69168 --- [    Test worker] o.s.j.d.e.EmbeddedDatabaseFactory        : Starting embedded database: url='jdbc:h2:mem:39f8817d-21fd-4610-aba4-2ce2d1977a5c;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false', username='sa'
-2025-03-26T09:46:10.295Z  INFO 69168 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-03-26T09:46:10.296Z  WARN 69168 --- [    Test worker] .h.j.b.i.EntityManagerFactoryBuilderImpl : HHH000059: Defining hibernate.transaction.flush_before_completion=true ignored in HEM
-2025-03-26T09:46:10.298Z  INFO 69168 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2025-03-26T09:46:10.301Z  INFO 69168 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2025-03-26T09:46:10.305Z  WARN 69168 --- [    Test worker] org.hibernate.dialect.Dialect            : HHH000511: The 2.2.0 version for [org.hibernate.dialect.PostgreSQLDialect] is no longer supported, hence certain features may not work properly. The minimum supported version is 12.0.0. Check the community dialects project for available legacy versions.
-2025-03-26T09:46:10.305Z  WARN 69168 --- [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-03-26T10:00:09.683Z  INFO 71965 --- [    Test worker] c.p.repository.PropertyRepositoryTest    : Starting PropertyRepositoryTest using Java 21.0.3 with PID 71965 (started by georgios.karametas in /Users/georgios.karametas/Dev/property-manager)
+2025-03-26T10:00:09.684Z  INFO 71965 --- [    Test worker] c.p.repository.PropertyRepositoryTest    : The following 1 profile is active: &quot;test&quot;
+2025-03-26T10:00:09.741Z  INFO 71965 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-03-26T10:00:09.747Z  INFO 71965 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 5 ms. Found 1 JPA repository interface.
+2025-03-26T10:00:09.755Z  INFO 71965 --- [    Test worker] beddedDataSourceBeanFactoryPostProcessor : Replacing 'dataSource' DataSource bean with embedded version
+2025-03-26T10:00:09.766Z  INFO 71965 --- [    Test worker] o.s.j.d.e.EmbeddedDatabaseFactory        : Starting embedded database: url='jdbc:h2:mem:3c198043-7a24-4e03-91f4-4f7de19c1fae;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false', username='sa'
+2025-03-26T10:00:09.879Z  INFO 71965 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-03-26T10:00:09.880Z  WARN 71965 --- [    Test worker] .h.j.b.i.EntityManagerFactoryBuilderImpl : HHH000059: Defining hibernate.transaction.flush_before_completion=true ignored in HEM
+2025-03-26T10:00:09.881Z  INFO 71965 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-03-26T10:00:09.885Z  INFO 71965 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-03-26T10:00:09.890Z  WARN 71965 --- [    Test worker] org.hibernate.dialect.Dialect            : HHH000511: The 2.2.0 version for [org.hibernate.dialect.PostgreSQLDialect] is no longer supported, hence certain features may not work properly. The minimum supported version is 12.0.0. Check the community dialects project for available legacy versions.
+2025-03-26T10:00:09.890Z  WARN 71965 --- [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
 Hibernate: 
     drop table if exists properties cascade
 Hibernate: 
@@ -148,8 +148,8 @@ Hibernate:
         address varchar(255),
         primary key (id)
     )
-2025-03-26T09:46:10.345Z  INFO 69168 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2025-03-26T09:46:10.383Z  INFO 69168 --- [    Test worker] c.p.repository.PropertyRepositoryTest    : Started PropertyRepositoryTest in 0.305 seconds (process running for 6.504)
+2025-03-26T10:00:09.942Z  INFO 71965 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-03-26T10:00:09.981Z  INFO 71965 --- [    Test worker] c.p.repository.PropertyRepositoryTest    : Started PropertyRepositoryTest in 0.317 seconds (process running for 6.295)
 Hibernate: 
     insert 
     into
@@ -244,7 +244,7 @@ Hibernate:
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 8.2.1</a> at 26 Mar 2025, 09:46:10</p>
+<a href="http://www.gradle.org">Gradle 8.2.1</a> at 26 Mar 2025, 10:00:10</p>
 </div>
 </div>
 </body>
