@@ -81,5 +81,3 @@ Tests use:
 - H2 in-memory database for repository tests
 - MockMvc for controller tests
 - Testcontainers for integration tests
-
-## Project Structure 
