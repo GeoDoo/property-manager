@@ -56,7 +56,7 @@ export function PropertyDetails() {
                                 <Button
                                     variant="danger"
                                     onClick={async () => {
-                                        await propertyService.delete(property.id);
+                                        await propertyService.delete(property?.id ?? 0);
                                         navigate('/');
                                     }}
                                 >

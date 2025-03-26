@@ -12,11 +12,19 @@ export function PropertyList() {
         queryFn: propertyService.getAll
     });
 
+    const handleAddProperty = () => {
+        navigate('/property/new');
+    };
+
     return (
         <div className="container mx-auto p-4">
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-bold">Properties</h1>
-                <Button onClick={() => navigate('/property/new')}>
+                <Button 
+                    onClick={handleAddProperty}
+                    aria-label="Add Property"
+                    data-testid="add-property-button"
+                >
                     Add Property
                 </Button>
             </div>
@@ -39,7 +47,7 @@ export function PropertyList() {
                                 variant="danger"
                                 onClick={async () => {
                                     if (window.confirm('Are you sure you want to delete this property?')) {
-                                        await propertyService.delete(property.id);
+                                        await propertyService.delete(property?.id ?? 0);
                                         queryClient.invalidateQueries({ queryKey: ['properties'] });
                                     }
                                 }}

@@ -11,13 +11,13 @@ interface PropertyFormProps {
 
 export function PropertyForm({ property, onClose }: PropertyFormProps) {
     const queryClient = useQueryClient();
-    const [formData, setFormData] = useState<Property>({
+    const [formData, setFormData] = useState<Omit<Property, 'id'>>({
+        description: property?.description ?? '',
         address: property?.address ?? '',
         price: property?.price ?? 0,
         bedrooms: property?.bedrooms ?? 0,
         bathrooms: property?.bathrooms ?? 0,
-        squareFootage: property?.squareFootage ?? 0,
-        description: property?.description ?? ''
+        squareFootage: property?.squareFootage ?? 0
     });
 
     const mutation = useMutation({
@@ -33,14 +33,15 @@ export function PropertyForm({ property, onClose }: PropertyFormProps) {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        mutation.mutate(formData);
+        mutation.mutate(formData as Property);
     };
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-                <label className="block mb-1 font-medium">Street Address</label>
+                <label htmlFor="address">Street</label>
                 <input
+                    id="address"
                     type="text"
                     value={formData.address}
                     onChange={e => setFormData({...formData, address: e.target.value})}
@@ -49,8 +50,19 @@ export function PropertyForm({ property, onClose }: PropertyFormProps) {
                 />
             </div>
             <div>
-                <label className="block mb-1 font-medium">Price</label>
+                <label htmlFor="description">Description</label>
+                <textarea
+                    id="description"
+                    value={formData.description}
+                    onChange={e => setFormData({...formData, description: e.target.value})}
+                    className="w-full border p-2 rounded"
+                    required
+                />
+            </div>
+            <div>
+                <label htmlFor="price">Price</label>
                 <input
+                    id="price"
                     type="number"
                     value={formData.price}
                     onChange={e => setFormData({...formData, price: Number(e.target.value)})}
@@ -58,44 +70,37 @@ export function PropertyForm({ property, onClose }: PropertyFormProps) {
                     required
                 />
             </div>
-            <div className="grid grid-cols-2 gap-4">
-                <div>
-                    <label className="block mb-1 font-medium">Bedrooms</label>
-                    <input
-                        type="number"
-                        value={formData.bedrooms}
-                        onChange={e => setFormData({...formData, bedrooms: Number(e.target.value)})}
-                        className="w-full border p-2 rounded"
-                        required
-                    />
-                </div>
-                <div>
-                    <label className="block mb-1 font-medium">Bathrooms</label>
-                    <input
-                        type="number"
-                        value={formData.bathrooms}
-                        onChange={e => setFormData({...formData, bathrooms: Number(e.target.value)})}
-                        className="w-full border p-2 rounded"
-                        required
-                    />
-                </div>
-            </div>
             <div>
-                <label className="block mb-1 font-medium">Square Footage</label>
+                <label htmlFor="bedrooms">Bedrooms</label>
                 <input
+                    id="bedrooms"
                     type="number"
-                    value={formData.squareFootage}
-                    onChange={e => setFormData({...formData, squareFootage: Number(e.target.value)})}
+                    value={formData.bedrooms}
+                    onChange={e => setFormData({...formData, bedrooms: Number(e.target.value)})}
                     className="w-full border p-2 rounded"
                     required
                 />
             </div>
             <div>
-                <label className="block mb-1 font-medium">Description</label>
-                <textarea
-                    value={formData.description}
-                    onChange={e => setFormData({...formData, description: e.target.value})}
-                    className="w-full border p-2 rounded h-32"
+                <label htmlFor="bathrooms">Bathrooms</label>
+                <input
+                    id="bathrooms"
+                    type="number"
+                    value={formData.bathrooms}
+                    onChange={e => setFormData({...formData, bathrooms: Number(e.target.value)})}
+                    className="w-full border p-2 rounded"
+                    required
+                />
+            </div>
+            <div>
+                <label htmlFor="squareFootage">Square Footage</label>
+                <input
+                    id="squareFootage"
+                    type="number"
+                    value={formData.squareFootage}
+                    onChange={e => setFormData({...formData, squareFootage: Number(e.target.value)})}
+                    className="w-full border p-2 rounded"
+                    required
                 />
             </div>
             <div className="flex gap-2">

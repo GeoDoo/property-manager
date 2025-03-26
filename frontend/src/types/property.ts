@@ -1,10 +1,16 @@
 export interface Property {
-    id: number;
+    id?: number;
+    description: string;
     address: string;
     price: number;
     bedrooms: number;
     bathrooms: number;
     squareFootage: number;
-    description: string;
-    propertyType: string;
+}
+
+export enum PropertyType {
+    HOUSE = 'HOUSE',
+    APARTMENT = 'APARTMENT',
+    CONDO = 'CONDO',
+    TOWNHOUSE = 'TOWNHOUSE'
 } 
