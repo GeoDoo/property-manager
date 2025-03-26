@@ -61,6 +61,34 @@ services:
     command: sh -c "npm install && npm run dev -- --host"
     restart: unless-stopped
 
+  postgres-test:
+    image: postgres:14-alpine
+    platform: linux/arm64/v8
+    environment:
+      POSTGRES_DB: propertymanager_test
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"  # Different port to avoid conflicts
+    tmpfs:
+      - /var/lib/postgresql/data  # Use tmpfs for faster test execution
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  test:
+    image: amazoncorretto:17-alpine
+    platform: linux/arm64/v8
+    working_dir: /app
+    volumes:
+      - .:/app
+      - gradle_cache:/root/.gradle
+    environment:
+      SPRING_PROFILES_ACTIVE: test
+    command: sh -c "./gradlew test --info"
+
 volumes:
   postgres_data:
   node_modules:
