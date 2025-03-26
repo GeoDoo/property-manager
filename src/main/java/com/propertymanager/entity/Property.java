@@ -2,6 +2,9 @@ package com.propertymanager.entity;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 @Entity
 @Table(name = "properties")
@@ -11,11 +14,27 @@ public class Property {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Address is required")
     private String address;
+
+    @NotNull(message = "Price is required")
+    @Positive(message = "Price must be positive")
     private BigDecimal price;
+
+    @NotNull(message = "Number of bedrooms is required")
+    @Positive(message = "Number of bedrooms must be positive")
     private Integer bedrooms;
+
+    @NotNull(message = "Number of bathrooms is required")
+    @Positive(message = "Number of bathrooms must be positive")
     private Integer bathrooms;
+
+    @NotNull(message = "Square footage is required")
+    @Positive(message = "Square footage must be positive")
     private Double squareFootage;
+
+    @Column(length = 1000)
+    private String description;
 
     // Getters and Setters
     public Long getId() {
@@ -64,5 +83,13 @@ public class Property {
 
     public void setSquareFootage(Double squareFootage) {
         this.squareFootage = squareFootage;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 } 

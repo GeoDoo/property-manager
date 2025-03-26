@@ -4,11 +4,14 @@ import com.propertymanager.entity.Property;
 import com.propertymanager.repository.PropertyRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/properties")
+@Validated
 public class PropertyController {
 
     private final PropertyRepository propertyRepository;
@@ -30,12 +33,14 @@ public class PropertyController {
     }
 
     @PostMapping
-    public Property createProperty(@RequestBody Property property) {
+    public Property createProperty(@Valid @RequestBody Property property) {
         return propertyRepository.save(property);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Property> updateProperty(@PathVariable Long id, @RequestBody Property property) {
+    public ResponseEntity<Property> updateProperty(
+            @PathVariable Long id,
+            @Valid @RequestBody Property property) {
         return propertyRepository.findById(id)
                 .map(existingProperty -> {
                     property.setId(id);
