@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.propertymanager.controller.PropertyControllerTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2025-03-26T09:22:59" hostname="georgioskarametas-MacBook-Pro" time="0.134">
+<testsuite name="com.propertymanager.controller.PropertyControllerTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2025-03-26T09:26:24" hostname="georgioskarametas-MacBook-Pro" time="0.125">
   <properties/>
-  <testcase name="getAllProperties_ShouldReturnProperties()" classname="com.propertymanager.controller.PropertyControllerTest" time="0.094"/>
-  <testcase name="getPropertyById_WhenNotExists_ShouldReturn404()" classname="com.propertymanager.controller.PropertyControllerTest" time="0.013"/>
-  <testcase name="getPropertyById_WhenExists_ShouldReturnProperty()" classname="com.propertymanager.controller.PropertyControllerTest" time="0.003"/>
-  <testcase name="createProperty_ShouldReturnCreatedProperty()" classname="com.propertymanager.controller.PropertyControllerTest" time="0.02"/>
-  <system-out><![CDATA[2025-03-26T09:22:59.143Z  INFO 62567 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.propertymanager.controller.PropertyControllerTest]: PropertyControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2025-03-26T09:22:59.150Z  INFO 62567 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.propertymanager.PropertyManagerApplication for test class com.propertymanager.controller.PropertyControllerTest
+  <testcase name="getAllProperties_ShouldReturnProperties()" classname="com.propertymanager.controller.PropertyControllerTest" time="0.081"/>
+  <testcase name="getPropertyById_WhenNotExists_ShouldReturn404()" classname="com.propertymanager.controller.PropertyControllerTest" time="0.014"/>
+  <testcase name="getPropertyById_WhenExists_ShouldReturnProperty()" classname="com.propertymanager.controller.PropertyControllerTest" time="0.004"/>
+  <testcase name="createProperty_ShouldReturnCreatedProperty()" classname="com.propertymanager.controller.PropertyControllerTest" time="0.023"/>
+  <system-out><![CDATA[2025-03-26T09:26:24.520Z  INFO 63029 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.propertymanager.controller.PropertyControllerTest]: PropertyControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-03-26T09:26:24.531Z  INFO 63029 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.propertymanager.PropertyManagerApplication for test class com.propertymanager.controller.PropertyControllerTest
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -16,13 +16,13 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.2.3)
 
-2025-03-26T09:22:59.162Z  INFO 62567 --- [    Test worker] c.p.controller.PropertyControllerTest    : Starting PropertyControllerTest using Java 21.0.3 with PID 62567 (started by georgios.karametas in /Users/georgios.karametas/Dev/property-manager)
-2025-03-26T09:22:59.162Z  INFO 62567 --- [    Test worker] c.p.controller.PropertyControllerTest    : No active profile set, falling back to 1 default profile: "default"
-2025-03-26T09:22:59.367Z  INFO 62567 --- [    Test worker] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
-2025-03-26T09:22:59.417Z  INFO 62567 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
-2025-03-26T09:22:59.417Z  INFO 62567 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
-2025-03-26T09:22:59.418Z  INFO 62567 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
-2025-03-26T09:22:59.426Z  INFO 62567 --- [    Test worker] c.p.controller.PropertyControllerTest    : Started PropertyControllerTest in 0.274 seconds (process running for 6.072)
+2025-03-26T09:26:24.544Z  INFO 63029 --- [    Test worker] c.p.controller.PropertyControllerTest    : Starting PropertyControllerTest using Java 21.0.3 with PID 63029 (started by georgios.karametas in /Users/georgios.karametas/Dev/property-manager)
+2025-03-26T09:26:24.544Z  INFO 63029 --- [    Test worker] c.p.controller.PropertyControllerTest    : No active profile set, falling back to 1 default profile: "default"
+2025-03-26T09:26:24.743Z  INFO 63029 --- [    Test worker] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2025-03-26T09:26:24.797Z  INFO 63029 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-03-26T09:26:24.797Z  INFO 63029 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-03-26T09:26:24.798Z  INFO 63029 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2025-03-26T09:26:24.805Z  INFO 63029 --- [    Test worker] c.p.controller.PropertyControllerTest    : Started PropertyControllerTest in 0.272 seconds (process running for 5.678)
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
