@@ -1,41 +1,26 @@
-package com.propertymanager.entity;
+package com.propertymanager.model;
 
 import jakarta.persistence.*;
-import java.math.BigDecimal;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 @Entity
 @Table(name = "properties")
 public class Property {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Address is required")
+    @NotNull
     private String address;
 
-    @NotNull(message = "Price is required")
-    @Positive(message = "Price must be positive")
+    @Positive
     private Double price;
 
-    @NotNull(message = "Number of bedrooms is required")
-    @Positive(message = "Number of bedrooms must be positive")
     private Integer bedrooms;
-
-    @NotNull(message = "Number of bathrooms is required")
-    @Positive(message = "Number of bathrooms must be positive")
     private Integer bathrooms;
-
-    @NotNull(message = "Square footage is required")
-    @Positive(message = "Square footage must be positive")
     private Double squareFootage;
-
-    @Column(length = 1000)
     private String description;
-
     private String propertyType;
 
     // Getters and Setters

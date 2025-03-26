@@ -1,24 +1,19 @@
 package com.propertymanager.controller;
 
-import com.propertymanager.entity.Property;
+import com.propertymanager.model.Property;
 import com.propertymanager.repository.PropertyRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/properties")
-@CrossOrigin(origins = "*")  // Added for development
 public class PropertyController {
 
-    private final PropertyRepository propertyRepository;
-
-    public PropertyController(PropertyRepository propertyRepository) {
-        this.propertyRepository = propertyRepository;
-    }
+    @Autowired
+    private PropertyRepository propertyRepository;
 
     @GetMapping
     public List<Property> getAllProperties() {
@@ -33,14 +28,8 @@ public class PropertyController {
     }
 
     @PostMapping
-    public ResponseEntity<Property> createProperty(@RequestBody Property property) {
-        Property savedProperty = propertyRepository.save(property);
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(savedProperty.getId())
-                .toUri();
-        return ResponseEntity.created(location).body(savedProperty);
+    public Property createProperty(@RequestBody Property property) {
+        return propertyRepository.save(property);
     }
 
     @PutMapping("/{id}")
@@ -56,10 +45,16 @@ public class PropertyController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProperty(@PathVariable Long id) {
-        if (!propertyRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        propertyRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
+        return propertyRepository.findById(id)
+                .map(property -> {
+                    propertyRepository.delete(property);
+                    return ResponseEntity.ok().<Void>build();
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/search")
+    public List<Property> searchProperties(@RequestParam String streetName) {
+        return propertyRepository.findByAddressContainingIgnoreCase(streetName);
     }
 } 

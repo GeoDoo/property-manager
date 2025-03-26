@@ -5,7 +5,7 @@ services:
     image: postgres:14-alpine
     platform: linux/arm64/v8  # For M1/M2 Macs
     environment:
-      POSTGRES_DB: propertymanager
+      POSTGRES_DB: propertydb
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
@@ -13,14 +13,16 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
+      test: ["CMD-SHELL", "pg_isready -U postgres -d propertydb"]
+      interval: 5s
       timeout: 5s
       retries: 5
     restart: unless-stopped
 
   backend:
-    image: amazoncorretto:17-alpine
+    build: 
+      context: .
+      dockerfile: Dockerfile
     platform: linux/arm64/v8
     working_dir: /app
     volumes:
@@ -32,20 +34,20 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/propertymanager
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/propertydb
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
-    command: sh -c "./gradlew bootRun"
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8081/api/properties"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
+      test: ["CMD", "curl", "-f", "http://localhost:8081/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: unless-stopped
 
   frontend:
-    image: node:20-alpine
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
     platform: linux/arm64/v8
     working_dir: /app
     volumes:
@@ -56,8 +58,7 @@ services:
     environment:
       - VITE_API_URL=http://localhost:8081
     depends_on:
-      backend:
-        condition: service_healthy
+      - backend
     command: sh -c "npm install && npm run dev -- --host"
     restart: unless-stopped
 

@@ -1,9 +1,10 @@
 export interface Property {
-    id?: number;
+    id: number;
     address: string;
     price: number;
     bedrooms: number;
     bathrooms: number;
     squareFootage: number;
-    description?: string;
+    description: string;
+    propertyType: string;
 } 
