@@ -1,55 +1,99 @@
 # Property Manager
 
-A Spring Boot application for managing real estate properties with RESTful APIs and a simple web interface.
+A modern property management system built with Spring Boot and React.
 
 ## Features
 
-- RESTful API endpoints for CRUD operations on properties
-- H2 in-memory database for development and testing
-- PostgreSQL support for production
-- Simple web interface to view properties
-- Comprehensive test coverage
+- RESTful API for property management
+- React frontend with Vite
+- Docker support for development and testing
+- Automated tests with H2 in-memory database
+- PostgreSQL database for production
 
-## Technologies
+## Tech Stack
 
-- Java 21
-- Spring Boot 3.2.3
+### Backend
+- Java 17
+- Spring Boot
 - Spring Data JPA
 - PostgreSQL
 - H2 Database (for testing)
-- JUnit 5
-- Testcontainers
 - Gradle
+
+### Frontend
+- React 18
+- TypeScript
+- Vite
+- TanStack Query
+- Axios
+
+### DevOps
+- Docker
+- Docker Compose
+- Git
 
 ## Prerequisites
 
-- Java 21 or higher
-- Docker (for running PostgreSQL in containers)
-- Gradle (included via wrapper)
+- Docker and Docker Compose
+- Java 17 (for local development)
+- Node.js 20+ (for local frontend development)
 
 ## Getting Started
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/yourusername/property-manager.git
 cd property-manager
 ```
 
-2. Build the project:
+2. Start the application using Docker Compose:
 ```bash
-./gradlew build
+docker-compose up
 ```
 
-3. Run the application:
+The services will be available at:
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:8081
+- Database: localhost:5432
+
+## Development
+
+### Running Backend Locally
+
 ```bash
 ./gradlew bootRun
 ```
 
-The application will be available at `http://localhost:8081`
+### Running Frontend Locally
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### Running Tests
+
+Using Docker:
+```bash
+# Run all tests
+docker-compose run --rm test
+
+# Run specific test class
+docker-compose run --rm test ./gradlew test --tests "com.propertymanager.controller.PropertyControllerTest"
+
+# Run tests with detailed output
+docker-compose run --rm test ./gradlew test --info
+```
+
+Locally:
+```bash
+./gradlew test
+```
 
 ## API Endpoints
 
-### Properties API
+### Properties
 
 - `GET /api/properties` - Get all properties
 - `GET /api/properties/{id}` - Get a specific property
@@ -68,16 +112,3 @@ The application will be available at `http://localhost:8081`
     "squareFootage": 2000.0
 }
 ```
-
-## Testing
-
-The project includes both unit and integration tests. To run the tests:
-
-```bash
-./gradlew test
-```
-
-Tests use:
-- H2 in-memory database for repository tests
-- MockMvc for controller tests
-- Testcontainers for integration tests
