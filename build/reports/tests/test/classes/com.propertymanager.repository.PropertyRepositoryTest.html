@@ -23,7 +23,7 @@
 <tr>
 <td>
 <div class="infoBox" id="tests">
-<div class="counter">4</div>
+<div class="counter">6</div>
 <p>tests</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.117s</div>
+<div class="counter">0.485s</div>
 <p>duration</p>
 </div>
 </td>
@@ -66,6 +66,9 @@
 <li>
 <a href="#tab1">Standard output</a>
 </li>
+<li>
+<a href="#tab2">Standard error</a>
+</li>
 </ul>
 <div id="tab0" class="tab">
 <h2>Tests</h2>
@@ -78,22 +81,32 @@
 </tr>
 </thead>
 <tr>
-<td class="success">delete_ShouldRemoveProperty()</td>
-<td class="success">0.050s</td>
+<td class="success">delete_ShouldRemoveProperty_WithAutoCommit()</td>
+<td class="success">0.010s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="success">findAll_ShouldReturnAllProperties()</td>
-<td class="success">0.060s</td>
+<td class="success">findAll_ShouldReturnAllProperties_WithAutoCommit()</td>
+<td class="success">0.457s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="success">findById_ShouldReturnProperty()</td>
-<td class="success">0.003s</td>
+<td class="success">findById_ShouldReturnProperty_WithAutoCommit()</td>
+<td class="success">0.004s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="success">save_ShouldPersistProperty()</td>
+<td class="success">saveAndRollback_ShouldNotPersistProperty()</td>
+<td class="success">0.006s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">save_ShouldPersistProperty_WithAutoCommit()</td>
+<td class="success">0.004s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">verifyNoProperties()</td>
 <td class="success">0.004s</td>
 <td class="success">passed</td>
 </tr>
@@ -102,8 +115,8 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>2025-03-26T09:13:00.034Z  INFO 61012 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.propertymanager.repository.PropertyRepositoryTest]: PropertyRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2025-03-26T09:13:00.050Z  INFO 61012 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.propertymanager.PropertyManagerApplication for test class com.propertymanager.repository.PropertyRepositoryTest
+<pre>09:22:53.822 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.propertymanager.repository.PropertyRepositoryTest]: PropertyRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+09:22:53.883 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.propertymanager.PropertyManagerApplication for test class com.propertymanager.repository.PropertyRepositoryTest
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -113,18 +126,19 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.2.3)
 
-2025-03-26T09:13:00.075Z  INFO 61012 --- [    Test worker] c.p.repository.PropertyRepositoryTest    : Starting PropertyRepositoryTest using Java 21.0.3 with PID 61012 (started by georgios.karametas in /Users/georgios.karametas/Dev/property-manager)
-2025-03-26T09:13:00.075Z  INFO 61012 --- [    Test worker] c.p.repository.PropertyRepositoryTest    : The following 1 profile is active: &quot;test&quot;
-2025-03-26T09:13:00.133Z  INFO 61012 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2025-03-26T09:13:00.139Z  INFO 61012 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 5 ms. Found 1 JPA repository interface.
-2025-03-26T09:13:00.149Z  INFO 61012 --- [    Test worker] beddedDataSourceBeanFactoryPostProcessor : Replacing 'dataSource' DataSource bean with embedded version
-2025-03-26T09:13:00.163Z  INFO 61012 --- [    Test worker] o.s.j.d.e.EmbeddedDatabaseFactory        : Starting embedded database: url='jdbc:h2:mem:f490f69d-a023-4429-a4f6-11fc7a02731f;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false', username='sa'
-2025-03-26T09:13:00.283Z  INFO 61012 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-03-26T09:13:00.285Z  INFO 61012 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2025-03-26T09:13:00.289Z  INFO 61012 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2025-03-26T09:13:00.294Z  WARN 61012 --- [    Test worker] org.hibernate.dialect.Dialect            : HHH000511: The 2.2.0 version for [org.hibernate.dialect.PostgreSQLDialect] is no longer supported, hence certain features may not work properly. The minimum supported version is 12.0.0. Check the community dialects project for available legacy versions.
-2025-03-26T09:13:00.294Z  WARN 61012 --- [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2025-03-26T09:13:00.320Z  INFO 61012 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-03-26T09:22:54.045Z  INFO 62567 --- [    Test worker] c.p.repository.PropertyRepositoryTest    : Starting PropertyRepositoryTest using Java 21.0.3 with PID 62567 (started by georgios.karametas in /Users/georgios.karametas/Dev/property-manager)
+2025-03-26T09:22:54.046Z  INFO 62567 --- [    Test worker] c.p.repository.PropertyRepositoryTest    : The following 1 profile is active: &quot;test&quot;
+2025-03-26T09:22:54.191Z  INFO 62567 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-03-26T09:22:54.214Z  INFO 62567 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 19 ms. Found 1 JPA repository interface.
+2025-03-26T09:22:54.236Z  INFO 62567 --- [    Test worker] beddedDataSourceBeanFactoryPostProcessor : Replacing 'dataSource' DataSource bean with embedded version
+2025-03-26T09:22:54.311Z  INFO 62567 --- [    Test worker] o.s.j.d.e.EmbeddedDatabaseFactory        : Starting embedded database: url='jdbc:h2:mem:34baae6e-4115-413a-86c4-1a4795a27aaf;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false', username='sa'
+2025-03-26T09:22:54.443Z  INFO 62567 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-03-26T09:22:54.467Z  INFO 62567 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2025-03-26T09:22:54.470Z  WARN 62567 --- [    Test worker] .h.j.b.i.EntityManagerFactoryBuilderImpl : HHH000059: Defining hibernate.transaction.flush_before_completion=true ignored in HEM
+2025-03-26T09:22:54.482Z  INFO 62567 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-03-26T09:22:54.585Z  INFO 62567 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-03-26T09:22:54.606Z  WARN 62567 --- [    Test worker] org.hibernate.dialect.Dialect            : HHH000511: The 2.2.0 version for [org.hibernate.dialect.PostgreSQLDialect] is no longer supported, hence certain features may not work properly. The minimum supported version is 12.0.0. Check the community dialects project for available legacy versions.
+2025-03-26T09:22:54.609Z  WARN 62567 --- [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
 Hibernate: 
     drop table if exists properties cascade
 Hibernate: 
@@ -137,15 +151,8 @@ Hibernate:
         address varchar(255),
         primary key (id)
     )
-2025-03-26T09:13:00.332Z  INFO 61012 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2025-03-26T09:13:00.369Z  INFO 61012 --- [    Test worker] c.p.repository.PropertyRepositoryTest    : Started PropertyRepositoryTest in 0.317 seconds (process running for 6.139)
-Hibernate: 
-    insert 
-    into
-        properties
-        (address, bathrooms, bedrooms, price, square_footage) 
-    values
-        (?, ?, ?, ?, ?)
+2025-03-26T09:22:54.984Z  INFO 62567 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-03-26T09:22:55.121Z  INFO 62567 --- [    Test worker] c.p.repository.PropertyRepositoryTest    : Started PropertyRepositoryTest in 1.207 seconds (process running for 1.766)
 Hibernate: 
     insert 
     into
@@ -171,6 +178,16 @@ Hibernate:
     from
         properties p1_0
 Hibernate: 
+    select
+        p1_0.id,
+        p1_0.address,
+        p1_0.bathrooms,
+        p1_0.bedrooms,
+        p1_0.price,
+        p1_0.square_footage 
+    from
+        properties p1_0
+Hibernate: 
     insert 
     into
         properties
@@ -184,6 +201,48 @@ Hibernate:
         (address, bathrooms, bedrooms, price, square_footage) 
     values
         (?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        properties
+        (address, bathrooms, bedrooms, price, square_footage) 
+    values
+        (?, ?, ?, ?, ?)
+Hibernate: 
+    delete 
+    from
+        properties 
+    where
+        id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.address,
+        p1_0.bathrooms,
+        p1_0.bedrooms,
+        p1_0.price,
+        p1_0.square_footage 
+    from
+        properties p1_0 
+    where
+        p1_0.id=?
+Hibernate: 
+    insert 
+    into
+        properties
+        (address, bathrooms, bedrooms, price, square_footage) 
+    values
+        (?, ?, ?, ?, ?)
+</pre>
+</span>
+</div>
+<div id="tab2" class="tab">
+<h2>Standard error</h2>
+<span class="code">
+<pre>WARNING: A Java agent has been loaded dynamically (/Users/georgios.karametas/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy-agent/1.14.12/be4984cb6fd1ef1d11f218a648889dfda44b8a15/byte-buddy-agent-1.14.12.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
 </pre>
 </span>
 </div>
@@ -195,7 +254,7 @@ Hibernate:
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 8.2.1</a> at 26 Mar 2025, 09:13:00</p>
+<a href="http://www.gradle.org">Gradle 8.2.1</a> at 26 Mar 2025, 09:22:59</p>
 </div>
 </div>
 </body>
