@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   postgres:
-    image: postgres:14-alpine
+    image: postgres
     container_name: property-manager-db
     environment:
       POSTGRES_DB: propertymanager
@@ -13,4 +13,4 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
 volumes:
-  postgres_data: 
+  postgres_data:

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.propertymanager.repository.PropertyRepositoryTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2025-03-26T09:13:00" hostname="georgioskarametas-MacBook-Pro" time="0.119">
+  <properties/>
+  <testcase name="delete_ShouldRemoveProperty()" classname="com.propertymanager.repository.PropertyRepositoryTest" time="0.05"/>
+  <testcase name="findAll_ShouldReturnAllProperties()" classname="com.propertymanager.repository.PropertyRepositoryTest" time="0.06"/>
+  <testcase name="save_ShouldPersistProperty()" classname="com.propertymanager.repository.PropertyRepositoryTest" time="0.004"/>
+  <testcase name="findById_ShouldReturnProperty()" classname="com.propertymanager.repository.PropertyRepositoryTest" time="0.003"/>
+  <system-out><![CDATA[2025-03-26T09:13:00.034Z  INFO 61012 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.propertymanager.repository.PropertyRepositoryTest]: PropertyRepositoryTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-03-26T09:13:00.050Z  INFO 61012 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.propertymanager.PropertyManagerApplication for test class com.propertymanager.repository.PropertyRepositoryTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.3)
+
+2025-03-26T09:13:00.075Z  INFO 61012 --- [    Test worker] c.p.repository.PropertyRepositoryTest    : Starting PropertyRepositoryTest using Java 21.0.3 with PID 61012 (started by georgios.karametas in /Users/georgios.karametas/Dev/property-manager)
+2025-03-26T09:13:00.075Z  INFO 61012 --- [    Test worker] c.p.repository.PropertyRepositoryTest    : The following 1 profile is active: "test"
+2025-03-26T09:13:00.133Z  INFO 61012 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-03-26T09:13:00.139Z  INFO 61012 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 5 ms. Found 1 JPA repository interface.
+2025-03-26T09:13:00.149Z  INFO 61012 --- [    Test worker] beddedDataSourceBeanFactoryPostProcessor : Replacing 'dataSource' DataSource bean with embedded version
+2025-03-26T09:13:00.163Z  INFO 61012 --- [    Test worker] o.s.j.d.e.EmbeddedDatabaseFactory        : Starting embedded database: url='jdbc:h2:mem:f490f69d-a023-4429-a4f6-11fc7a02731f;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false', username='sa'
+2025-03-26T09:13:00.283Z  INFO 61012 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-03-26T09:13:00.285Z  INFO 61012 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-03-26T09:13:00.289Z  INFO 61012 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-03-26T09:13:00.294Z  WARN 61012 --- [    Test worker] org.hibernate.dialect.Dialect            : HHH000511: The 2.2.0 version for [org.hibernate.dialect.PostgreSQLDialect] is no longer supported, hence certain features may not work properly. The minimum supported version is 12.0.0. Check the community dialects project for available legacy versions.
+2025-03-26T09:13:00.294Z  WARN 61012 --- [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-03-26T09:13:00.320Z  INFO 61012 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+Hibernate: 
+    drop table if exists properties cascade
+Hibernate: 
+    create table properties (
+        bathrooms integer,
+        bedrooms integer,
+        price numeric(38,2),
+        square_footage float(53),
+        id bigserial not null,
+        address varchar(255),
+        primary key (id)
+    )
+2025-03-26T09:13:00.332Z  INFO 61012 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-03-26T09:13:00.369Z  INFO 61012 --- [    Test worker] c.p.repository.PropertyRepositoryTest    : Started PropertyRepositoryTest in 0.317 seconds (process running for 6.139)
+Hibernate: 
+    insert 
+    into
+        properties
+        (address, bathrooms, bedrooms, price, square_footage) 
+    values
+        (?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        properties
+        (address, bathrooms, bedrooms, price, square_footage) 
+    values
+        (?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        properties
+        (address, bathrooms, bedrooms, price, square_footage) 
+    values
+        (?, ?, ?, ?, ?)
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.address,
+        p1_0.bathrooms,
+        p1_0.bedrooms,
+        p1_0.price,
+        p1_0.square_footage 
+    from
+        properties p1_0
+Hibernate: 
+    insert 
+    into
+        properties
+        (address, bathrooms, bedrooms, price, square_footage) 
+    values
+        (?, ?, ?, ?, ?)
+Hibernate: 
+    insert 
+    into
+        properties
+        (address, bathrooms, bedrooms, price, square_footage) 
+    values
+        (?, ?, ?, ?, ?)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
