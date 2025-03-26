@@ -1,0 +1,6 @@
+task copyReactBuild(type: Copy) {
+    from '../frontend/build'
+    into 'src/main/resources/static'
+}
+
+bootJar.dependsOn copyReactBuild 
