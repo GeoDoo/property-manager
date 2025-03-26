@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { PropertyList } from './components/PropertyList';
 import { EditProperty } from './components/EditProperty';
 import { AddProperty } from './components/AddProperty';
+import { PropertyDetails } from './components/PropertyDetails';
 
 const queryClient = new QueryClient();
 
@@ -14,6 +15,7 @@ function App() {
           <Routes>
             <Route path="/" element={<PropertyList />} />
             <Route path="/property/new" element={<AddProperty />} />
+            <Route path="/property/:id" element={<PropertyDetails />} />
             <Route path="/property/:id/edit" element={<EditProperty />} />
           </Routes>
         </div>

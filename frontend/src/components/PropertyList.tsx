@@ -1,7 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { propertyService } from '../services/propertyService';
 import { Property } from '../types/Property';
+import { Button } from './Button';
 
 export function PropertyList() {
     const navigate = useNavigate();
@@ -25,34 +26,28 @@ export function PropertyList() {
         <div className="container mx-auto p-4">
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-bold">Properties</h1>
-                <button
+                <Button
                     onClick={() => navigate('/property/new')}
-                    className="bg-blue-500 text-white px-4 py-2 rounded"
                 >
                     Add Property
-                </button>
+                </Button>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {properties?.map((property) => (
-                    <div key={property.id} className="border p-4 rounded-lg shadow">
-                        <h2 className="text-xl font-semibold">{property.address}</h2>
-                        <p>Price: ${property.price.toLocaleString()}</p>
-                        <p>Bedrooms: {property.bedrooms}</p>
-                        <p>Bathrooms: {property.bathrooms}</p>
-                        <p>Square Footage: {property.squareFootage}</p>
-                        <div className="mt-4 flex gap-2">
-                            <button
-                                onClick={() => navigate(`/property/${property.id}/edit`)}
-                                className="bg-blue-500 text-white px-4 py-2 rounded"
+            <div className="grid gap-4">
+                {properties?.map(property => (
+                    <div key={property.id} className="bg-white p-4 rounded-lg shadow">
+                        <div className="flex justify-between items-start">
+                            <Link 
+                                to={`/property/${property.id}`}
+                                className="text-blue-600 hover:text-blue-800 text-lg font-semibold"
                             >
-                                Edit
-                            </button>
-                            <button
-                                onClick={() => property.id && deleteMutation.mutate(property.id)}
-                                className="bg-red-500 text-white px-4 py-2 rounded"
-                            >
-                                Delete
-                            </button>
+                                {property.address}
+                            </Link>
+                            <div className="text-xl font-bold">
+                                ${property.price.toLocaleString()}
+                            </div>
+                        </div>
+                        <div className="mt-2 text-gray-600">
+                            {property.bedrooms} beds • {property.bathrooms} baths • {property.squareFootage} sqft
                         </div>
                     </div>
                 ))}
