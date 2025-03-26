@@ -112,3 +112,59 @@ Locally:
     "squareFootage": 2000.0
 }
 ```
+
+## Application Architecture
+
+### Data Flow Diagram
+
+```mermaid
+flowchart TD
+    User((User/Client))
+    Frontend[React Frontend]
+    API{Spring Boot API}
+    DB[(PostgreSQL Database)]
+    QueryClient[TanStack Query Client]
+    ExHandler[Global Exception Handler]
+    
+    %% Frontend Flow
+    User -->|HTTP Requests| Frontend
+    Frontend -->|API Calls| QueryClient
+    QueryClient -->|Axios Requests| API
+    
+    %% Backend Flow
+    API -->|SQL Queries| DB
+    DB -->|Data| API
+    API -->|Error| ExHandler
+    ExHandler -->|Formatted Error| API
+    API -->|JSON Response| QueryClient
+    QueryClient -->|Cached Data| Frontend
+    Frontend -->|Rendered UI| User
+    
+    %% Health Check Flow
+    API -->|Health Check| DB
+    DB -->|Status| API
+```
+
+### Key Components
+
+1. **Frontend Layer**:
+   - React application with TypeScript
+   - TanStack Query for data fetching and caching
+   - Axios for HTTP requests
+
+2. **Backend Layer**:
+   - Spring Boot REST API
+   - Global Exception Handler for error management
+   - Health check endpoint for monitoring
+
+3. **Data Layer**:
+   - PostgreSQL database
+   - JDBC Template for database operations
+
+### Data Flows
+- User interactions trigger HTTP requests from the frontend
+- TanStack Query manages API calls and caching
+- Spring Boot controllers process requests
+- Database queries are executed through JDBC Template
+- Errors are handled by the Global Exception Handler
+- Health checks monitor system status
