@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { propertyService } from '../services/propertyService';
 import { Property } from '../types/property';
 import { useState } from 'react';
@@ -6,11 +7,12 @@ import { Button } from './Button';
 
 interface PropertyFormProps {
     property?: Property;
-    onClose: () => void;
+    onClose?: () => void;
 }
 
 export function PropertyForm({ property, onClose }: PropertyFormProps) {
     const queryClient = useQueryClient();
+    const navigate = useNavigate();
     const [formData, setFormData] = useState<Omit<Property, 'id'>>({
         description: property?.description ?? '',
         address: property?.address ?? '',
@@ -27,13 +29,25 @@ export function PropertyForm({ property, onClose }: PropertyFormProps) {
                 : propertyService.create(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['properties'] });
-            onClose();
+            if (onClose) {
+                onClose();
+            } else {
+                navigate('/');
+            }
         }
     });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         mutation.mutate(formData as Property);
+    };
+
+    const handleCancel = () => {
+        if (onClose) {
+            onClose();
+        } else {
+            navigate('/');
+        }
     };
 
     return (
@@ -113,7 +127,7 @@ export function PropertyForm({ property, onClose }: PropertyFormProps) {
                 <Button
                     type="button"
                     variant="secondary"
-                    onClick={onClose}
+                    onClick={handleCancel}
                 >
                     Cancel
                 </Button>
