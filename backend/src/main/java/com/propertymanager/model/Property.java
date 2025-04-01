@@ -14,14 +14,8 @@ public class Property {
     @NotNull
     private String address;
 
-    @NotNull
-    private String city;
-
-    @NotNull
-    private String state;
-
-    @NotNull
-    private String zipCode;
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
     @Positive
     private Double price;
@@ -29,8 +23,6 @@ public class Property {
     private Integer bedrooms;
     private Integer bathrooms;
     private Double squareFootage;
-    private String description;
-    private String propertyType;
 
     // Getters and Setters
     public Long getId() {
@@ -49,28 +41,12 @@ public class Property {
         this.address = address;
     }
 
-    public String getCity() {
-        return city;
+    public String getDescription() {
+        return description;
     }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Double getPrice() {
@@ -103,21 +79,5 @@ public class Property {
 
     public void setSquareFootage(Double squareFootage) {
         this.squareFootage = squareFootage;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getPropertyType() {
-        return propertyType;
-    }
-
-    public void setPropertyType(String propertyType) {
-        this.propertyType = propertyType;
     }
 } 

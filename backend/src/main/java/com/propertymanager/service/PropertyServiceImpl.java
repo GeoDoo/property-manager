@@ -37,11 +37,11 @@ public class PropertyServiceImpl implements PropertyService {
     public Property updateProperty(Long id, Property property) {
         Property existingProperty = getPropertyById(id);
         existingProperty.setAddress(property.getAddress());
-        existingProperty.setCity(property.getCity());
-        existingProperty.setState(property.getState());
-        existingProperty.setZipCode(property.getZipCode());
+        existingProperty.setDescription(property.getDescription());
         existingProperty.setPrice(property.getPrice());
         existingProperty.setBedrooms(property.getBedrooms());
+        existingProperty.setBathrooms(property.getBathrooms());
+        existingProperty.setSquareFootage(property.getSquareFootage());
         return propertyRepository.save(existingProperty);
     }
 
