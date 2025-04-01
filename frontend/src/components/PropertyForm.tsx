@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { propertyService } from '../services/propertyService';
-import { Property } from '../types/Property';
+import { Property } from '../types/property';
 import { useState } from 'react';
 import { Button } from './Button';
 

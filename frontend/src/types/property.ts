@@ -13,4 +13,4 @@ export enum PropertyType {
     APARTMENT = 'APARTMENT',
     CONDO = 'CONDO',
     TOWNHOUSE = 'TOWNHOUSE'
-} 
+}

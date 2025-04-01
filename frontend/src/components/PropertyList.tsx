@@ -7,18 +7,7 @@ export function PropertyList() {
     const navigate = useNavigate();
     const { data: properties, isLoading, error } = useQuery({
         queryKey: ['properties'],
-        queryFn: async () => {
-            const response = await fetch('http://localhost:8081/api/properties', {
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        }
+        queryFn: propertyService.getAll
     });
 
     if (isLoading) return <div>Loading...</div>;
