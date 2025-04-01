@@ -5,6 +5,11 @@ import com.propertymanager.model.Property;
 import com.propertymanager.repository.ImageRepository;
 import com.propertymanager.repository.PropertyRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -82,5 +87,31 @@ public class ImageServiceImpl implements ImageService {
         Property property = propertyRepository.findById(propertyId)
             .orElseThrow(() -> new RuntimeException("Property not found with id: " + propertyId));
         return property.getImages();
+    }
+
+    @Override
+    public ResponseEntity<Resource> serveImage(String filename) throws IOException {
+        Path filePath = Paths.get(uploadPath).resolve(filename);
+        Resource resource = new UrlResource(filePath.toUri());
+
+        if (resource.exists() && resource.isReadable()) {
+            String contentType = determineContentType(filename);
+            return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(resource);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    private String determineContentType(String filename) {
+        String extension = filename.substring(filename.lastIndexOf(".") + 1).toLowerCase();
+        return switch (extension) {
+            case "png" -> "image/png";
+            case "gif" -> "image/gif";
+            case "webp" -> "image/webp";
+            default -> "image/jpeg";
+        };
     }
 } 

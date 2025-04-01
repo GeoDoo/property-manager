@@ -30,17 +30,6 @@ export const propertyService = {
         await axios.delete(`/properties/${id}`);
     },
 
-    search: async (params: { streetName?: string }): Promise<Property[]> => {
-        console.log('propertyService.search called with:', params);
-        const response = await axios.get<Property[]>('/properties/search', {
-            params: {
-                streetName: params.streetName
-            }
-        });
-        console.log('Search response:', response.data);
-        return response.data;
-    },
-
     uploadImage: async (propertyId: number, files: File[]) => {
         const formData = new FormData();
         if (Array.isArray(files)) {

@@ -49,12 +49,4 @@ public class PropertyServiceImpl implements PropertyService {
     public void deleteProperty(Long id) {
         propertyRepository.deleteById(id);
     }
-
-    @Override
-    public List<Property> searchProperties(String streetName) {
-        if (streetName == null || streetName.trim().isEmpty()) {
-            return propertyRepository.findAll();
-        }
-        return propertyRepository.findByAddressContainingIgnoreCase(streetName.trim());
-    }
 } 
