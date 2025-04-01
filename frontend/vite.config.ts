@@ -8,5 +8,11 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     sourcemap: false
+  },
+  server: {
+    port: 5173,
+    proxy: {
+      '/api': 'http://localhost:8081'
+    }
   }
 })
