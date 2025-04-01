@@ -24,7 +24,7 @@ export function PropertyDetails() {
                         onClick={() => navigate('/')}
                         className="bg-white hover:bg-gray-50"
                     >
-                        Back to search
+                        Back to properties
                     </Button>
                 </div>
             </div>
