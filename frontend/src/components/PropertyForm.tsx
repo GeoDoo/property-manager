@@ -265,7 +265,7 @@ export function PropertyForm() {
                                     {formData.images.map((image) => (
                                         <div key={image.id} className="relative group">
                                             <img
-                                                src={import.meta.env.VITE_API_URL + image.url}
+                                                src={image.url.startsWith('http') ? image.url : `${import.meta.env.VITE_API_URL}${image.url.replace(/^\/api/, '')}`}
                                                 alt="Property"
                                                 className="w-full h-32 object-cover rounded"
                                             />
@@ -273,8 +273,11 @@ export function PropertyForm() {
                                                 type="button"
                                                 onClick={() => handleDeleteImage(image.id)}
                                                 className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                                aria-label="Delete image"
                                             >
-                                                ×
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
                                             </button>
                                         </div>
                                     ))}
