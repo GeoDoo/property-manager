@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { propertyService } from '../services/propertyService';
 import { Button } from './Button';
+import { ImageSlider } from './ImageSlider';
 
 export function PropertyDetails() {
     const { id } = useParams();
@@ -31,10 +32,7 @@ export function PropertyDetails() {
 
             <div className="container mx-auto p-4">
                 <div className="bg-white rounded-lg overflow-hidden">
-                    {/* Image gallery placeholder */}
-                    <div className="w-full h-[480px] bg-gray-200 flex items-center justify-center text-gray-400">
-                        Property Images
-                    </div>
+                    <ImageSlider images={property.images || []} />
 
                     <div className="p-6">
                         <div className="flex justify-between items-start">

@@ -33,6 +33,7 @@ services:
       - ./backend:/app
       - /app/target
       - /app/.gradle
+      - property_images:/uploads
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8081/api/health"]
       interval: 30s
@@ -66,3 +67,4 @@ services:
 
 volumes:
   postgres_data:
+  property_images:

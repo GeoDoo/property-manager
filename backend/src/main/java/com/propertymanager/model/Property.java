@@ -3,6 +3,8 @@ package com.propertymanager.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "properties")
@@ -23,6 +25,9 @@ public class Property {
     private Integer bedrooms;
     private Integer bathrooms;
     private Double squareFootage;
+
+    @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Image> images = new ArrayList<>();
 
     // Getters and Setters
     public Long getId() {
@@ -79,5 +84,23 @@ public class Property {
 
     public void setSquareFootage(Double squareFootage) {
         this.squareFootage = squareFootage;
+    }
+
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
+    public void addImage(Image image) {
+        images.add(image);
+        image.setProperty(this);
+    }
+
+    public void removeImage(Image image) {
+        images.remove(image);
+        image.setProperty(null);
     }
 } 

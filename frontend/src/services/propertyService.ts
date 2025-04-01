@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Property } from '../types/property';
+import { Property, Image } from '../types/property';
 
 // Configure axios defaults
 axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8081/api';
@@ -39,5 +39,32 @@ export const propertyService = {
         });
         console.log('Search response:', response.data);
         return response.data;
+    },
+
+    uploadImage: async (propertyId: number, files: File[]) => {
+        const formData = new FormData();
+        if (Array.isArray(files)) {
+            files.forEach(file => {
+                formData.append('files', file);
+            });
+        } else {
+            console.error('Files parameter is not an array:', files);
+            throw new Error('Invalid files parameter');
+        }
+        const response = await axios.post<Image[]>(`/images/upload/${propertyId}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return response.data;
+    },
+
+    getPropertyImages: async (propertyId: number) => {
+        const response = await axios.get<Image[]>(`/images/property/${propertyId}`);
+        return response.data;
+    },
+
+    deleteImage: async (imageId: number) => {
+        await axios.delete(`/images/${imageId}`);
     }
 }; 
