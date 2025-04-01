@@ -1,20 +1,21 @@
 import { Property } from '../../types/property';
 import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../config/routes';
 
 interface PropertyCardProps {
     property: Property;
 }
 
-export const PropertyCard = ({ property }: PropertyCardProps) => {
+export function PropertyCard({ property }: PropertyCardProps) {
     const navigate = useNavigate();
 
     const handleViewDetails = () => {
-        navigate(`/property/${property.id}`);
+        navigate(ROUTES.PROPERTIES.DETAILS(property.id!));
     };
 
     const handleEdit = (e: React.MouseEvent) => {
         e.stopPropagation();
-        navigate(`/property/${property.id}/edit`);
+        navigate(ROUTES.PROPERTIES.EDIT(property.id!));
     };
 
     return (

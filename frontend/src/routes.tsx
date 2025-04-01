@@ -1,23 +1,24 @@
 import { RouteObject } from 'react-router-dom';
-import { PropertyList } from './components/PropertyList';
-import { PropertyForm } from './components/PropertyForm';
-import { PropertyDetails } from './components/PropertyDetails';
+import PropertyList from './components/Property/PropertyList';
+import { PropertyForm } from './components/Property/PropertyForm';
+import { PropertyDetails } from './components/Property/PropertyDetails';
+import { ROUTES } from './config/routes';
 
 export const routes: RouteObject[] = [
     {
-        path: '/',
+        path: ROUTES.HOME,
         element: <PropertyList />
     },
     {
-        path: '/property/new',
+        path: ROUTES.PROPERTIES.NEW,
         element: <PropertyForm />
     },
     {
-        path: '/property/:id',
+        path: ROUTES.PROPERTIES.DETAILS(':id'),
         element: <PropertyDetails />
     },
     {
-        path: '/property/:id/edit',
+        path: ROUTES.PROPERTIES.EDIT(':id'),
         element: <PropertyForm />
     }
 ]; 
