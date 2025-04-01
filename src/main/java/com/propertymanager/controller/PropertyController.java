@@ -8,7 +8,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/properties")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class PropertyController {
+
     private final PropertyService propertyService;
 
     public PropertyController(PropertyService propertyService) {

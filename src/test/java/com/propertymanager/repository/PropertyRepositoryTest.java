@@ -1,16 +1,12 @@
 package com.propertymanager.repository;
 
-import com.propertymanager.entity.Property;
+import com.propertymanager.model.Property;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionTemplate;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -24,13 +20,10 @@ class PropertyRepositoryTest {
     @Autowired
     private PropertyRepository propertyRepository;
 
-    @Autowired
-    private PlatformTransactionManager transactionManager;
-
     private Property createTestProperty() {
         Property property = new Property();
         property.setAddress("123 Test St");
-        property.setPrice(new BigDecimal("250000.00"));
+        property.setPrice(new BigDecimal("250000.00").doubleValue());
         property.setBedrooms(3);
         property.setBathrooms(2);
         property.setSquareFootage(2000.0);

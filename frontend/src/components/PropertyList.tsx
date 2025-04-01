@@ -1,16 +1,28 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { propertyService } from '../services/propertyService';
 import { Button } from './Button';
 
 export function PropertyList() {
     const navigate = useNavigate();
-    const queryClient = useQueryClient();
-    
-    const { data: properties } = useQuery({
+    const { data: properties, isLoading, error } = useQuery({
         queryKey: ['properties'],
-        queryFn: propertyService.getAll
+        queryFn: async () => {
+            const response = await fetch('http://localhost:8081/api/properties', {
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        }
     });
+
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>Error loading properties</div>;
 
     const handleAddProperty = () => {
         navigate('/property/new');
@@ -48,7 +60,6 @@ export function PropertyList() {
                                 onClick={async () => {
                                     if (window.confirm('Are you sure you want to delete this property?')) {
                                         await propertyService.delete(property?.id ?? 0);
-                                        queryClient.invalidateQueries({ queryKey: ['properties'] });
                                     }
                                 }}
                             >

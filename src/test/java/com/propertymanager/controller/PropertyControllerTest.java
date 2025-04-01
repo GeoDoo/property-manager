@@ -1,7 +1,7 @@
 package com.propertymanager.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.propertymanager.entity.Property;
+import com.propertymanager.model.Property;
 import com.propertymanager.repository.PropertyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,7 +40,7 @@ class PropertyControllerTest {
         testProperty = new Property();
         testProperty.setId(1L);
         testProperty.setAddress("123 Test St");
-        testProperty.setPrice(new BigDecimal("250000.00"));
+        testProperty.setPrice(new BigDecimal("250000.00").doubleValue());
         testProperty.setBedrooms(3);
         testProperty.setBathrooms(2);
         testProperty.setSquareFootage(2000.0);
@@ -99,7 +99,7 @@ class PropertyControllerTest {
         when(propertyRepository.findById(1L)).thenReturn(Optional.of(testProperty));
         when(propertyRepository.save(any(Property.class))).thenReturn(testProperty);
 
-        testProperty.setPrice(new BigDecimal("260000.00"));
+        testProperty.setPrice(new BigDecimal("260000.00").doubleValue());
 
         mockMvc.perform(put("/api/properties/1")
                 .contentType(MediaType.APPLICATION_JSON)
