@@ -1,41 +1,44 @@
 # Property Manager
 
-A modern web application for managing property listings, built with Spring Boot and React.
+A full-stack application for managing real estate properties with image upload capabilities.
 
 ## Features
 
-- Create, read, update, and delete property listings
-- Property details include:
-  - Address
-  - Description (supports long text)
-  - Price
-  - Number of bedrooms
-  - Number of bathrooms
-  - Square footage
+- View list of properties
+- Add new properties
+- Edit existing properties
+- Delete properties
+- Upload multiple images per property
+- View property details with image gallery
+- Responsive design for all screen sizes
 
 ## Tech Stack
 
-### Backend
-- Java 17
-- Spring Boot 3.x
-- PostgreSQL 14
-- Docker
-
 ### Frontend
 - React with TypeScript
-- Vite
-- TanStack Query
-- Tailwind CSS
-- Nginx
+- Vite for build tooling
+- Tailwind CSS for styling
+- React Query for data fetching
+- React Router for navigation
+
+### Backend
+- Spring Boot 3.2.0
+- Java 17
+- PostgreSQL database
+- JPA/Hibernate for data persistence
+- Lombok for reducing boilerplate code
+- File upload handling with multipart support
+
+## Prerequisites
+
+- Java 17 or later
+- Node.js 18 or later
+- PostgreSQL 15 or later
+- Docker and Docker Compose (optional, for running with containers)
 
 ## Getting Started
 
-### Prerequisites
-- Docker and Docker Compose
-- Node.js 18+ (for local development)
-- Java 17 (for local development)
-
-### Running the Application
+### Running with Docker Compose (Recommended)
 
 1. Clone the repository:
 ```bash
@@ -43,83 +46,126 @@ git clone <repository-url>
 cd property-manager
 ```
 
-2. Start the application using Docker Compose:
+2. Start the application:
 ```bash
-docker compose up --build
+docker-compose up
 ```
 
 The application will be available at:
-- Frontend: http://localhost
-- Backend API: http://localhost:8081/api
-- PostgreSQL: localhost:5432
+- Frontend: http://localhost:5173
+- Backend: http://localhost:8081
 
-## API Documentation
+### Running Locally
 
-### Endpoints
-
-#### Properties
-
-- `GET /api/properties` - List all properties
-- `GET /api/properties/{id}` - Get a specific property
-- `POST /api/properties` - Create a new property
-- `PUT /api/properties/{id}` - Update a property
-- `DELETE /api/properties/{id}` - Delete a property
-
-### Property Model
-
-```typescript
-interface Property {
-    id?: number;
-    address: string;      // Required
-    description: string;  // Optional, supports long text
-    price: number;        // Required, must be positive
-    bedrooms: number;     // Optional
-    bathrooms: number;    // Optional
-    squareFootage: number; // Optional
-}
+1. Start PostgreSQL database:
+```bash
+docker-compose up postgres
 ```
+
+2. Start the backend:
+```bash
+cd backend
+./gradlew bootRun
+```
+
+3. Start the frontend:
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+## Project Structure
+
+### Frontend
+```
+frontend/
+├── src/
+│   ├── components/
+│   │   ├── Layout/
+│   │   │   └── Layout.tsx
+│   │   ├── Property/
+│   │   │   ├── PropertyCard.tsx
+│   │   │   ├── PropertyDetails.tsx
+│   │   │   ├── PropertyForm.tsx
+│   │   │   └── PropertyList.tsx
+│   │   └── ImageSlider.tsx
+│   ├── config/
+│   │   └── routes.ts
+│   ├── services/
+│   │   └── propertyService.ts
+│   ├── types/
+│   │   └── property.ts
+│   └── App.tsx
+└── package.json
+```
+
+### Backend
+```
+backend/
+├── src/
+│   └── main/
+│       ├── java/
+│       │   └── com/propertymanager/
+│       │       ├── config/
+│       │       │   └── WebConfig.java
+│       │       ├── controller/
+│       │       │   ├── ImageController.java
+│       │       │   └── PropertyController.java
+│       │       ├── model/
+│       │       │   ├── Image.java
+│       │       │   └── Property.java
+│       │       ├── repository/
+│       │       │   ├── ImageRepository.java
+│       │       │   └── PropertyRepository.java
+│       │       └── service/
+│       │           ├── ImageService.java
+│       │           ├── ImageServiceImpl.java
+│       │           ├── PropertyService.java
+│       │           └── PropertyServiceImpl.java
+│       └── resources/
+│           └── application.properties
+└── build.gradle
+```
+
+## API Endpoints
+
+### Properties
+- `GET /api/properties` - Get all properties
+- `GET /api/properties/{id}` - Get property by ID
+- `POST /api/properties` - Create new property
+- `PUT /api/properties/{id}` - Update property
+- `DELETE /api/properties/{id}` - Delete property
+
+### Images
+- `POST /api/images/upload/{propertyId}` - Upload images for a property
+- `GET /api/images/{filename}` - Get image by filename
+- `GET /api/images/property/{propertyId}` - Get all images for a property
+- `DELETE /api/images/{id}` - Delete image
 
 ## Development
 
-### Backend Development
-
-The backend is a Spring Boot application with the following configuration:
-- Server port: 8081
-- Database: PostgreSQL
-- JPA/Hibernate with automatic schema updates
-- Logging enabled for SQL queries
-
 ### Frontend Development
-
-The frontend is a React application built with:
-- Vite for fast development and building
+- Uses Vite for fast development and hot module replacement
 - TypeScript for type safety
-- TanStack Query for API data management
-- Tailwind CSS for styling
-- Nginx for production serving
+- Tailwind CSS for utility-first styling
+- React Query for efficient data fetching and caching
 
-### Environment Variables
-
-Backend (application.properties):
-```properties
-spring.datasource.url=jdbc:postgresql://postgres:5432/propertymanager
-spring.datasource.username=postgres
-spring.datasource.password=postgres
-```
-
-## Docker Configuration
-
-The application uses Docker Compose with three services:
-1. `postgres` - PostgreSQL database
-2. `backend` - Spring Boot application
-3. `frontend` - React application with Nginx
-
-Each service is configured with health checks and appropriate dependencies.
+### Backend Development
+- Spring Boot with Gradle build system
+- JPA/Hibernate for database operations
+- Lombok for reducing boilerplate code
+- File upload handling with proper error management
+- CORS configuration for frontend communication
 
 ## Contributing
 
 1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a new Pull Request
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
