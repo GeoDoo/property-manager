@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { propertyService } from '../../services/propertyService';
-import { PropertyCard } from './PropertyCard';
+import PropertyCard from './PropertyCard';
 import { Property } from '../../types/property';
 import { Layout } from '../Layout/Layout';
 

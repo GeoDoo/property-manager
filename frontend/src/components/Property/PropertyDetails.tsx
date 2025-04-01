@@ -1,16 +1,18 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { propertyService } from '../../services/propertyService';
 import { Property } from '../../types/property';
 import { ImageSlider } from '../ImageSlider';
 import { Layout } from '../Layout/Layout';
 import { Button } from '../Button';
 import { ROUTES } from '../../config/routes';
+import { FaBed, FaBath, FaRulerCombined } from 'react-icons/fa';
 
 export function PropertyDetails() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const { data: property, isLoading } = useQuery<Property>({
     queryKey: ['property', id],
@@ -18,13 +20,22 @@ export function PropertyDetails() {
     enabled: !!id,
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: propertyService.delete,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['properties'] });
+      navigate(ROUTES.HOME);
+    },
+  });
+
+  const handleDelete = () => {
+    if (window.confirm('Are you sure you want to delete this property?')) {
+      deleteMutation.mutate(Number(id));
+    }
+  };
+
   if (isLoading) return <div>Loading...</div>;
   if (!property) return <div>Property not found</div>;
-
-  const handleDelete = async () => {
-    await propertyService.delete(property.id!);
-    navigate(ROUTES.HOME);
-  };
 
   return (
     <Layout>
@@ -59,15 +70,36 @@ export function PropertyDetails() {
 
           <div className="mt-8 grid grid-cols-3 gap-6">
             <div className="bg-[#f7f7f7] p-4 rounded-lg text-center">
-              <div className="text-2xl font-bold text-[#262637]">{property.bedrooms}</div>
+              <div className="text-2xl font-bold text-[#262637]">
+                {property.bedrooms && (
+                  <div className="flex items-center justify-center">
+                    <FaBed className="mr-2 text-xl" />
+                    <span>{property.bedrooms} Bedrooms</span>
+                  </div>
+                )}
+              </div>
               <div className="text-[#6a6a6a]">BEDROOMS</div>
             </div>
             <div className="bg-[#f7f7f7] p-4 rounded-lg text-center">
-              <div className="text-2xl font-bold text-[#262637]">{property.bathrooms}</div>
+              <div className="text-2xl font-bold text-[#262637]">
+                {property.bathrooms && (
+                  <div className="flex items-center justify-center">
+                    <FaBath className="mr-2 text-xl" />
+                    <span>{property.bathrooms} Bathrooms</span>
+                  </div>
+                )}
+              </div>
               <div className="text-[#6a6a6a]">BATHROOMS</div>
             </div>
             <div className="bg-[#f7f7f7] p-4 rounded-lg text-center">
-              <div className="text-2xl font-bold text-[#262637]">{property.squareFootage}</div>
+              <div className="text-2xl font-bold text-[#262637]">
+                {property.squareFootage && (
+                  <div className="flex items-center justify-center">
+                    <FaRulerCombined className="mr-2 text-xl" />
+                    <span>{property.squareFootage.toLocaleString()} sq ft</span>
+                  </div>
+                )}
+              </div>
               <div className="text-[#6a6a6a]">SQ. FT.</div>
             </div>
           </div>

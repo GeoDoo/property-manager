@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { propertyService } from '../../services/propertyService';
 import { Property, Image } from '../../types/property';
 import { Layout } from '../Layout/Layout';
+import { ROUTES } from '../../config/routes';
 
 export function PropertyForm() {
   const { id } = useParams<{ id: string }>();
@@ -12,6 +13,15 @@ export function PropertyForm() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [uploadProgress, setUploadProgress] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [formData, setFormData] = useState<Property>({
+    address: '',
+    description: '',
+    price: 0,
+    bedrooms: 0,
+    bathrooms: 0,
+    squareFootage: 0,
+    images: [],
+  });
 
   const { data: property, isLoading: isLoadingProperty } = useQuery<Property>({
     queryKey: ['property', id],
@@ -19,15 +29,19 @@ export function PropertyForm() {
     enabled: !!id,
   });
 
-  const [formData, setFormData] = useState<Property>({
-    address: property?.address || '',
-    description: property?.description || '',
-    price: property?.price || 0,
-    bedrooms: property?.bedrooms || 0,
-    bathrooms: property?.bathrooms || 0,
-    squareFootage: property?.squareFootage || 0,
-    images: property?.images || [],
-  });
+  useEffect(() => {
+    if (property) {
+      setFormData({
+        address: property.address,
+        description: property.description,
+        price: property.price,
+        bedrooms: property.bedrooms,
+        bathrooms: property.bathrooms,
+        squareFootage: property.squareFootage,
+        images: property.images || [],
+      });
+    }
+  }, [property]);
 
   const propertyMutation = useMutation({
     mutationFn: (data: Property) => {
@@ -44,7 +58,7 @@ export function PropertyForm() {
           files: selectedFiles,
         });
       } else {
-        navigate('/properties');
+        navigate(ROUTES.PROPERTIES.LIST);
       }
     },
     onError: (error) => {
@@ -60,7 +74,7 @@ export function PropertyForm() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['properties'] });
-      navigate('/properties');
+      navigate(ROUTES.PROPERTIES.LIST);
     },
     onError: (error) => {
       setError('Error uploading images. Please try again.');
@@ -100,13 +114,25 @@ export function PropertyForm() {
     }));
   };
 
-  if (isLoadingProperty && id) return <div>Loading...</div>;
+  if (isLoadingProperty && id) {
+    return (
+      <Layout>
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#262637]"></div>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
-      <div className="bg-white rounded-lg shadow-md p-8">
-        <form onSubmit={handleSubmit}>
-          <h1 className="text-2xl font-bold mb-8 text-[#262637]">{id ? 'Edit Property' : 'Add New Property'}</h1>
+      <div className="bg-white rounded-lg overflow-hidden">
+        <div className="p-6">
+          <div className="flex justify-between items-start mb-8">
+            <h1 className="text-2xl font-bold text-[#262637]">
+              {id ? 'Edit Property' : 'Add New Property'}
+            </h1>
+          </div>
 
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
@@ -114,145 +140,147 @@ export function PropertyForm() {
             </div>
           )}
 
-          <div className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-[#262637] mb-2">Address</label>
-              <input
-                type="text"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                className="block w-full rounded-lg border border-gray-200 px-4 py-3 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-[#262637] mb-2">Description</label>
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                rows={4}
-                className="block w-full rounded-lg border border-gray-200 px-4 py-3 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-                required
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-6">
+          <form onSubmit={handleSubmit}>
+            <div className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-[#262637] mb-2">Price</label>
+                <label className="block text-sm font-medium text-[#262637] mb-2">Address</label>
                 <input
-                  type="number"
-                  name="price"
-                  value={formData.price}
+                  type="text"
+                  name="address"
+                  value={formData.address}
                   onChange={handleChange}
-                  min="0"
-                  className="block w-full rounded-lg border border-gray-200 px-4 py-3 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                  className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-[#262637] focus:border-[#262637] focus:ring-[#262637]"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[#262637] mb-2">Square Footage</label>
-                <input
-                  type="number"
-                  name="squareFootage"
-                  value={formData.squareFootage}
+                <label className="block text-sm font-medium text-[#262637] mb-2">Description</label>
+                <textarea
+                  name="description"
+                  value={formData.description}
                   onChange={handleChange}
-                  min="0"
-                  className="block w-full rounded-lg border border-gray-200 px-4 py-3 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-[#262637] mb-2">Bedrooms</label>
-                <input
-                  type="number"
-                  name="bedrooms"
-                  value={formData.bedrooms}
-                  onChange={handleChange}
-                  min="0"
-                  className="block w-full rounded-lg border border-gray-200 px-4 py-3 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                  rows={4}
+                  className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-[#262637] focus:border-[#262637] focus:ring-[#262637]"
                   required
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-[#262637] mb-2">Bathrooms</label>
-                <input
-                  type="number"
-                  name="bathrooms"
-                  value={formData.bathrooms}
-                  onChange={handleChange}
-                  min="0"
-                  className="block w-full rounded-lg border border-gray-200 px-4 py-3 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
-                  required
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-[#262637] mb-2">Images</label>
-              {formData.images.length > 0 && (
-                <div className="mb-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {formData.images.map((image) => (
-                    <div key={image.id} className="relative group">
-                      <img
-                        src={image.url.startsWith('http') 
-                          ? image.url 
-                          : `${import.meta.env.VITE_API_URL}${image.url.replace(/^\/api/, '')}`}
-                        alt="Property"
-                        className="w-full h-32 object-cover rounded-lg"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveImage(image)}
-                        className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                        </svg>
-                      </button>
-                    </div>
-                  ))}
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-[#262637] mb-2">Price</label>
+                  <input
+                    type="number"
+                    name="price"
+                    value={formData.price}
+                    onChange={handleChange}
+                    min="0"
+                    className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-[#262637] focus:border-[#262637] focus:ring-[#262637]"
+                    required
+                  />
                 </div>
-              )}
-              <input
-                type="file"
-                onChange={handleFileChange}
-                multiple
-                accept="image/*"
-                className="block w-full text-sm text-gray-500
-                  file:mr-4 file:py-3 file:px-4
-                  file:rounded-lg file:border-0
-                  file:text-sm file:font-medium
-                  file:bg-[#262637] file:text-white
-                  hover:file:bg-[#363654]"
-              />
-            </div>
-          </div>
 
-          <div className="mt-8 flex items-center justify-end space-x-4">
-            <button
-              type="button"
-              onClick={() => navigate('/properties')}
-              className="px-6 py-3 text-sm font-medium text-[#262637] bg-white border border-gray-200 rounded-lg hover:bg-gray-50"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={propertyMutation.isPending || uploadProgress}
-              className="px-6 py-3 text-sm font-medium text-white bg-[#262637] rounded-lg hover:bg-[#363654] disabled:opacity-50"
-            >
-              {propertyMutation.isPending || uploadProgress ? 'Saving...' : id ? 'Update Property' : 'Add Property'}
-            </button>
-          </div>
-        </form>
+                <div>
+                  <label className="block text-sm font-medium text-[#262637] mb-2">Square Footage</label>
+                  <input
+                    type="number"
+                    name="squareFootage"
+                    value={formData.squareFootage}
+                    onChange={handleChange}
+                    min="0"
+                    className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-[#262637] focus:border-[#262637] focus:ring-[#262637]"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-[#262637] mb-2">Bedrooms</label>
+                  <input
+                    type="number"
+                    name="bedrooms"
+                    value={formData.bedrooms}
+                    onChange={handleChange}
+                    min="0"
+                    className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-[#262637] focus:border-[#262637] focus:ring-[#262637]"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-[#262637] mb-2">Bathrooms</label>
+                  <input
+                    type="number"
+                    name="bathrooms"
+                    value={formData.bathrooms}
+                    onChange={handleChange}
+                    min="0"
+                    className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-[#262637] focus:border-[#262637] focus:ring-[#262637]"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-[#262637] mb-2">Images</label>
+                {formData.images.length > 0 && (
+                  <div className="mb-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {formData.images.map((image) => (
+                      <div key={image.id} className="relative group">
+                        <img
+                          src={image.url.startsWith('http') 
+                            ? image.url 
+                            : `${import.meta.env.VITE_API_URL}${image.url.replace(/^\/api/, '')}`}
+                          alt="Property"
+                          className="w-full h-32 object-cover rounded-lg"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveImage(image)}
+                          className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <input
+                  type="file"
+                  onChange={handleFileChange}
+                  multiple
+                  accept="image/*"
+                  className="block w-full text-sm text-gray-500
+                    file:mr-4 file:py-3 file:px-4
+                    file:rounded-lg file:border-0
+                    file:text-sm file:font-medium
+                    file:bg-[#262637] file:text-white
+                    hover:file:bg-[#363654]"
+                />
+              </div>
+            </div>
+
+            <div className="mt-8 flex items-center justify-end space-x-4">
+              <button
+                type="button"
+                onClick={() => navigate(ROUTES.PROPERTIES.LIST)}
+                className="px-6 py-3 text-sm font-medium text-[#262637] bg-white border border-gray-200 rounded-lg hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={propertyMutation.isPending || uploadProgress}
+                className="px-6 py-3 text-sm font-medium text-white bg-[#262637] rounded-lg hover:bg-[#363654] disabled:opacity-50"
+              >
+                {propertyMutation.isPending || uploadProgress ? 'Saving...' : id ? 'Update Property' : 'Add Property'}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </Layout>
   );

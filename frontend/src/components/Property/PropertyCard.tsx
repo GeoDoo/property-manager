@@ -1,12 +1,14 @@
+import React from 'react';
 import { Property } from '../../types/property';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../config/routes';
+import { FaBed, FaBath, FaRulerCombined } from 'react-icons/fa';
 
 interface PropertyCardProps {
     property: Property;
 }
 
-export function PropertyCard({ property }: PropertyCardProps) {
+const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
     const navigate = useNavigate();
 
     const handleViewDetails = () => {
@@ -60,16 +62,28 @@ export function PropertyCard({ property }: PropertyCardProps) {
                 {/* Property Features */}
                 <div className="grid grid-cols-3 gap-4 py-4 border-t border-gray-100">
                     <div className="text-center">
-                        <p className="text-lg font-semibold text-[#262637]">{property.bedrooms}</p>
-                        <p className="text-sm text-gray-500">BEDS</p>
+                        {property.bedrooms && (
+                            <div className="flex items-center">
+                                <FaBed className="mr-1" />
+                                <span>{property.bedrooms}</span>
+                            </div>
+                        )}
                     </div>
                     <div className="text-center">
-                        <p className="text-lg font-semibold text-[#262637]">{property.bathrooms}</p>
-                        <p className="text-sm text-gray-500">BATHS</p>
+                        {property.bathrooms && (
+                            <div className="flex items-center">
+                                <FaBath className="mr-1" />
+                                <span>{property.bathrooms}</span>
+                            </div>
+                        )}
                     </div>
                     <div className="text-center">
-                        <p className="text-lg font-semibold text-[#262637]">{property.squareFootage.toLocaleString()}</p>
-                        <p className="text-sm text-gray-500">SQ.FT</p>
+                        {property.squareFootage && (
+                            <div className="flex items-center">
+                                <FaRulerCombined className="mr-1" />
+                                <span>{property.squareFootage.toLocaleString()}</span>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -94,4 +108,6 @@ export function PropertyCard({ property }: PropertyCardProps) {
             </div>
         </div>
     );
-}; 
+};
+
+export default PropertyCard; 
