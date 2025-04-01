@@ -8,19 +8,22 @@ interface ImageSliderProps {
 export function ImageSlider({ images = [] }: ImageSliderProps) {
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    const goToPrevious = () => {
+    const goToPrevious = (e: React.MouseEvent) => {
+        e.stopPropagation();
         const isFirstSlide = currentIndex === 0;
         const newIndex = isFirstSlide ? images.length - 1 : currentIndex - 1;
         setCurrentIndex(newIndex);
     };
 
-    const goToNext = () => {
+    const goToNext = (e: React.MouseEvent) => {
+        e.stopPropagation();
         const isLastSlide = currentIndex === images.length - 1;
         const newIndex = isLastSlide ? 0 : currentIndex + 1;
         setCurrentIndex(newIndex);
     };
 
-    const goToSlide = (slideIndex: number) => {
+    const goToSlide = (e: React.MouseEvent, slideIndex: number) => {
+        e.stopPropagation();
         setCurrentIndex(slideIndex);
     };
 
@@ -32,42 +35,57 @@ export function ImageSlider({ images = [] }: ImageSliderProps) {
         );
     }
 
+    const imageUrl = images[currentIndex]?.url;
+    if (!imageUrl) {
+        return (
+            <div className="w-full h-[480px] bg-gray-200 flex items-center justify-center text-gray-400">
+                Invalid Image URL
+            </div>
+        );
+    }
+
     return (
         <div className="relative w-full h-[480px] group">
             <img
-                src={import.meta.env.VITE_API_URL + images[currentIndex].url}
+                src={imageUrl.startsWith('http') ? imageUrl : `${import.meta.env.VITE_API_URL}${imageUrl.replace(/^\/api/, '')}`}
                 alt={`Property ${currentIndex + 1}`}
                 className="w-full h-full object-cover"
             />
             
             {/* Left Arrow */}
-            <div 
-                className="hidden group-hover:block absolute top-1/2 left-4 -translate-y-1/2 cursor-pointer bg-black/30 hover:bg-black/50 text-white p-2 rounded-full"
+            <button 
+                className="absolute top-1/2 left-4 -translate-y-1/2 cursor-pointer bg-black/30 hover:bg-black/50 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                 onClick={goToPrevious}
+                type="button"
+                aria-label="Previous image"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
                 </svg>
-            </div>
+            </button>
 
             {/* Right Arrow */}
-            <div 
-                className="hidden group-hover:block absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer bg-black/30 hover:bg-black/50 text-white p-2 rounded-full"
+            <button 
+                className="absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer bg-black/30 hover:bg-black/50 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                 onClick={goToNext}
+                type="button"
+                aria-label="Next image"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                 </svg>
-            </div>
+            </button>
 
             {/* Dots/Thumbnails */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
                 {images.map((_, slideIndex) => (
-                    <div
+                    <button
                         key={slideIndex}
-                        onClick={() => goToSlide(slideIndex)}
+                        onClick={(e) => goToSlide(e, slideIndex)}
+                        type="button"
+                        aria-label={`Go to image ${slideIndex + 1}`}
                         className={`
-                            w-2 h-2 rounded-full cursor-pointer transition-all
+                            w-3 h-3 rounded-full cursor-pointer transition-all
                             ${currentIndex === slideIndex ? 'bg-white scale-125' : 'bg-white/50 hover:bg-white/75'}
                         `}
                     />

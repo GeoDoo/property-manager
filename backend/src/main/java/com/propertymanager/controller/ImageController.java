@@ -47,7 +47,7 @@ public class ImageController {
         return uploadedImages;
     }
 
-    @GetMapping("/{filename}")
+    @GetMapping("/{filename:.+}")
     public ResponseEntity<Resource> serveImage(@PathVariable String filename) throws IOException {
         Path filePath = Paths.get(uploadPath).resolve(filename);
         Resource resource = new UrlResource(filePath.toUri());

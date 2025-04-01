@@ -55,7 +55,7 @@ public class ImageServiceImpl implements ImageService {
         Image image = new Image();
         image.setFileName(filename);
         image.setContentType(file.getContentType());
-        image.setUrl("/api/images/" + filename);
+        image.setUrl("/images/" + filename);
         image.setProperty(property);
 
         return imageRepository.save(image);
