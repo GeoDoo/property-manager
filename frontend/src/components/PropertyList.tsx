@@ -10,53 +10,74 @@ export function PropertyList() {
         queryFn: propertyService.getAll
     });
 
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error loading properties</div>;
+    if (isLoading) return (
+        <div className="min-h-screen bg-[#f7f7f7] flex items-center justify-center">
+            <div className="text-xl">Loading...</div>
+        </div>
+    );
+    
+    if (error) return (
+        <div className="min-h-screen bg-[#f7f7f7] flex items-center justify-center">
+            <div className="text-xl">Error loading properties</div>
+        </div>
+    );
 
     const handleAddProperty = () => {
         navigate('/property/new');
     };
 
     return (
-        <div className="container mx-auto p-4">
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold">Properties</h1>
-                <Button 
-                    onClick={handleAddProperty}
-                    aria-label="Add Property"
-                    data-testid="add-property-button"
-                >
-                    Add Property
-                </Button>
+        <div className="min-h-screen bg-[#f7f7f7]">
+            <div className="bg-[#262637] text-white">
+                <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+                    <h1 className="text-2xl font-bold">Properties</h1>
+                    <Button 
+                        onClick={handleAddProperty}
+                        variant="outline"
+                        className="bg-white hover:bg-gray-50"
+                    >
+                        Add Property
+                    </Button>
+                </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {properties?.map(property => (
-                    <div key={property.id} className="bg-white p-4 rounded-lg shadow">
-                        <h2 className="text-xl font-semibold mb-2">{property.address}</h2>
-                        <p className="text-gray-600">${property.price.toLocaleString()}</p>
-                        <p className="text-gray-600">{property.bedrooms} beds • {property.bathrooms} baths</p>
-                        <p className="text-gray-600">{property.squareFootage} sq ft</p>
-                        <div className="mt-4 flex justify-end gap-2">
-                            <Button 
-                                variant="secondary"
-                                onClick={() => navigate(`/edit/${property.id}`)}
-                            >
-                                Edit
-                            </Button>
-                            <Button 
-                                variant="danger"
-                                onClick={async () => {
-                                    if (window.confirm('Are you sure you want to delete this property?')) {
-                                        await propertyService.delete(property?.id ?? 0);
-                                    }
-                                }}
-                            >
-                                Delete
-                            </Button>
+            <div className="container mx-auto p-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {properties?.map(property => (
+                        <div key={property.id} className="bg-white p-4 rounded-lg shadow-sm">
+                            <h2 className="text-xl font-semibold mb-2">{property.address}</h2>
+                            <p className="text-2xl font-bold text-[#262637] mb-4">£{property.price.toLocaleString()}</p>
+                            <div className="grid grid-cols-3 gap-4 mb-4">
+                                <div className="text-center">
+                                    <div className="font-bold">{property.bedrooms}</div>
+                                    <div className="text-gray-600 text-sm">BEDS</div>
+                                </div>
+                                <div className="text-center">
+                                    <div className="font-bold">{property.bathrooms}</div>
+                                    <div className="text-gray-600 text-sm">BATHS</div>
+                                </div>
+                                <div className="text-center">
+                                    <div className="font-bold">{property.squareFootage}</div>
+                                    <div className="text-gray-600 text-sm">SQ.FT</div>
+                                </div>
+                            </div>
+                            <div className="flex gap-2 justify-end">
+                                <Button 
+                                    variant="secondary"
+                                    onClick={() => navigate(`/property/${property.id}`)}
+                                >
+                                    View Details
+                                </Button>
+                                <Button 
+                                    variant="primary"
+                                    onClick={() => navigate(`/property/${property.id}/edit`)}
+                                >
+                                    Edit
+                                </Button>
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
         </div>
     );

@@ -2,6 +2,7 @@ import { RouteObject } from 'react-router-dom';
 import { PropertyList } from './components/PropertyList';
 import { PropertyForm } from './components/PropertyForm';
 import { PropertyDetails } from './components/PropertyDetails';
+import { PropertyEdit } from './components/PropertyEdit';
 
 export const routes: RouteObject[] = [
     {
@@ -18,6 +19,6 @@ export const routes: RouteObject[] = [
     },
     {
         path: '/property/:id/edit',
-        element: <PropertyForm />
+        element: <PropertyEdit />
     }
 ]; 
