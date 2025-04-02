@@ -149,7 +149,7 @@ export function PropertyForm() {
                   name="address"
                   value={formData.address}
                   onChange={handleChange}
-                  className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-[#262637] focus:border-[#262637] focus:ring-[#262637]"
+                  className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-[#262637] focus:border-[#00deb6] focus:ring-[#00deb6]"
                   required
                 />
               </div>
@@ -161,7 +161,7 @@ export function PropertyForm() {
                   value={formData.description}
                   onChange={handleChange}
                   rows={4}
-                  className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-[#262637] focus:border-[#262637] focus:ring-[#262637]"
+                  className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-[#262637] focus:border-[#00deb6] focus:ring-[#00deb6]"
                   required
                 />
               </div>
@@ -175,7 +175,7 @@ export function PropertyForm() {
                     value={formData.price}
                     onChange={handleChange}
                     min="0"
-                    className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-[#262637] focus:border-[#262637] focus:ring-[#262637]"
+                    className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-[#262637] focus:border-[#00deb6] focus:ring-[#00deb6]"
                     required
                   />
                 </div>
@@ -188,7 +188,7 @@ export function PropertyForm() {
                     value={formData.squareFootage}
                     onChange={handleChange}
                     min="0"
-                    className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-[#262637] focus:border-[#262637] focus:ring-[#262637]"
+                    className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-[#262637] focus:border-[#00deb6] focus:ring-[#00deb6]"
                     required
                   />
                 </div>
@@ -203,7 +203,7 @@ export function PropertyForm() {
                     value={formData.bedrooms}
                     onChange={handleChange}
                     min="0"
-                    className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-[#262637] focus:border-[#262637] focus:ring-[#262637]"
+                    className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-[#262637] focus:border-[#00deb6] focus:ring-[#00deb6]"
                     required
                   />
                 </div>
@@ -216,7 +216,7 @@ export function PropertyForm() {
                     value={formData.bathrooms}
                     onChange={handleChange}
                     min="0"
-                    className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-[#262637] focus:border-[#262637] focus:ring-[#262637]"
+                    className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-[#262637] focus:border-[#00deb6] focus:ring-[#00deb6]"
                     required
                   />
                 </div>
@@ -238,7 +238,7 @@ export function PropertyForm() {
                         <button
                           type="button"
                           onClick={() => handleRemoveImage(image)}
-                          className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                          className="absolute top-2 right-2 bg-[#e60000] text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -253,12 +253,12 @@ export function PropertyForm() {
                   onChange={handleFileChange}
                   multiple
                   accept="image/*"
-                  className="block w-full text-sm text-gray-500
+                  className="block w-full text-sm text-[#666666]
                     file:mr-4 file:py-3 file:px-4
                     file:rounded-lg file:border-0
                     file:text-sm file:font-medium
-                    file:bg-[#262637] file:text-white
-                    hover:file:bg-[#363654]"
+                    file:bg-[#00deb6] file:text-white
+                    hover:file:bg-[#00c5a0]"
                 />
               </div>
             </div>
@@ -274,7 +274,7 @@ export function PropertyForm() {
               <button
                 type="submit"
                 disabled={propertyMutation.isPending || uploadProgress}
-                className="px-6 py-3 text-sm font-medium text-white bg-[#262637] rounded-lg hover:bg-[#363654] disabled:opacity-50"
+                className="px-6 py-3 text-sm font-medium text-white bg-[#00deb6] rounded-lg hover:bg-[#00c5a0] disabled:opacity-50"
               >
                 {propertyMutation.isPending || uploadProgress ? 'Saving...' : id ? 'Update Property' : 'Add Property'}
               </button>
