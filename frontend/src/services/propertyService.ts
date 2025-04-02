@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { Property, Image } from '../types/property';
+import { API_URL } from '../config/api';
 
 // Configure axios defaults
-axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8081/api';
+axios.defaults.baseURL = API_URL;
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 
 export const propertyService = {

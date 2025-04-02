@@ -3,6 +3,7 @@ import { Property } from '../../types/property';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../config/routes';
 import { FaBed, FaBath, FaRulerCombined, FaHome } from 'react-icons/fa';
+import { getFullImageUrl } from '../../config/api';
 
 interface PropertyCardProps {
     property: Property;
@@ -29,9 +30,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
             <div className="relative h-48 bg-gray-200">
                 {property.images && property.images.length > 0 ? (
                     <img
-                        src={property.images[0].url.startsWith('http') 
-                            ? property.images[0].url 
-                            : `${import.meta.env.VITE_API_URL}${property.images[0].url.replace(/^\/api/, '')}`}
+                        src={getFullImageUrl(property.images[0].url)}
                         alt={property.address}
                         className="w-full h-full object-cover"
                     />

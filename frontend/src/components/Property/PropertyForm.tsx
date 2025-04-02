@@ -5,6 +5,7 @@ import { propertyService } from '../../services/propertyService';
 import { Property, Image } from '../../types/property';
 import { Layout } from '../Layout/Layout';
 import { ROUTES } from '../../config/routes';
+import { getFullImageUrl } from '../../config/api';
 
 export function PropertyForm() {
   const { id } = useParams<{ id: string }>();
@@ -242,13 +243,11 @@ export function PropertyForm() {
                 <label className="block text-sm font-medium text-[#262637] mb-2">Images</label>
                 {formData.images.length > 0 && (
                   <div className="mb-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {formData.images.map((image) => (
-                      <div key={image.id} className="relative group">
+                    {formData.images.map((image, index) => (
+                      <div key={index} className="relative group">
                         <img
-                          src={image.url.startsWith('http') 
-                            ? image.url 
-                            : `${import.meta.env.VITE_API_URL}${image.url.replace(/^\/api/, '')}`}
-                          alt="Property"
+                          src={getFullImageUrl(image.url)}
+                          alt={`Property image ${index + 1}`}
                           className="w-full h-32 object-cover rounded-lg"
                         />
                         <button

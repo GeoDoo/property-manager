@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Image } from '../types/property';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { getFullImageUrl } from '../config/api';
 
 interface ImageSliderProps {
     images: Image[];
@@ -47,7 +49,7 @@ export function ImageSlider({ images = [] }: ImageSliderProps) {
     return (
         <div className="relative w-full h-[480px] group">
             <img
-                src={imageUrl.startsWith('http') ? imageUrl : `${import.meta.env.VITE_API_URL}${imageUrl.replace(/^\/api/, '')}`}
+                src={getFullImageUrl(imageUrl)}
                 alt={`Property ${currentIndex + 1}`}
                 className="w-full h-full object-cover"
             />
