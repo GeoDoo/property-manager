@@ -73,6 +73,32 @@ public class PropertyServiceImpl implements PropertyService {
         propertyRepository.deleteById(id);
     }
 
+    @Override
+    public List<Property> searchProperties(String address, Double minPrice, Double maxPrice, Integer bedrooms) {
+        logger.debug("Searching properties with address: {}, minPrice: {}, maxPrice: {}, bedrooms: {}", 
+            address, minPrice, maxPrice, bedrooms);
+        
+        // Handle null values
+        if (address == null) address = "";
+        if (minPrice == null) minPrice = 0.0;
+        if (maxPrice == null) maxPrice = Double.MAX_VALUE;
+        
+        // Validate price range
+        if (minPrice < 0) {
+            throw new IllegalArgumentException("Minimum price cannot be negative");
+        }
+        if (maxPrice < minPrice) {
+            throw new IllegalArgumentException("Maximum price must be greater than or equal to minimum price");
+        }
+        
+        // Validate bedrooms
+        if (bedrooms != null && bedrooms < 0) {
+            throw new IllegalArgumentException("Number of bedrooms cannot be negative");
+        }
+        
+        return propertyRepository.searchProperties(address, minPrice, maxPrice, bedrooms);
+    }
+
     /**
      * Validates the property data before saving.
      * Throws IllegalArgumentException if validation fails.

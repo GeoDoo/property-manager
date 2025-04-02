@@ -9,4 +9,5 @@ public interface PropertyService {
     Property createProperty(Property property);
     Property updateProperty(Long id, Property property);
     void deleteProperty(Long id);
+    List<Property> searchProperties(String address, Double minPrice, Double maxPrice, Integer bedrooms);
 } 
