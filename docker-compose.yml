@@ -20,7 +20,7 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     ports:
       - "8081:8081"
     environment:
@@ -28,7 +28,6 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      SPRING_BOOT_DEVTOOLS_RESTART_ENABLED: "true"
     volumes:
       - ./backend:/app
       - /app/target
@@ -47,7 +46,7 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     ports:
       - "5173:5173"
     volumes:
