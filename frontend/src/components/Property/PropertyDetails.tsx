@@ -68,39 +68,26 @@ export function PropertyDetails() {
             </div>
           </div>
 
-          <div className="mt-8 grid grid-cols-3 gap-6">
-            <div className="bg-[#f7f7f7] p-4 rounded-lg text-center">
-              <div className="text-2xl font-bold text-[#262637]">
-                {property.bedrooms && (
-                  <div className="flex items-center justify-center">
-                    <FaBed className="mr-2 text-xl" />
-                    <span>{property.bedrooms} Bedrooms</span>
-                  </div>
-                )}
+          <div className="mt-8 border border-gray-200 rounded-lg p-4 bg-white">
+            <div className="grid grid-cols-3 gap-6">
+              <div className="bg-gray-200 p-4 rounded-lg text-center">
+                <div className="flex items-center justify-center text-lg text-[#262637]">
+                  <FaBed className="mr-2" />
+                  <span>{property.bedrooms} Bedrooms</span>
+                </div>
               </div>
-              <div className="text-[#6a6a6a]">BEDROOMS</div>
-            </div>
-            <div className="bg-[#f7f7f7] p-4 rounded-lg text-center">
-              <div className="text-2xl font-bold text-[#262637]">
-                {property.bathrooms && (
-                  <div className="flex items-center justify-center">
-                    <FaBath className="mr-2 text-xl" />
-                    <span>{property.bathrooms} Bathrooms</span>
-                  </div>
-                )}
+              <div className="bg-gray-200 p-4 rounded-lg text-center">
+                <div className="flex items-center justify-center text-lg text-[#262637]">
+                  <FaBath className="mr-2" />
+                  <span>{property.bathrooms} Bathrooms</span>
+                </div>
               </div>
-              <div className="text-[#6a6a6a]">BATHROOMS</div>
-            </div>
-            <div className="bg-[#f7f7f7] p-4 rounded-lg text-center">
-              <div className="text-2xl font-bold text-[#262637]">
-                {property.squareFootage && (
-                  <div className="flex items-center justify-center">
-                    <FaRulerCombined className="mr-2 text-xl" />
-                    <span>{property.squareFootage.toLocaleString()} sq ft</span>
-                  </div>
-                )}
+              <div className="bg-gray-200 p-4 rounded-lg text-center">
+                <div className="flex items-center justify-center text-lg text-[#262637]">
+                  <FaRulerCombined className="mr-2" />
+                  <span>{property.squareFootage.toLocaleString()} sq ft</span>
+                </div>
               </div>
-              <div className="text-[#6a6a6a]">SQ. FT.</div>
             </div>
           </div>
 
