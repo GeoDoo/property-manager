@@ -68,24 +68,30 @@ export function PropertyDetails() {
             </div>
           </div>
 
-          <div className="mt-8 border border-gray-200 rounded-lg p-4 bg-white">
-            <div className="grid grid-cols-3 gap-6">
-              <div className="bg-gray-200 p-4 rounded-lg text-center">
-                <div className="flex items-center justify-center text-lg text-[#262637]">
-                  <FaBed className="mr-2" />
-                  <span>{property.bedrooms} Bedrooms</span>
+          <div className="mt-8 bg-white border border-gray-200 rounded-none">
+            <div className="grid grid-cols-3">
+              <div className="flex flex-col items-center py-6">
+                <span className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">BEDROOMS</span>
+                <div className="flex items-center gap-2">
+                  <FaBed className="text-[#262637]" />
+                  <span className="text-lg text-[#262637]">{property.bedrooms}</span>
                 </div>
               </div>
-              <div className="bg-gray-200 p-4 rounded-lg text-center">
-                <div className="flex items-center justify-center text-lg text-[#262637]">
-                  <FaBath className="mr-2" />
-                  <span>{property.bathrooms} Bathrooms</span>
+              <div className="flex flex-col items-center py-6">
+                <span className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">BATHROOMS</span>
+                <div className="flex items-center gap-2">
+                  <FaBath className="text-[#262637]" />
+                  <span className="text-lg text-[#262637]">{property.bathrooms}</span>
                 </div>
               </div>
-              <div className="bg-gray-200 p-4 rounded-lg text-center">
-                <div className="flex items-center justify-center text-lg text-[#262637]">
-                  <FaRulerCombined className="mr-2" />
-                  <span>{property.squareFootage.toLocaleString()} sq ft</span>
+              <div className="flex flex-col items-center py-6">
+                <span className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">SIZE</span>
+                <div className="flex items-center gap-2">
+                  <FaRulerCombined className="text-[#262637]" />
+                  <div className="flex flex-col items-center">
+                    <span className="text-lg text-[#262637]">{property.squareFootage} sq ft</span>
+                    <span className="text-sm text-gray-500">{Math.round(property.squareFootage * 0.092903)} sq m</span>
+                  </div>
                 </div>
               </div>
             </div>
