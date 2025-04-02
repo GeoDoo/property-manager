@@ -1,87 +1,93 @@
 # Property Manager
 
-A modern web application for managing property listings, built with React and Spring Boot. Features a clean, Rightmove-inspired design.
-
-## Features
-
-- **Property Listings**
-  - View all properties in a responsive grid layout
-  - Property cards with image previews and key information
-  - Rightmove-style property statistics display
-
-- **Property Details**
-  - Image slider for property photos
-  - Key property statistics (bedrooms, bathrooms, size in sq ft/m)
-  - Detailed property description
-  - Price and address information
-
-- **Property Management**
-  - Add new properties
-  - Edit existing properties
-  - Delete properties
-  - Upload and manage multiple property images
-  - Delete individual images
+A full-stack application for managing property listings with image upload capabilities.
 
 ## Tech Stack
 
-### Frontend
-- React with TypeScript
-- TailwindCSS for styling
-- React Query for data fetching
-- React Router for navigation
-- React Icons for UI icons
-
 ### Backend
-- Spring Boot
-- JPA/Hibernate
-- PostgreSQL database
-- RESTful API architecture
+- Java 17
+- Spring Boot 3.2.4
+- Spring Data JPA
+- PostgreSQL
+- Gradle
+- Docker
+
+### Frontend
+- React 18
+- TypeScript
+- Vite
+- Tailwind CSS
+- Docker
+
+## Features
+- Property CRUD operations
+- Image upload and management
+- Responsive design
+- Docker containerization
+- Health check endpoints
+- Input validation
+- Error handling
+- Logging
+
+## Prerequisites
+- Java 17
+- Node.js 18+
+- Docker and Docker Compose
+- PostgreSQL (optional, as it's included in Docker setup)
 
 ## Getting Started
 
-### Prerequisites
-- Node.js (v16 or higher)
-- Java 17 or higher
-- PostgreSQL
-
-### Installation
+### Using Docker (Recommended)
 
 1. Clone the repository:
-```bash
-git clone [repository-url]
-```
+   ```bash
+   git clone https://github.com/yourusername/property-manager.git
+   cd property-manager
+   ```
 
-2. Frontend setup:
-```bash
-cd frontend
-npm install
-```
+2. Start the application:
+   ```bash
+   docker compose up -d
+   ```
 
-3. Backend setup:
-```bash
-cd backend
-./mvnw clean install
-```
+3. Access the application:
+   - Frontend: http://localhost:3000
+   - Backend: http://localhost:8080
+   - Backend Health Check: http://localhost:8080/actuator/health
 
-4. Configure the database:
-- Create a PostgreSQL database
-- Update `application.properties` with your database credentials
+### Manual Setup
 
-### Running the Application
+#### Backend Setup
+1. Navigate to the backend directory:
+   ```bash
+   cd backend
+   ```
 
-1. Start the backend server:
-```bash
-cd backend
-./mvnw spring-boot:run
-```
+2. Build the project:
+   ```bash
+   ./gradlew build
+   ```
 
-2. Start the frontend development server:
-```bash
-cd frontend
-npm run dev
-```
+3. Run the application:
+   ```bash
+   ./gradlew bootRun
+   ```
 
-The application will be available at `http://localhost:5173`
+#### Frontend Setup
+1. Navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
 ## API Endpoints
 
@@ -93,29 +99,37 @@ The application will be available at `http://localhost:5173`
 - `DELETE /api/properties/{id}` - Delete property
 
 ### Images
-- `POST /api/images/upload/{propertyId}` - Upload property images
-- `GET /api/images/property/{propertyId}` - Get property images
+- `POST /api/properties/{propertyId}/images` - Upload image for property
+- `GET /api/properties/{propertyId}/images` - Get all images for property
 - `DELETE /api/images/{id}` - Delete image
+- `GET /images/{filename}` - Serve image file
 
-## Styling
+## Environment Variables
 
-The application uses TailwindCSS with a custom theme inspired by Rightmove:
-- Primary color: #00deb6 (Rightmove teal)
-- Text colors: 
-  - Primary: #262637 (dark navy)
-  - Secondary: #666666 (medium gray)
-  - Labels: #6a6a6a (light gray)
-- Clean, modern UI with consistent spacing and typography
-- Responsive design that works on all screen sizes
+### Backend
+- `SPRING_DATASOURCE_URL` - Database URL
+- `SPRING_DATASOURCE_USERNAME` - Database username
+- `SPRING_DATASOURCE_PASSWORD` - Database password
+- `UPLOAD_PATH` - Path for storing uploaded images
+
+### Frontend
+- `VITE_API_URL` - Backend API URL
+
+## Recent Changes
+- Added Spring Boot Actuator for health checks
+- Improved error handling with custom exceptions
+- Added input validation for properties and images
+- Enhanced logging throughout the application
+- Optimized CORS configuration
+- Removed redundant configuration settings
+- Added proper documentation
 
 ## Contributing
-
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
 ## License
-
 This project is licensed under the MIT License - see the LICENSE file for details.
