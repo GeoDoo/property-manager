@@ -5,6 +5,9 @@ import com.propertymanager.model.Property;
 import com.propertymanager.repository.PropertyRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -16,7 +19,7 @@ import java.util.List;
  * Handles business logic for property operations.
  */
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class PropertyServiceImpl implements PropertyService {
 
     private static final Logger logger = LoggerFactory.getLogger(PropertyServiceImpl.class);
@@ -27,12 +30,14 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Property> getAllProperties() {
         logger.debug("Fetching all properties");
         return propertyRepository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Property getPropertyById(Long id) {
         logger.debug("Fetching property with id: {}", id);
         return propertyRepository.findById(id)
@@ -40,6 +45,7 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
+    @Transactional
     public Property createProperty(Property property) {
         logger.debug("Creating new property: {}", property);
         validateProperty(property);
@@ -47,6 +53,7 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
+    @Transactional
     public Property updateProperty(Long id, Property property) {
         logger.debug("Updating property with id {}: {}", id, property);
         validateProperty(property);
@@ -65,6 +72,7 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
+    @Transactional
     public void deleteProperty(Long id) {
         logger.debug("Deleting property with id: {}", id);
         if (!propertyRepository.existsById(id)) {
@@ -74,29 +82,37 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
-    public List<Property> searchProperties(String address, Double minPrice, Double maxPrice, Integer bedrooms) {
+    @Transactional(readOnly = true)
+    public Page<Property> searchProperties(String address, Double minPrice, Double maxPrice, Integer bedrooms, Pageable pageable) {
         logger.debug("Searching properties with address: {}, minPrice: {}, maxPrice: {}, bedrooms: {}", 
             address, minPrice, maxPrice, bedrooms);
         
-        // Handle null values
-        if (address == null) address = "";
-        if (minPrice == null) minPrice = 0.0;
-        if (maxPrice == null) maxPrice = Double.MAX_VALUE;
+        validateSearchParameters(minPrice, maxPrice, bedrooms);
         
-        // Validate price range
-        if (minPrice < 0) {
-            throw new IllegalArgumentException("Minimum price cannot be negative");
+        // Create specifications for each filter
+        Specification<Property> spec = Specification.where(null);
+
+        if (StringUtils.hasText(address)) {
+            spec = spec.and((root, query, cb) -> 
+                cb.like(cb.lower(root.get("address")), "%" + address.toLowerCase() + "%"));
         }
-        if (maxPrice < minPrice) {
-            throw new IllegalArgumentException("Maximum price must be greater than or equal to minimum price");
+
+        if (minPrice != null) {
+            spec = spec.and((root, query, cb) -> 
+                cb.greaterThanOrEqualTo(root.get("price"), minPrice));
         }
-        
-        // Validate bedrooms
-        if (bedrooms != null && bedrooms < 0) {
-            throw new IllegalArgumentException("Number of bedrooms cannot be negative");
+
+        if (maxPrice != null) {
+            spec = spec.and((root, query, cb) -> 
+                cb.lessThanOrEqualTo(root.get("price"), maxPrice));
         }
-        
-        return propertyRepository.searchProperties(address, minPrice, maxPrice, bedrooms);
+
+        if (bedrooms != null) {
+            spec = spec.and((root, query, cb) -> 
+                cb.equal(root.get("bedrooms"), bedrooms));
+        }
+
+        return propertyRepository.findAll(spec, pageable);
     }
 
     /**
@@ -120,6 +136,21 @@ public class PropertyServiceImpl implements PropertyService {
         }
         if (property.getSquareFootage() == null || property.getSquareFootage() <= 0) {
             throw new IllegalArgumentException("Square footage must be greater than 0");
+        }
+    }
+
+    private void validateSearchParameters(Double minPrice, Double maxPrice, Integer bedrooms) {
+        if (minPrice != null && minPrice < 0) {
+            throw new IllegalArgumentException("Minimum price cannot be negative");
+        }
+        if (maxPrice != null && maxPrice < 0) {
+            throw new IllegalArgumentException("Maximum price cannot be negative");
+        }
+        if (minPrice != null && maxPrice != null && maxPrice < minPrice) {
+            throw new IllegalArgumentException("Maximum price must be greater than or equal to minimum price");
+        }
+        if (bedrooms != null && bedrooms < 0) {
+            throw new IllegalArgumentException("Number of bedrooms cannot be negative");
         }
     }
 } 
