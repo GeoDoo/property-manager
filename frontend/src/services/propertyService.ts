@@ -1,10 +1,27 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { Property, Image } from '../types/property';
 import { API_URL } from '../config/api';
+
+// Define validation error type
+export interface ValidationError {
+    [key: string]: string;
+}
 
 // Configure axios defaults
 axios.defaults.baseURL = API_URL;
 axios.defaults.headers.common['Content-Type'] = 'application/json';
+
+// Add error interceptor to handle validation errors
+axios.interceptors.response.use(
+    response => response,
+    (error: AxiosError) => {
+        if (error.response?.status === 400 && error.response.data) {
+            // If it's a validation error, throw it with the validation messages
+            throw error.response.data as ValidationError;
+        }
+        throw error;
+    }
+);
 
 export const propertyService = {
     getAll: async () => {

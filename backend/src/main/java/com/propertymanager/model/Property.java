@@ -13,17 +13,22 @@ public class Property {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotNull(message = "Address is required")
     private String address;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Positive
+    @Positive(message = "Price must be greater than 0")
     private Double price;
 
+    @Positive(message = "Number of bedrooms must be greater than 0")
     private Integer bedrooms;
+    
+    @Positive(message = "Number of bathrooms must be greater than 0")
     private Integer bathrooms;
+    
+    @Positive(message = "Square footage must be greater than 0")
     private Double squareFootage;
 
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)

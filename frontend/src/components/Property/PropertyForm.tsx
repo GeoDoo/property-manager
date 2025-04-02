@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { propertyService } from '../../services/propertyService';
+import { propertyService, ValidationError } from '../../services/propertyService';
 import { Property, Image } from '../../types/property';
 import { Layout } from '../Layout/Layout';
 import { ROUTES } from '../../config/routes';
@@ -14,6 +14,7 @@ export function PropertyForm() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [uploadProgress, setUploadProgress] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [validationErrors, setValidationErrors] = useState<ValidationError>({});
   const [formData, setFormData] = useState<Property>({
     address: '',
     description: '',
@@ -63,8 +64,13 @@ export function PropertyForm() {
       }
     },
     onError: (error) => {
-      setError('Error saving property. Please try again.');
-      console.error('Error saving property:', error);
+      if (error && typeof error === 'object' && !(error instanceof Error)) {
+        setValidationErrors(error as unknown as ValidationError);
+        setError('Please fix the validation errors below.');
+      } else {
+        setError('Error saving property. Please try again.');
+        console.error('Error saving property:', error);
+      }
     },
   });
 
@@ -100,17 +106,56 @@ export function PropertyForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setValidationErrors({});
+
+    // Validate numeric fields before submission
+    const numericFields = ['price', 'bedrooms', 'bathrooms', 'squareFootage'];
+    const newErrors: ValidationError = {};
+    
+    numericFields.forEach(field => {
+      const value = formData[field as keyof Property];
+      if (typeof value === 'number' && value <= 0) {
+        newErrors[field] = `Please enter a valid ${field === 'price' ? 'price' : field === 'squareFootage' ? 'square footage' : field}`;
+      }
+    });
+
+    if (Object.keys(newErrors).length > 0) {
+      setValidationErrors(newErrors);
+      setError('Please check the highlighted fields and fix any errors before submitting.');
+      return;
+    }
+
     propertyMutation.mutate(formData);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
+    // For numeric fields, ensure the value is non-negative
+    if (name === 'price' || name === 'bedrooms' || name === 'bathrooms' || name === 'squareFootage') {
+      const numericValue = Number(value);
+      if (numericValue < 0) {
+        setValidationErrors(prev => ({
+          ...prev,
+          [name]: `Please enter a valid ${name === 'price' ? 'price' : name === 'squareFootage' ? 'square footage' : name}`
+        }));
+        return;
+      }
+    }
+    
     setFormData((prev) => ({
       ...prev,
       [name]: name === 'price' || name === 'bedrooms' || name === 'bathrooms' || name === 'squareFootage'
         ? Number(value)
         : value,
     }));
+    // Clear validation error for the field being changed
+    if (validationErrors[name]) {
+      setValidationErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -152,8 +197,17 @@ export function PropertyForm() {
           </div>
 
           {error && (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-              {error}
+            <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm text-red-700">{error}</p>
+                </div>
+              </div>
             </div>
           )}
 
@@ -166,9 +220,19 @@ export function PropertyForm() {
                   name="address"
                   value={formData.address}
                   onChange={handleChange}
-                  className="block w-full rounded-lg border-2 border-[#e5e5e5] px-4 py-3 text-[#262637] focus:border-[#00deb6] focus:ring-0 transition-colors"
+                  className={`block w-full rounded-lg border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
+                    validationErrors.address ? 'border-red-500' : 'border-[#e5e5e5] focus:border-[#00deb6]'
+                  }`}
                   required
                 />
+                {validationErrors.address && (
+                  <p className="mt-1 text-sm text-red-600 flex items-center">
+                    <svg className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                    </svg>
+                    {validationErrors.address}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -178,9 +242,14 @@ export function PropertyForm() {
                   value={formData.description}
                   onChange={handleChange}
                   rows={4}
-                  className="block w-full rounded-lg border-2 border-[#e5e5e5] px-4 py-3 text-[#262637] focus:border-[#00deb6] focus:ring-0 transition-colors"
+                  className={`block w-full rounded-lg border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
+                    validationErrors.description ? 'border-red-500' : 'border-[#e5e5e5] focus:border-[#00deb6]'
+                  }`}
                   required
                 />
+                {validationErrors.description && (
+                  <p className="mt-1 text-sm text-red-600">{validationErrors.description}</p>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-6">
@@ -192,9 +261,14 @@ export function PropertyForm() {
                     value={formData.price}
                     onChange={handleChange}
                     min="0"
-                    className="block w-full rounded-lg border-2 border-[#e5e5e5] px-4 py-3 text-[#262637] focus:border-[#00deb6] focus:ring-0 transition-colors"
+                    className={`block w-full rounded-lg border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
+                      validationErrors.price ? 'border-red-500' : 'border-[#e5e5e5] focus:border-[#00deb6]'
+                    }`}
                     required
                   />
+                  {validationErrors.price && (
+                    <p className="mt-1 text-sm text-red-600">{validationErrors.price}</p>
+                  )}
                 </div>
 
                 <div>
@@ -205,9 +279,14 @@ export function PropertyForm() {
                     value={formData.squareFootage}
                     onChange={handleChange}
                     min="0"
-                    className="block w-full rounded-lg border-2 border-[#e5e5e5] px-4 py-3 text-[#262637] focus:border-[#00deb6] focus:ring-0 transition-colors"
+                    className={`block w-full rounded-lg border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
+                      validationErrors.squareFootage ? 'border-red-500' : 'border-[#e5e5e5] focus:border-[#00deb6]'
+                    }`}
                     required
                   />
+                  {validationErrors.squareFootage && (
+                    <p className="mt-1 text-sm text-red-600">{validationErrors.squareFootage}</p>
+                  )}
                 </div>
               </div>
 
@@ -220,9 +299,14 @@ export function PropertyForm() {
                     value={formData.bedrooms}
                     onChange={handleChange}
                     min="0"
-                    className="block w-full rounded-lg border-2 border-[#e5e5e5] px-4 py-3 text-[#262637] focus:border-[#00deb6] focus:ring-0 transition-colors"
+                    className={`block w-full rounded-lg border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
+                      validationErrors.bedrooms ? 'border-red-500' : 'border-[#e5e5e5] focus:border-[#00deb6]'
+                    }`}
                     required
                   />
+                  {validationErrors.bedrooms && (
+                    <p className="mt-1 text-sm text-red-600">{validationErrors.bedrooms}</p>
+                  )}
                 </div>
 
                 <div>
@@ -233,9 +317,14 @@ export function PropertyForm() {
                     value={formData.bathrooms}
                     onChange={handleChange}
                     min="0"
-                    className="block w-full rounded-lg border-2 border-[#e5e5e5] px-4 py-3 text-[#262637] focus:border-[#00deb6] focus:ring-0 transition-colors"
+                    className={`block w-full rounded-lg border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
+                      validationErrors.bathrooms ? 'border-red-500' : 'border-[#e5e5e5] focus:border-[#00deb6]'
+                    }`}
                     required
                   />
+                  {validationErrors.bathrooms && (
+                    <p className="mt-1 text-sm text-red-600">{validationErrors.bathrooms}</p>
+                  )}
                 </div>
               </div>
 

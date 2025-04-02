@@ -2,6 +2,7 @@ package com.propertymanager.controller;
 
 import com.propertymanager.model.Property;
 import com.propertymanager.service.PropertyService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,12 +29,12 @@ public class PropertyController {
     }
 
     @PostMapping
-    public Property createProperty(@RequestBody Property property) {
+    public Property createProperty(@Valid @RequestBody Property property) {
         return propertyService.createProperty(property);
     }
 
     @PutMapping("/{id}")
-    public Property updateProperty(@PathVariable Long id, @RequestBody Property property) {
+    public Property updateProperty(@PathVariable Long id, @Valid @RequestBody Property property) {
         return propertyService.updateProperty(id, property);
     }
 
