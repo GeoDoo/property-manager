@@ -1,54 +1,48 @@
-# Gradle
-.gradle/
+# Backend
+.gradle
 build/
-out/
-gradle-app.setting
-!gradle-wrapper.jar
-.gradletasknamecache
+bin/
+target/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-# IntelliJ IDEA
+# Frontend
+node_modules/
+dist/
+dist-ssr/
+*.local
+.env*.local
+
+# IDEs and editors
 .idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.project
+.classpath
+.settings/
+.factorypath
 *.iws
 *.iml
 *.ipr
-
-# VS Code
-.vscode/
-.settings/
-.classpath
-.project
-
-# Node/React
-frontend/node_modules/
-frontend/dist/
-frontend/build/
-frontend/.env
-frontend/coverage/
-frontend/.vite/
-frontend/node/
+.apt_generated
+.springBeans
+.sts4-cache
+.DS_Store
 
 # Logs
+logs
 *.log
-logs/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# OS specific
-.DS_Store
-Thumbs.db
-
-# Spring Boot
-target/
-!.mvn/wrapper/maven-wrapper.jar
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# Test coverage
-coverage/
-.nyc_output/ 
+# Application specific
+/uploads/
+application-local.properties 
