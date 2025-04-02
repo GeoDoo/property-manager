@@ -23,7 +23,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
     return (
         <div 
             onClick={handleViewDetails}
-            className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer"
+            className="bg-white rounded-lg overflow-hidden shadow-none border-2 border-[#e5e5e5] hover:border-[#00deb6] transition-colors duration-300 cursor-pointer"
         >
             {/* Image Section */}
             <div className="relative h-48 bg-gray-200">

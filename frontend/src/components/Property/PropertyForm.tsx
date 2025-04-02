@@ -149,7 +149,7 @@ export function PropertyForm() {
                   name="address"
                   value={formData.address}
                   onChange={handleChange}
-                  className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-[#262637] focus:border-[#00deb6] focus:ring-[#00deb6]"
+                  className="block w-full rounded-lg border-2 border-[#e5e5e5] px-4 py-3 text-[#262637] focus:border-[#00deb6] focus:ring-0 transition-colors"
                   required
                 />
               </div>
@@ -161,7 +161,7 @@ export function PropertyForm() {
                   value={formData.description}
                   onChange={handleChange}
                   rows={4}
-                  className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-[#262637] focus:border-[#00deb6] focus:ring-[#00deb6]"
+                  className="block w-full rounded-lg border-2 border-[#e5e5e5] px-4 py-3 text-[#262637] focus:border-[#00deb6] focus:ring-0 transition-colors"
                   required
                 />
               </div>
@@ -175,7 +175,7 @@ export function PropertyForm() {
                     value={formData.price}
                     onChange={handleChange}
                     min="0"
-                    className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-[#262637] focus:border-[#00deb6] focus:ring-[#00deb6]"
+                    className="block w-full rounded-lg border-2 border-[#e5e5e5] px-4 py-3 text-[#262637] focus:border-[#00deb6] focus:ring-0 transition-colors"
                     required
                   />
                 </div>
@@ -188,7 +188,7 @@ export function PropertyForm() {
                     value={formData.squareFootage}
                     onChange={handleChange}
                     min="0"
-                    className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-[#262637] focus:border-[#00deb6] focus:ring-[#00deb6]"
+                    className="block w-full rounded-lg border-2 border-[#e5e5e5] px-4 py-3 text-[#262637] focus:border-[#00deb6] focus:ring-0 transition-colors"
                     required
                   />
                 </div>
@@ -203,7 +203,7 @@ export function PropertyForm() {
                     value={formData.bedrooms}
                     onChange={handleChange}
                     min="0"
-                    className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-[#262637] focus:border-[#00deb6] focus:ring-[#00deb6]"
+                    className="block w-full rounded-lg border-2 border-[#e5e5e5] px-4 py-3 text-[#262637] focus:border-[#00deb6] focus:ring-0 transition-colors"
                     required
                   />
                 </div>
@@ -216,7 +216,7 @@ export function PropertyForm() {
                     value={formData.bathrooms}
                     onChange={handleChange}
                     min="0"
-                    className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-[#262637] focus:border-[#00deb6] focus:ring-[#00deb6]"
+                    className="block w-full rounded-lg border-2 border-[#e5e5e5] px-4 py-3 text-[#262637] focus:border-[#00deb6] focus:ring-0 transition-colors"
                     required
                   />
                 </div>
@@ -267,7 +267,7 @@ export function PropertyForm() {
               <button
                 type="button"
                 onClick={() => navigate(ROUTES.PROPERTIES.LIST)}
-                className="px-6 py-3 text-sm font-medium text-[#262637] bg-white border border-gray-200 rounded-lg hover:bg-gray-50"
+                className="px-6 py-3 text-sm font-medium text-[#262637] bg-white border-2 border-[#e5e5e5] rounded-lg hover:border-[#00deb6] transition-colors"
               >
                 Cancel
               </button>
