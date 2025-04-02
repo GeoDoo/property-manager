@@ -2,7 +2,7 @@ import React from 'react';
 import { Property } from '../../types/property';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../config/routes';
-import { FaBed, FaBath, FaRulerCombined } from 'react-icons/fa';
+import { FaBed, FaBath, FaRulerCombined, FaHome } from 'react-icons/fa';
 
 interface PropertyCardProps {
     property: Property;
@@ -36,14 +36,14 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
                         className="w-full h-full object-cover"
                     />
                 ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-400">
-                        No Image Available
+                    <div className="flex items-center justify-center h-full bg-gray-200">
+                        <FaHome className="text-4xl text-gray-400" />
                     </div>
                 )}
                 <div className="absolute top-4 right-4">
                     <button
                         onClick={handleEdit}
-                        className="bg-white text-gray-700 px-4 py-2 rounded-full text-sm font-medium shadow-sm hover:bg-gray-50 transition-colors duration-200"
+                        className="bg-white text-[#262637] px-4 py-2 rounded-full text-sm font-medium shadow-sm hover:bg-gray-50 transition-colors duration-200"
                     >
                         Edit
                     </button>
@@ -54,7 +54,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
             <div className="p-4">
                 <div className="mb-2">
                     <h3 className="text-xl font-bold text-[#262637] mb-2">{property.address}</h3>
-                    <p className="text-2xl font-bold text-[#262637]">
+                    <p className="text-2xl font-bold text-[#00deb6]">
                         £{property.price.toLocaleString()}
                     </p>
                 </div>
@@ -63,7 +63,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
                 <div className="grid grid-cols-3 gap-4 py-4 border-t border-gray-100">
                     <div className="text-center">
                         {property.bedrooms && (
-                            <div className="flex items-center">
+                            <div className="flex items-center justify-center text-[#666666]">
                                 <FaBed className="mr-1" />
                                 <span>{property.bedrooms}</span>
                             </div>
@@ -71,7 +71,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
                     </div>
                     <div className="text-center">
                         {property.bathrooms && (
-                            <div className="flex items-center">
+                            <div className="flex items-center justify-center text-[#666666]">
                                 <FaBath className="mr-1" />
                                 <span>{property.bathrooms}</span>
                             </div>
@@ -79,7 +79,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
                     </div>
                     <div className="text-center">
                         {property.squareFootage && (
-                            <div className="flex items-center">
+                            <div className="flex items-center justify-center text-[#666666]">
                                 <FaRulerCombined className="mr-1" />
                                 <span>{property.squareFootage.toLocaleString()}</span>
                             </div>
@@ -90,7 +90,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
                 {/* Description Preview */}
                 {property.description && (
                     <div className="mt-4 border-t border-gray-100 pt-4">
-                        <p className="text-gray-600 text-sm line-clamp-2">
+                        <p className="text-[#666666] text-sm line-clamp-2">
                             {property.description}
                         </p>
                     </div>
@@ -100,7 +100,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
                 <div className="mt-4 text-center">
                     <button
                         onClick={handleViewDetails}
-                        className="w-full bg-[#262637] text-white px-4 py-2 rounded-md hover:bg-[#363654] transition-colors duration-200"
+                        className="w-full bg-[#00deb6] text-white px-4 py-2 rounded-md hover:bg-[#00c5a0] transition-colors duration-200"
                     >
                         View Details
                     </button>
