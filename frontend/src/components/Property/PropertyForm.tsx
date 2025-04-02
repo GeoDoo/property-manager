@@ -85,6 +85,17 @@ export function PropertyForm() {
     },
   });
 
+  const deleteImageMutation = useMutation({
+    mutationFn: propertyService.deleteImage,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['property', id] });
+    },
+    onError: (error) => {
+      setError('Error deleting image. Please try again.');
+      console.error('Error deleting image:', error);
+    },
+  });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -107,11 +118,16 @@ export function PropertyForm() {
     }
   };
 
-  const handleRemoveImage = (imageToRemove: Image) => {
-    setFormData(prev => ({
-      ...prev,
-      images: prev.images.filter(img => img.id !== imageToRemove.id)
-    }));
+  const handleRemoveImage = async (imageToRemove: Image) => {
+    try {
+      await deleteImageMutation.mutateAsync(imageToRemove.id);
+      setFormData(prev => ({
+        ...prev,
+        images: prev.images.filter(img => img.id !== imageToRemove.id)
+      }));
+    } catch (error) {
+      // Error is handled by the mutation
+    }
   };
 
   if (isLoadingProperty && id) {
