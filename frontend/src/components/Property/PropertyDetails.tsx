@@ -39,8 +39,12 @@ export function PropertyDetails() {
 
   return (
     <Layout>
-      <div className="bg-white rounded-lg">
-        <ImageSlider images={property.images || []} />
+      <div className="bg-white rounded-lg overflow-hidden">
+        <div className="p-6">
+          <div className="rounded-lg overflow-hidden">
+            <ImageSlider images={property.images || []} />
+          </div>
+        </div>
 
         <div className="p-6">
           <div className="flex justify-between items-start">

@@ -15,7 +15,7 @@ export function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-[#f7f7f7] p-0">
       <div className="container mx-auto">
-        <div className="bg-white text-[#00deb6] rounded-lg px-4 py-2 flex justify-between items-center">
+        <div className="bg-white text-[#00deb6] rounded-lg px-6 py-2 flex justify-between items-center">
           {!isHomePage ? (
             <Button
               variant="outline"
