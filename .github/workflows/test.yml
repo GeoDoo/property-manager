@@ -30,6 +30,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
+      - name: Create badges directory
+        run: mkdir -p .github/badges
+
       - name: Run tests with Docker Compose
         run: docker compose -f docker-compose.test.yml up test --build --abort-on-container-exit --force-recreate --exit-code-from test
         env:
@@ -54,15 +57,20 @@ jobs:
           generate-coverage-endpoint: true
           coverage-badge-filename: jacoco.svg
           branches-badge-filename: branches.svg
+          fail-if-coverage-less-than: 0
+          fail-if-branches-less-than: 0
+          coverage-label: coverage
+          branches-label: branches
 
       - name: Commit and push coverage badges
         if: github.ref == 'refs/heads/main' && success()
         run: |
+          mkdir -p .github/badges
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add .github/badges/jacoco.svg .github/badges/branches.svg
+          git add .github/badges/jacoco.svg .github/badges/branches.svg || true
           git commit -m "Update coverage badges" || echo "No changes to commit"
-          git push
+          git push || echo "No changes to push"
 
       - name: Add coverage link to PR
         if: github.event_name == 'pull_request' && success()

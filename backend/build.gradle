@@ -41,9 +41,12 @@ tasks.named('test') {
 jacocoTestReport {
     dependsOn test
     reports {
-        xml.required = false
-        csv.required = false
+        xml.required = true
+        csv.required = true
         html.required = true
+        html.outputLocation = layout.buildDirectory.dir('reports/jacoco/test/html')
+        csv.outputLocation = layout.buildDirectory.file('reports/jacoco/test/jacocoTestReport.csv')
+        xml.outputLocation = layout.buildDirectory.file('reports/jacoco/test/jacocoTestReport.xml')
     }
 }
 
