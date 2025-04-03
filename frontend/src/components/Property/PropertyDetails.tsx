@@ -40,13 +40,9 @@ export function PropertyDetails() {
   return (
     <Layout>
       <div className="bg-white rounded-lg overflow-hidden">
-        <div className="p-6">
-          <div className="rounded-lg overflow-hidden">
-            <ImageSlider images={property.images || []} />
-          </div>
-        </div>
-
-        <div className="p-6">
+        <ImageSlider images={property.images || []} />
+        
+        <div className="py-6">
           <div className="flex justify-between items-start">
             <div>
               <h1 className="text-3xl font-bold text-[#262637]">
@@ -71,37 +67,39 @@ export function PropertyDetails() {
               </Button>
             </div>
           </div>
+        </div>
 
-          <div className="mt-8 bg-white border border-gray-200 rounded-none">
-            <div className="grid grid-cols-3">
-              <div className="flex flex-col items-center py-6">
-                <span className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">BEDROOMS</span>
-                <div className="flex items-center gap-2">
-                  <FaBed className="text-[#262637]" />
-                  <span className="text-lg text-[#262637]">{property.bedrooms}</span>
-                </div>
+        <div className="border-t border-b border-gray-200">
+          <div className="grid grid-cols-3">
+            <div className="flex flex-col items-center py-6">
+              <span className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">BEDROOMS</span>
+              <div className="flex items-center gap-2">
+                <FaBed className="text-[#262637]" />
+                <span className="text-lg text-[#262637]">{property.bedrooms}</span>
               </div>
-              <div className="flex flex-col items-center py-6">
-                <span className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">BATHROOMS</span>
-                <div className="flex items-center gap-2">
-                  <FaBath className="text-[#262637]" />
-                  <span className="text-lg text-[#262637]">{property.bathrooms}</span>
-                </div>
+            </div>
+            <div className="flex flex-col items-center py-6 border-x border-gray-200">
+              <span className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">BATHROOMS</span>
+              <div className="flex items-center gap-2">
+                <FaBath className="text-[#262637]" />
+                <span className="text-lg text-[#262637]">{property.bathrooms}</span>
               </div>
-              <div className="flex flex-col items-center py-6">
-                <span className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">SIZE</span>
-                <div className="flex items-center gap-2">
-                  <FaRulerCombined className="text-[#262637]" />
-                  <div className="flex flex-col items-center">
-                    <span className="text-lg text-[#262637]">{property.squareFootage} sq ft</span>
-                    <span className="text-sm text-gray-500">{Math.round(property.squareFootage * 0.092903)} sq m</span>
-                  </div>
+            </div>
+            <div className="flex flex-col items-center py-6">
+              <span className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">SIZE</span>
+              <div className="flex items-center gap-2">
+                <FaRulerCombined className="text-[#262637]" />
+                <div className="flex flex-col items-center">
+                  <span className="text-lg text-[#262637]">{property.squareFootage} sq ft</span>
+                  <span className="text-sm text-gray-500">{Math.round(property.squareFootage * 0.092903)} sq m</span>
                 </div>
               </div>
             </div>
           </div>
+        </div>
 
-          <div className="mt-8">
+        <div className="py-6">
+          <div>
             <h2 className="text-xl font-bold text-[#262637] mb-4">PROPERTY DETAILS</h2>
             <p className="text-[#6a6a6a] leading-relaxed whitespace-pre-line">
               {property.description || 'No description available'}
