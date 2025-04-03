@@ -85,17 +85,22 @@ const PropertyList: React.FC = () => {
 
   return (
     <Layout>
-      <Filter onFilterChange={handleFilterChange} initialFilters={filters} />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="bg-white rounded-lg overflow-hidden py-6">
+        <Filter onFilterChange={handleFilterChange} initialFilters={filters} />
+      </div>
+
+      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {properties.map((property: Property) => (
           <PropertyCard key={property.id} property={property} />
         ))}
       </div>
+
       {!isLoading && (!data || data.empty) && (
-        <div className="text-center text-gray-500 p-4">
+        <div className="text-center text-gray-500 py-4">
           No properties found matching your criteria.
         </div>
       )}
+
       {totalPages > 1 && (
         <div className="mt-8 flex justify-center">
           <nav className="flex items-center space-x-2">

@@ -188,16 +188,16 @@ export function PropertyForm() {
 
   return (
     <Layout>
-      <div className="bg-white rounded-lg">
-        <div className="p-6">
-          <div className="flex justify-between items-start mb-8">
+      <div className="bg-white rounded-lg overflow-hidden">
+        <div className="py-6">
+          <div className="flex justify-between items-start">
             <h1 className="text-2xl font-bold text-[#262637]">
               {id ? 'Edit Property' : 'Add New Property'}
             </h1>
           </div>
 
           {error && (
-            <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+            <div className="bg-red-50 border-l-4 border-red-500 p-4 mt-6">
               <div className="flex">
                 <div className="flex-shrink-0">
                   <svg className="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
@@ -211,7 +211,7 @@ export function PropertyForm() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="mt-6">
             <div className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-[#262637] mb-2">Address</label>
@@ -226,12 +226,7 @@ export function PropertyForm() {
                   required
                 />
                 {validationErrors.address && (
-                  <p className="mt-1 text-sm text-red-600 flex items-center">
-                    <svg className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                    </svg>
-                    {validationErrors.address}
-                  </p>
+                  <p className="mt-1 text-sm text-red-600">{validationErrors.address}</p>
                 )}
               </div>
 
