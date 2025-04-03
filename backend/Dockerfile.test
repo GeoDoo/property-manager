@@ -1,0 +1,23 @@
+FROM amazoncorretto:17-alpine
+
+# Install Docker CLI and required packages
+RUN apk add --no-cache docker-cli curl
+
+WORKDIR /app
+
+# Copy gradle files first for better caching
+COPY gradlew .
+COPY gradle gradle
+COPY build.gradle .
+COPY settings.gradle .
+
+# Make gradlew executable
+RUN chmod +x gradlew
+
+# Copy source code
+COPY src src
+
+# Cache dependencies
+RUN ./gradlew dependencies
+
+# The actual test command will be provided by docker-compose 

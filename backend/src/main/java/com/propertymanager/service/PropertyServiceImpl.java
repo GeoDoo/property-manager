@@ -49,6 +49,9 @@ public class PropertyServiceImpl implements PropertyService {
     public Property createProperty(Property property) {
         logger.debug("Creating new property: {}", property);
         validateProperty(property);
+        if (property.getId() != null && !propertyRepository.existsById(property.getId())) {
+            throw new ResourceNotFoundException("Property", "id", property.getId());
+        }
         return propertyRepository.save(property);
     }
 
