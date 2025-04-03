@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
   checks: write
@@ -54,6 +54,15 @@ jobs:
           generate-coverage-endpoint: true
           coverage-badge-filename: jacoco.svg
           branches-badge-filename: branches.svg
+
+      - name: Commit and push coverage badges
+        if: github.ref == 'refs/heads/main' && success()
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .github/badges/jacoco.svg .github/badges/branches.svg
+          git commit -m "Update coverage badges" || echo "No changes to commit"
+          git push
 
       - name: Add coverage link to PR
         if: github.event_name == 'pull_request' && success()
