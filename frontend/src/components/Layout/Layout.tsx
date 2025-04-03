@@ -26,7 +26,12 @@ export function Layout({ children }: LayoutProps) {
             </Button>
           ) : (
             <>
-              <h1 className="text-2xl font-bold">Properties</h1>
+              <a
+                href={ROUTES.HOME}
+                className="text-2xl font-bold cursor-pointer text-white hover:text-white"
+              >
+                Properties
+              </a>
               <Button 
                 onClick={() => navigate(ROUTES.PROPERTIES.NEW)}
                 variant="outline"
