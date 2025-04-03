@@ -22,7 +22,7 @@ export function Layout({ children }: LayoutProps) {
               onClick={() => navigate(ROUTES.HOME)}
               className="bg-white hover:bg-gray-50"
             >
-              Back to properties
+              Back to Property Manager
             </Button>
           ) : (
             <>
@@ -30,7 +30,7 @@ export function Layout({ children }: LayoutProps) {
                 href={ROUTES.HOME}
                 className="text-2xl font-bold cursor-pointer text-white hover:text-white"
               >
-                Properties
+                <h1>Property Manager</h1>
               </a>
               <Button 
                 onClick={() => navigate(ROUTES.PROPERTIES.NEW)}
