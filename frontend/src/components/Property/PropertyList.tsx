@@ -30,7 +30,7 @@ const PropertyList: React.FC = () => {
     maxPrice: sanitizeNumber(searchParams.get('maxPrice')),
     bedrooms: sanitizeNumber(searchParams.get('bedrooms')),
     page: parseInt(searchParams.get('page') || '0'),
-    size: parseInt(searchParams.get('size') || '10'),
+    size: parseInt(searchParams.get('size') || '12'),
   };
 
   console.log('Current filters:', filters);

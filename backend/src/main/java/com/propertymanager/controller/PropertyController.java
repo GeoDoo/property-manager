@@ -27,7 +27,7 @@ public class PropertyController {
     }
 
     @GetMapping
-    public Page<Property> getAllProperties(@PageableDefault(size = 10) Pageable pageable) {
+    public Page<Property> getAllProperties(@PageableDefault(size = 12) Pageable pageable) {
         return propertyService.searchProperties(null, null, null, null, pageable);
     }
 
@@ -70,7 +70,7 @@ public class PropertyController {
             @PositiveOrZero(message = "Number of bedrooms must be a positive number")
             Integer bedrooms,
             
-            @PageableDefault(size = 10) Pageable pageable) {
+            @PageableDefault(size = 12) Pageable pageable) {
         try {
             Page<Property> properties = propertyService.searchProperties(address, minPrice, maxPrice, bedrooms, pageable);
             return ResponseEntity.ok(properties);
