@@ -144,6 +144,114 @@ class PropertyServiceImplTest {
     }
 
     @Test
+    void createProperty_WithNegativePrice_ShouldThrowException() {
+        // Given
+        Property invalidProperty = Property.builder()
+            .address("123 Test St")
+            .description("Test Description")
+            .price(-500000.0)  // Invalid: negative price
+            .bedrooms(3)
+            .bathrooms(2)
+            .squareFootage(2000.0)
+            .build();
+
+        // When/Then
+        assertThatThrownBy(() -> propertyService.createProperty(invalidProperty))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Price must be greater than 0");
+    }
+
+    @Test
+    void createProperty_WithZeroBedrooms_ShouldThrowException() {
+        // Given
+        Property invalidProperty = Property.builder()
+            .address("123 Test St")
+            .description("Test Description")
+            .price(500000.0)
+            .bedrooms(0)  // Invalid: zero bedrooms
+            .bathrooms(2)
+            .squareFootage(2000.0)
+            .build();
+
+        // When/Then
+        assertThatThrownBy(() -> propertyService.createProperty(invalidProperty))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Number of bedrooms must be greater than 0");
+    }
+
+    @Test
+    void createProperty_WithZeroBathrooms_ShouldThrowException() {
+        // Given
+        Property invalidProperty = Property.builder()
+            .address("123 Test St")
+            .description("Test Description")
+            .price(500000.0)
+            .bedrooms(3)
+            .bathrooms(0)  // Invalid: zero bathrooms
+            .squareFootage(2000.0)
+            .build();
+
+        // When/Then
+        assertThatThrownBy(() -> propertyService.createProperty(invalidProperty))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Number of bathrooms must be greater than 0");
+    }
+
+    @Test
+    void createProperty_WithZeroSquareFootage_ShouldThrowException() {
+        // Given
+        Property invalidProperty = Property.builder()
+            .address("123 Test St")
+            .description("Test Description")
+            .price(500000.0)
+            .bedrooms(3)
+            .bathrooms(2)
+            .squareFootage(0.0)  // Invalid: zero square footage
+            .build();
+
+        // When/Then
+        assertThatThrownBy(() -> propertyService.createProperty(invalidProperty))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Square footage must be greater than 0");
+    }
+
+    @Test
+    void createProperty_WithNullAddress_ShouldThrowException() {
+        // Given
+        Property invalidProperty = Property.builder()
+            .address(null)  // Invalid: null address
+            .description("Test Description")
+            .price(500000.0)
+            .bedrooms(3)
+            .bathrooms(2)
+            .squareFootage(2000.0)
+            .build();
+
+        // When/Then
+        assertThatThrownBy(() -> propertyService.createProperty(invalidProperty))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Address is required");
+    }
+
+    @Test
+    void createProperty_WithBlankAddress_ShouldThrowException() {
+        // Given
+        Property invalidProperty = Property.builder()
+            .address("   ")  // Invalid: blank address
+            .description("Test Description")
+            .price(500000.0)
+            .bedrooms(3)
+            .bathrooms(2)
+            .squareFootage(2000.0)
+            .build();
+
+        // When/Then
+        assertThatThrownBy(() -> propertyService.createProperty(invalidProperty))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Address is required");
+    }
+
+    @Test
     void updateProperty_WhenPropertyExists_ShouldUpdateProperty() {
         // Given
         Property updatedProperty = Property.builder()
@@ -254,5 +362,30 @@ class PropertyServiceImplTest {
         // Then
         assertThat(result).isEqualTo(testPage);
         verify(propertyRepository).findAll(any(Specification.class), any(Pageable.class));
+    }
+
+    @Test
+    void searchProperties_WithInvalidPriceRange_ShouldThrowException() {
+        // Given
+        Double minPrice = 600000.0;
+        Double maxPrice = 500000.0;  // Invalid: maxPrice < minPrice
+        Pageable pageable = PageRequest.of(0, 12);
+
+        // When/Then
+        assertThatThrownBy(() -> propertyService.searchProperties(null, minPrice, maxPrice, null, pageable))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Maximum price must be greater than minimum price");
+    }
+
+    @Test
+    void searchProperties_WithNegativeBedrooms_ShouldThrowException() {
+        // Given
+        Integer bedrooms = -2;  // Invalid: negative bedrooms
+        Pageable pageable = PageRequest.of(0, 12);
+
+        // When/Then
+        assertThatThrownBy(() -> propertyService.searchProperties(null, null, null, bedrooms, pageable))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Number of bedrooms cannot be negative");
     }
 } 

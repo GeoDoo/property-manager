@@ -1,38 +1,44 @@
 package com.propertymanager.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.propertymanager.exception.ResourceNotFoundException;
 import com.propertymanager.model.Property;
 import com.propertymanager.service.PropertyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest(PropertyController.class)
 class PropertyControllerTest {
 
-    @Mock
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @MockBean
     private PropertyService propertyService;
 
-    @InjectMocks
-    private PropertyController propertyController;
-
     private Property testProperty;
+    private List<Property> testProperties;
     private Page<Property> testPage;
 
     @BeforeEach
@@ -47,118 +53,187 @@ class PropertyControllerTest {
             .squareFootage(2000.0)
             .build();
 
-        List<Property> properties = List.of(testProperty);
-        testPage = new PageImpl<>(properties);
+        testProperties = Arrays.asList(
+            testProperty,
+            Property.builder()
+                .id(2L)
+                .address("456 Test Ave")
+                .description("Another Test Description")
+                .price(750000.0)
+                .bedrooms(4)
+                .bathrooms(3)
+                .squareFootage(2500.0)
+                .build()
+        );
+
+        testPage = new PageImpl<>(testProperties);
     }
 
     @Test
-    void getAllProperties_ShouldReturnPageOfProperties() {
-        // Given
-        Pageable pageable = PageRequest.of(0, 12);
-        when(propertyService.searchProperties(null, null, null, null, pageable))
+    void getAllProperties_ShouldReturnAllProperties() throws Exception {
+        when(propertyService.searchProperties(eq(null), eq(null), eq(null), eq(null), any(Pageable.class)))
             .thenReturn(testPage);
 
-        // When
-        Page<Property> result = propertyController.getAllProperties(pageable);
-
-        // Then
-        assertThat(result).isEqualTo(testPage);
-        verify(propertyService).searchProperties(null, null, null, null, pageable);
+        mockMvc.perform(get("/api/properties"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.content[0].id").value(testProperty.getId()))
+            .andExpect(jsonPath("$.content[0].address").value(testProperty.getAddress()))
+            .andExpect(jsonPath("$.content[1].id").value(testProperties.get(1).getId()))
+            .andExpect(jsonPath("$.content[1].address").value(testProperties.get(1).getAddress()));
     }
 
     @Test
-    void getPropertyById_ShouldReturnProperty() {
-        // Given
+    void getPropertyById_WhenPropertyExists_ShouldReturnProperty() throws Exception {
         when(propertyService.getPropertyById(1L)).thenReturn(testProperty);
 
-        // When
-        Property result = propertyController.getPropertyById(1L);
-
-        // Then
-        assertThat(result).isEqualTo(testProperty);
-        verify(propertyService).getPropertyById(1L);
+        mockMvc.perform(get("/api/properties/1"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.id").value(testProperty.getId()))
+            .andExpect(jsonPath("$.address").value(testProperty.getAddress()));
     }
 
     @Test
-    void createProperty_ShouldReturnCreatedProperty() {
-        // Given
+    void getPropertyById_WhenPropertyDoesNotExist_ShouldReturnNotFound() throws Exception {
+        when(propertyService.getPropertyById(1L))
+            .thenThrow(new ResourceNotFoundException("Property", "id", 1L));
+
+        mockMvc.perform(get("/api/properties/1"))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void createProperty_WithValidData_ShouldCreateProperty() throws Exception {
         when(propertyService.createProperty(any(Property.class))).thenReturn(testProperty);
 
-        // When
-        Property result = propertyController.createProperty(testProperty);
-
-        // Then
-        assertThat(result).isEqualTo(testProperty);
-        verify(propertyService).createProperty(testProperty);
+        mockMvc.perform(post("/api/properties")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(testProperty)))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.id").value(testProperty.getId()))
+            .andExpect(jsonPath("$.address").value(testProperty.getAddress()));
     }
 
     @Test
-    void updateProperty_ShouldReturnUpdatedProperty() {
-        // Given
+    void createProperty_WithInvalidData_ShouldReturnBadRequest() throws Exception {
+        Property invalidProperty = Property.builder()
+            .address("")  // Invalid: empty address
+            .price(-1.0)  // Invalid: negative price
+            .bedrooms(0)  // Invalid: zero bedrooms
+            .bathrooms(0) // Invalid: zero bathrooms
+            .squareFootage(0.0) // Invalid: zero square footage
+            .build();
+
+        mockMvc.perform(post("/api/properties")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(invalidProperty)))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void updateProperty_WhenPropertyExists_ShouldUpdateProperty() throws Exception {
         when(propertyService.updateProperty(eq(1L), any(Property.class))).thenReturn(testProperty);
 
-        // When
-        Property result = propertyController.updateProperty(1L, testProperty);
-
-        // Then
-        assertThat(result).isEqualTo(testProperty);
-        verify(propertyService).updateProperty(1L, testProperty);
+        mockMvc.perform(put("/api/properties/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(testProperty)))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.id").value(testProperty.getId()))
+            .andExpect(jsonPath("$.address").value(testProperty.getAddress()));
     }
 
     @Test
-    void deleteProperty_ShouldReturnNoContent() {
-        // When
-        ResponseEntity<Void> result = propertyController.deleteProperty(1L);
+    void updateProperty_WhenPropertyDoesNotExist_ShouldReturnNotFound() throws Exception {
+        when(propertyService.updateProperty(eq(1L), any(Property.class)))
+            .thenThrow(new ResourceNotFoundException("Property", "id", 1L));
 
-        // Then
-        assertThat(result.getStatusCodeValue()).isEqualTo(204);
+        mockMvc.perform(put("/api/properties/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(testProperty)))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void deleteProperty_WhenPropertyExists_ShouldDeleteProperty() throws Exception {
+        doNothing().when(propertyService).deleteProperty(1L);
+
+        mockMvc.perform(delete("/api/properties/1"))
+            .andExpect(status().isNoContent());
+
         verify(propertyService).deleteProperty(1L);
     }
 
     @Test
-    void searchProperties_ShouldReturnFilteredProperties() {
-        // Given
-        String address = "Test";
-        Double minPrice = 400000.0;
-        Double maxPrice = 600000.0;
-        Integer bedrooms = 3;
-        Pageable pageable = PageRequest.of(0, 12);
+    void deleteProperty_WhenPropertyDoesNotExist_ShouldReturnNotFound() throws Exception {
+        doThrow(new ResourceNotFoundException("Property", "id", 1L))
+            .when(propertyService).deleteProperty(1L);
 
-        when(propertyService.searchProperties(address, minPrice, maxPrice, bedrooms, pageable))
-            .thenReturn(testPage);
-
-        // When
-        ResponseEntity<?> result = propertyController.searchProperties(
-            address, minPrice, maxPrice, bedrooms, pageable);
-
-        // Then
-        assertThat(result.getStatusCodeValue()).isEqualTo(200);
-        assertThat(result.getBody()).isEqualTo(testPage);
-        verify(propertyService).searchProperties(address, minPrice, maxPrice, bedrooms, pageable);
+        mockMvc.perform(delete("/api/properties/1"))
+            .andExpect(status().isNotFound());
     }
 
     @Test
-    void searchProperties_WithInvalidParameters_ShouldReturnBadRequest() {
-        // Given
-        String address = "Test";
-        Double minPrice = 600000.0;
-        Double maxPrice = 400000.0; // Invalid: max < min
-        Integer bedrooms = 3;
-        Pageable pageable = PageRequest.of(0, 12);
+    void searchProperties_WithValidParameters_ShouldReturnFilteredProperties() throws Exception {
+        when(propertyService.searchProperties(
+                eq("Test St"),
+                eq(400000.0),
+                eq(600000.0),
+                eq(3),
+                any(Pageable.class)))
+            .thenReturn(testPage);
 
-        when(propertyService.searchProperties(address, minPrice, maxPrice, bedrooms, pageable))
-            .thenThrow(new IllegalArgumentException("Maximum price must be greater than minimum price"));
+        mockMvc.perform(get("/api/properties/search")
+                .param("address", "Test St")
+                .param("minPrice", "400000")
+                .param("maxPrice", "600000")
+                .param("bedrooms", "3"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.content[0].id").value(testProperty.getId()))
+            .andExpect(jsonPath("$.content[0].address").value(testProperty.getAddress()));
+    }
 
-        // When
-        ResponseEntity<?> result = propertyController.searchProperties(
-            address, minPrice, maxPrice, bedrooms, pageable);
+    @Test
+    void searchProperties_WithInvalidParameters_ShouldReturnBadRequest() throws Exception {
+        mockMvc.perform(get("/api/properties/search")
+                .param("minPrice", "-1")  // Negative price
+                .param("maxPrice", "0")   // Zero price
+                .param("bedrooms", "-2"))  // Negative bedrooms
+            .andExpect(status().isBadRequest());
+    }
 
-        // Then
-        assertThat(result.getStatusCodeValue()).isEqualTo(400);
-        assertThat(result.getBody()).isInstanceOf(Map.class);
-        @SuppressWarnings("unchecked")
-        Map<String, String> errorMap = (Map<String, String>) result.getBody();
-        assertThat(errorMap).containsKey("error");
-        assertThat(errorMap.get("error")).isEqualTo("Maximum price must be greater than minimum price");
+    @Test
+    void searchProperties_WithInvalidAddressPattern_ShouldReturnBadRequest() throws Exception {
+        mockMvc.perform(get("/api/properties/search")
+                .param("address", "Test St!@#$%^"))  // Invalid characters
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void searchProperties_WithInvalidPriceRange_ShouldReturnBadRequest() throws Exception {
+        mockMvc.perform(get("/api/properties/search")
+                .param("minPrice", "600000")  // Min price > Max price
+                .param("maxPrice", "400000"))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void searchProperties_WithNoParameters_ShouldReturnAllProperties() throws Exception {
+        when(propertyService.searchProperties(
+                eq(null),
+                eq(null),
+                eq(null),
+                eq(null),
+                any(Pageable.class)))
+            .thenReturn(testPage);
+
+        mockMvc.perform(get("/api/properties/search"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.content[0].id").value(testProperty.getId()))
+            .andExpect(jsonPath("$.content[0].address").value(testProperty.getAddress()));
     }
 } 
