@@ -1,7 +1,8 @@
 # Property Manager
 
 ![Tests](https://github.com/GeoDoo/property-manager/actions/workflows/test.yml/badge.svg)
-![Coverage](https://img.shields.io/badge/coverage-0%25-red.svg)
+![Coverage](.github/badges/jacoco.svg)
+![Branches](.github/badges/branches.svg)
 
 A full-stack application for managing real estate properties, built with Spring Boot and React.
 

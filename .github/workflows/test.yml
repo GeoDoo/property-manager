@@ -43,15 +43,17 @@ jobs:
           path: backend/build/reports/jacoco/test/html/
           retention-days: 7
 
-      - name: Update coverage badge
+      - name: Generate coverage badge
         if: success()
-        run: |
-          COVERAGE=$(grep -oP '(?<=Total.*?)\d+(?=%)' backend/build/reports/jacoco/test/html/index.html || echo "0")
-          echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
-          curl -X POST https://api.shields.io/badge/dynamic/json \
-            -H "Content-Type: application/json" \
-            -d "{\"schemaVersion\":1,\"label\":\"coverage\",\"message\":\"$COVERAGE%\",\"color\":\"green\"}" \
-            -o coverage-badge.json
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          generate-branches-badge: true
+          jacoco-csv-file: backend/build/reports/jacoco/test/jacocoTestReport.csv
+          badges-directory: .github/badges
+          generate-coverage-badge: true
+          generate-coverage-endpoint: true
+          coverage-badge-filename: jacoco.svg
+          branches-badge-filename: branches.svg
 
       - name: Add coverage link to PR
         if: github.event_name == 'pull_request' && success()
