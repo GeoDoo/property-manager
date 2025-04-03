@@ -188,7 +188,7 @@ export function PropertyForm() {
 
   return (
     <Layout>
-      <div className="bg-white rounded-lg overflow-hidden">
+      <div className="bg-white rounded-lg">
         <div className="p-6">
           <div className="flex justify-between items-start mb-8">
             <h1 className="text-2xl font-bold text-[#262637]">

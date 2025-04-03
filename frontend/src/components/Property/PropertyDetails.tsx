@@ -39,7 +39,7 @@ export function PropertyDetails() {
 
   return (
     <Layout>
-      <div className="bg-white rounded-lg overflow-hidden">
+      <div className="bg-white rounded-lg">
         <ImageSlider images={property.images || []} />
 
         <div className="p-6">

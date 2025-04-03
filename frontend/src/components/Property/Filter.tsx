@@ -64,8 +64,7 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange, initialFilters = {
   };
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-md mb-6">
-      <h2 className="text-xl font-semibold mb-4">Filter Properties</h2>
+    <div className="bg-white py-3 rounded-lg mb-2">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">

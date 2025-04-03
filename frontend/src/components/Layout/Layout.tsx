@@ -13,14 +13,14 @@ export function Layout({ children }: LayoutProps) {
   const isHomePage = location.pathname === ROUTES.HOME;
 
   return (
-    <div className="min-h-screen bg-[#f7f7f7]">
-      <div className="bg-[#00deb6] text-white">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+    <div className="min-h-screen bg-[#f7f7f7] p-0">
+      <div className="container mx-auto">
+        <div className="bg-white text-[#00deb6] rounded-lg px-4 py-2 flex justify-between items-center">
           {!isHomePage ? (
             <Button
               variant="outline"
               onClick={() => navigate(ROUTES.HOME)}
-              className="bg-white hover:bg-gray-50"
+              className="bg-[#00deb6] hover:bg-[#00deb6]/90 text-white"
             >
               Back to Property Manager
             </Button>
@@ -28,14 +28,14 @@ export function Layout({ children }: LayoutProps) {
             <>
               <a
                 href={ROUTES.HOME}
-                className="text-2xl font-bold cursor-pointer text-white hover:text-white"
+                className="text-2xl font-bold cursor-pointer text-[#00deb6] hover:text-[#00deb6]"
               >
                 <h1>Property Manager</h1>
               </a>
               <Button 
                 onClick={() => navigate(ROUTES.PROPERTIES.NEW)}
                 variant="outline"
-                className="bg-white hover:bg-gray-50"
+                className="bg-[#00deb6] hover:bg-[#00deb6]/90 text-white"
               >
                 Add Property
               </Button>
@@ -44,8 +44,10 @@ export function Layout({ children }: LayoutProps) {
         </div>
       </div>
 
-      <div className="container mx-auto p-4">
-        {children}
+      <div className="container mx-auto">
+        <div className="mt-4">
+          {children}
+        </div>
       </div>
     </div>
   );

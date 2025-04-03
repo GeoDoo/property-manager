@@ -85,7 +85,7 @@ const PropertyList: React.FC = () => {
 
   return (
     <Layout>
-      <div className="container mx-auto px-4 py-8">
+      <div>
         <Filter onFilterChange={handleFilterChange} initialFilters={filters} />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {properties.map((property: Property) => (
