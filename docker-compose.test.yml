@@ -1,6 +1,41 @@
 version: '3.8'
 
 services:
+  postgres-test:
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_DB: property_test
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend-test:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-test:5432/property_test
+      SPRING_DATASOURCE_USERNAME: test
+      SPRING_DATASOURCE_PASSWORD: test
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+      SPRING_FLYWAY_ENABLED: "false"
+      SPRING_PROFILES_ACTIVE: test
+    volumes:
+      - ./backend:/app
+      - /app/target
+      - /app/.gradle
+    depends_on:
+      postgres-test:
+        condition: service_healthy
+
   test:
     build:
       context: ./backend
@@ -12,21 +47,10 @@ services:
       - TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock
       - DOCKER_HOST=unix:///var/run/docker.sock
       - TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-test:5432/property_test
+      - SPRING_DATASOURCE_USERNAME=test
+      - SPRING_DATASOURCE_PASSWORD=test
     network_mode: "host"
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    command: ["./gradlew", "test"]
-
-  postgres-test:
-    image: postgres:16-alpine
-    environment:
-      - POSTGRES_DB=property_test
-      - POSTGRES_USER=test
-      - POSTGRES_PASSWORD=test
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U test"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    ports:
-      - "5432:5432" 
+    command: ["./gradlew", "test"] 

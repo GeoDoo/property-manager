@@ -34,6 +34,7 @@ jobs:
         run: |
           mkdir -p .github/badges
           mkdir -p backend/build/reports/jacoco/test
+          chmod -R 777 backend/build/reports
 
       - name: Run tests with Docker Compose
         run: |
@@ -53,6 +54,7 @@ jobs:
           exit $exit_code
         env:
           GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx2048m -XX:MaxMetaspaceSize=512m"
+          DOCKER_BUILDKIT: 1
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
