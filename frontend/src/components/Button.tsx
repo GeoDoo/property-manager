@@ -10,7 +10,7 @@ export function Button({ variant = 'primary', className = '', ...props }: Button
     primary: 'bg-[#00deb6] hover:bg-[#00c5a0] text-white',
     secondary: 'bg-[#262637] hover:bg-[#1a1a2b] text-white',
     danger: 'bg-[#e60000] hover:bg-[#cc0000] text-white',
-    outline: 'border border-[#00deb6] text-[#00deb6] hover:bg-[#f7f7f7]'
+    outline: 'bg-white border-2 border-[#00deb6] text-[#00deb6] hover:bg-[#f7f7f7]'
   };
 
   return (

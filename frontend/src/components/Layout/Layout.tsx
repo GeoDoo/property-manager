@@ -24,7 +24,7 @@ export function Layout({ children }: LayoutProps) {
             {isHomePage && (
               <Link
                 to={ROUTES.PROPERTIES.NEW}
-                className="text-[#00deb6] border-2 border-[#00deb6] hover:border-[#00c5a0] hover:text-[#00c5a0] px-4 py-2 rounded-xl transition-colors"
+                className="bg-white text-[#00deb6] border-2 border-[#00deb6] hover:border-[#00c5a0] hover:text-[#00c5a0] px-4 py-2 rounded-xl transition-colors"
               >
                 Add Property
               </Link>
