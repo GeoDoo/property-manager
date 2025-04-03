@@ -33,7 +33,7 @@ dependencies {
     testImplementation 'org.testcontainers:postgresql:1.19.7'
 }
 
-tasks.named('test') {
+test {
     useJUnitPlatform()
     finalizedBy jacocoTestReport
 }
