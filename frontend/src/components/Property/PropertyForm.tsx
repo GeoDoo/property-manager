@@ -188,16 +188,16 @@ export function PropertyForm() {
 
   return (
     <Layout>
-      <div className="bg-white rounded-xl overflow-hidden">
+      <div className="rounded-xl overflow-hidden">
         <div className="py-6">
-          <div className="flex justify-between items-start">
+          <div className="flex justify-between items-start mb-6">
             <h1 className="text-2xl font-bold text-[#262637]">
               {id ? 'Edit Property' : 'Add New Property'}
             </h1>
           </div>
 
           {error && (
-            <div className="bg-red-50 border-l-4 border-red-500 p-4 mt-6 rounded-xl">
+            <div className="border-2 border-red-500 p-4 mt-6 rounded-xl">
               <div className="flex">
                 <div className="flex-shrink-0">
                   <svg className="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">

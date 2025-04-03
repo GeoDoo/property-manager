@@ -39,7 +39,7 @@ export function PropertyDetails() {
 
   return (
     <Layout>
-      <div className="bg-white rounded-xl overflow-hidden">
+      <div className="rounded-xl overflow-hidden">
         <ImageSlider images={property.images || []} />
         
         <div className="py-6">

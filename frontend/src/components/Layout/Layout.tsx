@@ -2,6 +2,7 @@ import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../Button';
 import { ROUTES } from '../../config/routes';
+import { Link } from 'react-router-dom';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -13,42 +14,23 @@ export function Layout({ children }: LayoutProps) {
   const isHomePage = location.pathname === ROUTES.HOME;
 
   return (
-    <div className="min-h-screen bg-[#f7f7f7] pb-8">
-      {/* Header Section */}
+    <div className="min-h-screen pb-8">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="bg-white text-[#00deb6] rounded-xl py-2">
+        <div className="py-2">
           <div className="flex justify-between items-center">
-            {!isHomePage ? (
-              <Button
-                variant="outline"
-                onClick={() => navigate(ROUTES.HOME)}
-                className="bg-[#00deb6] hover:bg-[#00deb6]/90 text-white rounded-xl"
+            <Link to={ROUTES.HOME} className="text-2xl font-bold text-[#00deb6]">
+              Property Manager
+            </Link>
+            {isHomePage && (
+              <Link
+                to={ROUTES.PROPERTIES.NEW}
+                className="text-[#00deb6] border-2 border-[#00deb6] hover:border-[#00c5a0] hover:text-[#00c5a0] px-4 py-2 rounded-xl transition-colors"
               >
-                Back to Property Manager
-              </Button>
-            ) : (
-              <>
-                <a
-                  href={ROUTES.HOME}
-                  className="text-2xl font-bold cursor-pointer text-[#00deb6] hover:text-[#00deb6]"
-                >
-                  <h1>Property Manager</h1>
-                </a>
-                <Button 
-                  onClick={() => navigate(ROUTES.PROPERTIES.NEW)}
-                  variant="outline"
-                  className="bg-[#00deb6] hover:bg-[#00deb6]/90 text-white rounded-xl"
-                >
-                  Add Property
-                </Button>
-              </>
+                Add Property
+              </Link>
             )}
           </div>
         </div>
-      </div>
-
-      {/* Main Section */}
-      <div className="max-w-7xl mx-auto px-6 mt-4">
         {children}
       </div>
     </div>

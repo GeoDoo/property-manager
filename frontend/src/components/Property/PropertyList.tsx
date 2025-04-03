@@ -85,7 +85,7 @@ const PropertyList: React.FC = () => {
 
   return (
     <Layout>
-      <div className="bg-white rounded-lg overflow-hidden py-6">
+      <div className="py-6">
         <Filter onFilterChange={handleFilterChange} initialFilters={filters} />
       </div>
 

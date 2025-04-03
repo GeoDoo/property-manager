@@ -64,7 +64,7 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange, initialFilters = {
   };
 
   return (
-    <div className="bg-white py-3 rounded-lg mb-2">
+    <div className="py-3 mb-2">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -76,7 +76,7 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange, initialFilters = {
             value={filters.address}
             onChange={handleChange}
             placeholder="Search by address"
-            className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="w-full px-4 py-3 border-2 border-[#e5e5e5] rounded-xl focus:outline-none focus:ring-0 focus:border-[#00deb6] bg-white text-[#262637] transition-colors"
             maxLength={100}
           />
         </div>
@@ -90,7 +90,7 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange, initialFilters = {
             value={filters.minPrice}
             onChange={handleChange}
             placeholder="Min price"
-            className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="w-full px-4 py-3 border-2 border-[#e5e5e5] rounded-xl focus:outline-none focus:ring-0 focus:border-[#00deb6] bg-white text-[#262637] transition-colors"
             min="0"
             max="9999999999"
           />
@@ -105,7 +105,7 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange, initialFilters = {
             value={filters.maxPrice}
             onChange={handleChange}
             placeholder="Max price"
-            className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="w-full px-4 py-3 border-2 border-[#e5e5e5] rounded-xl focus:outline-none focus:ring-0 focus:border-[#00deb6] bg-white text-[#262637] transition-colors"
             min="0"
             max="9999999999"
           />
@@ -120,7 +120,7 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange, initialFilters = {
             value={filters.bedrooms}
             onChange={handleChange}
             placeholder="Number of bedrooms"
-            className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="w-full px-4 py-3 border-2 border-[#e5e5e5] rounded-xl focus:outline-none focus:ring-0 focus:border-[#00deb6] bg-white text-[#262637] transition-colors"
             min="0"
             max="99"
           />
