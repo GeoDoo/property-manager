@@ -6,9 +6,17 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
 
@@ -23,40 +31,41 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v4
+
       - name: Run tests with Docker Compose
-        run: docker compose -f docker-compose.test.yml up test --build --abort-on-container-exit --force-recreate
+        run: docker compose -f docker-compose.test.yml up test --build --abort-on-container-exit --force-recreate --exit-code-from test
         env:
           GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx2048m -XX:MaxMetaspaceSize=512m"
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: coverage-report
           path: backend/build/reports/jacoco/test/html/
           retention-days: 7
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        if: github.ref == 'refs/heads/main'
+        id: deployment
+        if: github.ref == 'refs/heads/main' && success()
+        uses: actions/deploy-pages@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./backend/build/reports/jacoco/test/html
-          destination_dir: coverage
+          artifact_name: coverage-report
 
       - name: Update coverage badge
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' && success()
         run: |
-          COVERAGE=$(grep -oP '(?<=Total.*?)\d+(?=%)' backend/build/reports/jacoco/test/html/index.html)
+          COVERAGE=$(grep -oP '(?<=Total.*?)\d+(?=%)' backend/build/reports/jacoco/test/html/index.html || echo "0")
           echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
-          echo "::set-output name=coverage::$COVERAGE"
-          curl -s -o /dev/null -w "%{http_code}" -X PUT \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          curl -X POST https://api.shields.io/badge/dynamic/json \
             -H "Content-Type: application/json" \
             -d "{\"schemaVersion\":1,\"label\":\"coverage\",\"message\":\"$COVERAGE%\",\"color\":\"green\"}" \
-            "https://api.shields.io/badge/coverage-$COVERAGE%25-green.svg" > /dev/null
+            -o coverage-badge.json
 
       - name: Add coverage link to PR
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && success()
         uses: actions/github-script@v7
         with:
           script: |
