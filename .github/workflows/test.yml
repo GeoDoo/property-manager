@@ -10,13 +10,12 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  checks: write
+  pull-requests: write
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
 
@@ -31,9 +30,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v4
-
       - name: Run tests with Docker Compose
         run: docker compose -f docker-compose.test.yml up test --build --abort-on-container-exit --force-recreate --exit-code-from test
         env:
@@ -47,15 +43,8 @@ jobs:
           path: backend/build/reports/jacoco/test/html/
           retention-days: 7
 
-      - name: Deploy to GitHub Pages
-        id: deployment
-        if: github.ref == 'refs/heads/main' && success()
-        uses: actions/deploy-pages@v4
-        with:
-          artifact_name: coverage-report
-
       - name: Update coverage badge
-        if: github.ref == 'refs/heads/main' && success()
+        if: success()
         run: |
           COVERAGE=$(grep -oP '(?<=Total.*?)\d+(?=%)' backend/build/reports/jacoco/test/html/index.html || echo "0")
           echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
@@ -69,8 +58,7 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const coverageUrl = `https://${context.repo.owner}.github.io/${context.repo.repo}/coverage/`;
-            const comment = `### Coverage Report 📊\n\nA new coverage report has been generated for this PR.\n\n🔍 [View Coverage Report](${coverageUrl})\n\n`;
+            const comment = `### Coverage Report 📊\n\nA new coverage report has been generated for this PR.\n\nCoverage report is available as an artifact in this workflow run.\n\n`;
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
