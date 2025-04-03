@@ -34,7 +34,10 @@ jobs:
         run: mkdir -p .github/badges
 
       - name: Run tests with Docker Compose
-        run: docker compose -f docker-compose.test.yml up test --build --abort-on-container-exit --force-recreate --exit-code-from test
+        run: |
+          docker compose -f docker-compose.test.yml up test --build --abort-on-container-exit --force-recreate --exit-code-from test
+          container_id=$(docker compose -f docker-compose.test.yml ps -q test)
+          docker cp $container_id:/app/build/reports/jacoco/test ./backend/build/reports/jacoco/
         env:
           GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx2048m -XX:MaxMetaspaceSize=512m"
 

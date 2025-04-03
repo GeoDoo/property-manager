@@ -17,6 +17,10 @@ RUN chmod +x gradlew
 # Copy source code
 COPY src src
 
+# Create reports directory with proper permissions
+RUN mkdir -p build/reports/jacoco/test && \
+    chmod -R 777 build
+
 # Cache dependencies
 RUN ./gradlew dependencies
 
