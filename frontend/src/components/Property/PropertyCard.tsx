@@ -24,7 +24,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
     return (
         <div 
             onClick={handleViewDetails}
-            className="bg-white rounded-lg overflow-hidden shadow-none border-2 border-[#e5e5e5] hover:border-[#00deb6] transition-colors duration-300 cursor-pointer"
+            className="bg-white rounded-xl overflow-hidden shadow-none border-2 border-[#e5e5e5] hover:border-[#00deb6] transition-colors duration-300 cursor-pointer"
         >
             {/* Image Section */}
             <div className="relative h-48 bg-gray-200">
@@ -32,10 +32,10 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
                     <img
                         src={getFullImageUrl(property.images[0].url)}
                         alt={property.address}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover rounded-t-xl"
                     />
                 ) : (
-                    <div className="flex items-center justify-center h-full bg-gray-200">
+                    <div className="flex items-center justify-center h-full bg-gray-200 rounded-t-xl">
                         <FaHome className="text-4xl text-gray-400" />
                     </div>
                 )}
@@ -99,7 +99,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
                 <div className="mt-4 text-center">
                     <button
                         onClick={handleViewDetails}
-                        className="w-full bg-[#00deb6] text-white px-4 py-2 rounded-md hover:bg-[#00c5a0] transition-colors duration-200"
+                        className="w-full bg-[#00deb6] text-white px-4 py-2 rounded-xl hover:bg-[#00c5a0] transition-colors duration-200"
                     >
                         View Details
                     </button>

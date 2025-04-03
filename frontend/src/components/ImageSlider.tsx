@@ -31,7 +31,7 @@ export function ImageSlider({ images = [] }: ImageSliderProps) {
 
     if (!Array.isArray(images) || images.length === 0) {
         return (
-            <div className="w-full h-[480px] bg-gray-200 flex items-center justify-center text-gray-400">
+            <div className="w-full h-[480px] bg-gray-200 flex items-center justify-center text-gray-400 rounded-xl">
                 No Images Available
             </div>
         );
@@ -40,7 +40,7 @@ export function ImageSlider({ images = [] }: ImageSliderProps) {
     const imageUrl = images[currentIndex]?.url;
     if (!imageUrl) {
         return (
-            <div className="w-full h-[480px] bg-gray-200 flex items-center justify-center text-gray-400">
+            <div className="w-full h-[480px] bg-gray-200 flex items-center justify-center text-gray-400 rounded-xl">
                 Invalid Image URL
             </div>
         );
@@ -51,7 +51,7 @@ export function ImageSlider({ images = [] }: ImageSliderProps) {
             <img
                 src={getFullImageUrl(imageUrl)}
                 alt={`Property ${currentIndex + 1}`}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover rounded-xl"
             />
             
             {/* Left Arrow */}

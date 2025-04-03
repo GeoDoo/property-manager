@@ -16,13 +16,13 @@ export function Layout({ children }: LayoutProps) {
     <div className="min-h-screen bg-[#f7f7f7] pb-8">
       {/* Header Section */}
       <div className="max-w-7xl mx-auto px-6">
-        <div className="bg-white text-[#00deb6] rounded-lg py-2">
+        <div className="bg-white text-[#00deb6] rounded-xl py-2">
           <div className="flex justify-between items-center">
             {!isHomePage ? (
               <Button
                 variant="outline"
                 onClick={() => navigate(ROUTES.HOME)}
-                className="bg-[#00deb6] hover:bg-[#00deb6]/90 text-white"
+                className="bg-[#00deb6] hover:bg-[#00deb6]/90 text-white rounded-xl"
               >
                 Back to Property Manager
               </Button>
@@ -37,7 +37,7 @@ export function Layout({ children }: LayoutProps) {
                 <Button 
                   onClick={() => navigate(ROUTES.PROPERTIES.NEW)}
                   variant="outline"
-                  className="bg-[#00deb6] hover:bg-[#00deb6]/90 text-white"
+                  className="bg-[#00deb6] hover:bg-[#00deb6]/90 text-white rounded-xl"
                 >
                   Add Property
                 </Button>

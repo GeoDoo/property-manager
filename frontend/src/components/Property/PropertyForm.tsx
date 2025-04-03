@@ -188,7 +188,7 @@ export function PropertyForm() {
 
   return (
     <Layout>
-      <div className="bg-white rounded-lg overflow-hidden">
+      <div className="bg-white rounded-xl overflow-hidden">
         <div className="py-6">
           <div className="flex justify-between items-start">
             <h1 className="text-2xl font-bold text-[#262637]">
@@ -197,7 +197,7 @@ export function PropertyForm() {
           </div>
 
           {error && (
-            <div className="bg-red-50 border-l-4 border-red-500 p-4 mt-6">
+            <div className="bg-red-50 border-l-4 border-red-500 p-4 mt-6 rounded-xl">
               <div className="flex">
                 <div className="flex-shrink-0">
                   <svg className="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
@@ -220,7 +220,7 @@ export function PropertyForm() {
                   name="address"
                   value={formData.address}
                   onChange={handleChange}
-                  className={`block w-full rounded-lg border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
+                  className={`block w-full rounded-xl border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
                     validationErrors.address ? 'border-red-500' : 'border-[#e5e5e5] focus:border-[#00deb6]'
                   }`}
                   required
@@ -237,7 +237,7 @@ export function PropertyForm() {
                   value={formData.description}
                   onChange={handleChange}
                   rows={4}
-                  className={`block w-full rounded-lg border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
+                  className={`block w-full rounded-xl border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
                     validationErrors.description ? 'border-red-500' : 'border-[#e5e5e5] focus:border-[#00deb6]'
                   }`}
                   required
@@ -256,7 +256,7 @@ export function PropertyForm() {
                     value={formData.price}
                     onChange={handleChange}
                     min="0"
-                    className={`block w-full rounded-lg border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
+                    className={`block w-full rounded-xl border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
                       validationErrors.price ? 'border-red-500' : 'border-[#e5e5e5] focus:border-[#00deb6]'
                     }`}
                     required
@@ -274,7 +274,7 @@ export function PropertyForm() {
                     value={formData.squareFootage}
                     onChange={handleChange}
                     min="0"
-                    className={`block w-full rounded-lg border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
+                    className={`block w-full rounded-xl border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
                       validationErrors.squareFootage ? 'border-red-500' : 'border-[#e5e5e5] focus:border-[#00deb6]'
                     }`}
                     required
@@ -294,7 +294,7 @@ export function PropertyForm() {
                     value={formData.bedrooms}
                     onChange={handleChange}
                     min="0"
-                    className={`block w-full rounded-lg border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
+                    className={`block w-full rounded-xl border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
                       validationErrors.bedrooms ? 'border-red-500' : 'border-[#e5e5e5] focus:border-[#00deb6]'
                     }`}
                     required
@@ -312,7 +312,7 @@ export function PropertyForm() {
                     value={formData.bathrooms}
                     onChange={handleChange}
                     min="0"
-                    className={`block w-full rounded-lg border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
+                    className={`block w-full rounded-xl border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
                       validationErrors.bathrooms ? 'border-red-500' : 'border-[#e5e5e5] focus:border-[#00deb6]'
                     }`}
                     required
@@ -332,7 +332,7 @@ export function PropertyForm() {
                         <img
                           src={getFullImageUrl(image.url)}
                           alt={`Property image ${index + 1}`}
-                          className="w-full h-32 object-cover rounded-lg"
+                          className="w-full h-32 object-cover rounded-xl"
                         />
                         <button
                           type="button"
@@ -354,7 +354,7 @@ export function PropertyForm() {
                   accept="image/*"
                   className="block w-full text-sm text-[#666666]
                     file:mr-4 file:py-3 file:px-4
-                    file:rounded-lg file:border-0
+                    file:rounded-xl file:border-0
                     file:text-sm file:font-medium
                     file:bg-[#00deb6] file:text-white
                     hover:file:bg-[#00c5a0]"
@@ -366,14 +366,14 @@ export function PropertyForm() {
               <button
                 type="button"
                 onClick={() => navigate(ROUTES.PROPERTIES.LIST)}
-                className="px-6 py-3 text-sm font-medium text-[#262637] bg-white border-2 border-[#e5e5e5] rounded-lg hover:border-[#00deb6] transition-colors"
+                className="px-6 py-3 text-sm font-medium text-[#262637] bg-white border-2 border-[#e5e5e5] rounded-xl hover:border-[#00deb6] transition-colors"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={propertyMutation.isPending || uploadProgress}
-                className="px-6 py-3 text-sm font-medium text-white bg-[#00deb6] rounded-lg hover:bg-[#00c5a0] disabled:opacity-50"
+                className="px-6 py-3 text-sm font-medium text-white bg-[#00deb6] rounded-xl hover:bg-[#00c5a0] disabled:opacity-50"
               >
                 {propertyMutation.isPending || uploadProgress ? 'Saving...' : id ? 'Update Property' : 'Add Property'}
               </button>

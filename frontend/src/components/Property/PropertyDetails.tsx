@@ -39,7 +39,7 @@ export function PropertyDetails() {
 
   return (
     <Layout>
-      <div className="bg-white rounded-lg overflow-hidden">
+      <div className="bg-white rounded-xl overflow-hidden">
         <ImageSlider images={property.images || []} />
         
         <div className="py-6">
@@ -56,12 +56,14 @@ export function PropertyDetails() {
               <Button
                 onClick={() => navigate(ROUTES.PROPERTIES.EDIT(property.id!))}
                 variant="primary"
+                className="rounded-xl"
               >
                 Edit property
               </Button>
               <Button
                 variant="danger"
                 onClick={handleDelete}
+                className="rounded-xl"
               >
                 Delete
               </Button>
@@ -99,12 +101,10 @@ export function PropertyDetails() {
         </div>
 
         <div className="py-6">
-          <div>
-            <h2 className="text-xl font-bold text-[#262637] mb-4">PROPERTY DETAILS</h2>
-            <p className="text-[#6a6a6a] leading-relaxed whitespace-pre-line">
-              {property.description || 'No description available'}
-            </p>
-          </div>
+          <h2 className="text-xl font-bold text-[#262637] mb-4">PROPERTY DETAILS</h2>
+          <p className="text-[#6a6a6a] leading-relaxed whitespace-pre-line">
+            {property.description || 'No description available'}
+          </p>
         </div>
       </div>
     </Layout>

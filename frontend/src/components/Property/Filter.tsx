@@ -76,7 +76,7 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange, initialFilters = {
             value={filters.address}
             onChange={handleChange}
             placeholder="Search by address"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
             maxLength={100}
           />
         </div>
@@ -90,7 +90,7 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange, initialFilters = {
             value={filters.minPrice}
             onChange={handleChange}
             placeholder="Min price"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
             min="0"
             max="9999999999"
           />
@@ -105,7 +105,7 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange, initialFilters = {
             value={filters.maxPrice}
             onChange={handleChange}
             placeholder="Max price"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
             min="0"
             max="9999999999"
           />
@@ -120,7 +120,7 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange, initialFilters = {
             value={filters.bedrooms}
             onChange={handleChange}
             placeholder="Number of bedrooms"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500"
             min="0"
             max="99"
           />
