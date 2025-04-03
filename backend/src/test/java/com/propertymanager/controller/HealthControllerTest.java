@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,7 +25,7 @@ public class HealthControllerTest {
     @Test
     public void shouldReturnUpWhenDatabaseIsConnected() {
         // Arrange
-        when(jdbcTemplate.queryForObject(anyString(), Integer.class)).thenReturn(1);
+        when(jdbcTemplate.queryForObject(eq("SELECT 1"), eq(Integer.class))).thenReturn(1);
 
         // Act
         Map<String, String> response = healthController.health();
@@ -39,7 +39,7 @@ public class HealthControllerTest {
     public void shouldReturnDownWhenDatabaseIsNotConnected() {
         // Arrange
         String errorMessage = "Connection refused";
-        when(jdbcTemplate.queryForObject(anyString(), Integer.class))
+        when(jdbcTemplate.queryForObject(eq("SELECT 1"), eq(Integer.class)))
                 .thenThrow(new RuntimeException(errorMessage));
 
         // Act

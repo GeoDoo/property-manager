@@ -170,10 +170,21 @@ class ImageTest {
 
     @Test
     void whenToString_thenPropertyIsExcluded() {
+        // Given
+        validImage.setId(1L);
+        validImage.setFileName("test-image.jpg");
+        validImage.setContentType("image/jpeg");
+        validImage.setUrl("https://example.com/images/test-image.jpg");
+        validImage.setProperty(testProperty);
+
         // When
         String toString = validImage.toString();
 
         // Then
-        assertThat(toString).doesNotContain("property=");
+        assertThat(toString).contains("id=1")
+            .contains("fileName=test-image.jpg")
+            .contains("contentType=image/jpeg")
+            .contains("url=https://example.com/images/test-image.jpg")
+            .doesNotContain("property=");
     }
 } 

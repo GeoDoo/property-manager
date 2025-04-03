@@ -31,11 +31,13 @@ dependencies {
     testImplementation 'org.testcontainers:testcontainers:1.19.7'
     testImplementation 'org.testcontainers:junit-jupiter:1.19.7'
     testImplementation 'org.testcontainers:postgresql:1.19.7'
+    testImplementation 'com.h2database:h2'
 }
 
 test {
     useJUnitPlatform()
     finalizedBy jacocoTestReport
+    systemProperty 'spring.profiles.active', 'test'
 }
 
 jacocoTestReport {

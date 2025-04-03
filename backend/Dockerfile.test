@@ -24,4 +24,10 @@ RUN mkdir -p build/reports/jacoco/test && \
 # Cache dependencies
 RUN ./gradlew dependencies
 
+# Set environment variables for testing
+ENV TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock
+ENV DOCKER_HOST=unix:///var/run/docker.sock
+ENV TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal
+ENV SPRING_PROFILES_ACTIVE=test
+
 # The actual test command will be provided by docker-compose 
