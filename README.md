@@ -1,79 +1,82 @@
 # Property Manager
 
-A full-stack application for managing property listings with image upload capabilities.
+![Tests](https://github.com/georgioskarametas/property-manager/actions/workflows/test.yml/badge.svg)
+![Coverage](https://img.shields.io/badge/coverage-0%25-red.svg)
+
+A full-stack application for managing real estate properties, built with Spring Boot and React.
+
+## Features
+
+- Property listing and management
+- Advanced search and filtering
+- User authentication and authorization
+- Responsive design
+- Docker support for development and testing
 
 ## Tech Stack
 
 ### Backend
-- Java 17
-- Spring Boot 3.2.4
-- Spring Data JPA
+- Spring Boot 3.2.0
 - PostgreSQL
-- Gradle
-- Docker
+- JPA/Hibernate
+- Flyway for database migrations
+- TestContainers for integration testing
 
 ### Frontend
-- React 18
+- React
 - TypeScript
-- Vite
-- Tailwind CSS
-- Docker
-
-## Features
-- Property CRUD operations
-- Image upload and management
-- Responsive design
-- Docker containerization
-- Health check endpoints
-- Input validation
-- Error handling
-- Logging
-
-## Prerequisites
-- Java 17
-- Node.js 18+
-- Docker and Docker Compose
-- PostgreSQL (optional, as it's included in Docker setup)
+- Material-UI
+- React Router
+- Axios
 
 ## Getting Started
 
-### Using Docker (Recommended)
+### Prerequisites
+
+- Docker and Docker Compose
+- JDK 17
+- Node.js 18+
+
+### Running the Application
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/property-manager.git
+   git clone https://github.com/georgioskarametas/property-manager.git
    cd property-manager
    ```
 
-2. Start the application:
+2. Start the application using Docker Compose:
    ```bash
-   docker compose up -d
+   docker compose up --build
    ```
 
 3. Access the application:
-   - Frontend: http://localhost:3000
-   - Backend: http://localhost:8080
-   - Backend Health Check: http://localhost:8080/actuator/health
+   - Frontend: http://localhost:5173
+   - Backend API: http://localhost:8081
+   - Backend Health Check: http://localhost:8081/actuator/health
+   - PostgreSQL: localhost:5432
 
-### Manual Setup
+### Development
 
-#### Backend Setup
+#### Backend Development
+
 1. Navigate to the backend directory:
    ```bash
    cd backend
    ```
 
-2. Build the project:
-   ```bash
-   ./gradlew build
-   ```
-
-3. Run the application:
+2. Run the application:
    ```bash
    ./gradlew bootRun
    ```
 
-#### Frontend Setup
+3. Run tests:
+   ```bash
+   ./gradlew test
+   ```
+
+#### Frontend Development
+
 1. Navigate to the frontend directory:
    ```bash
    cd frontend
@@ -86,55 +89,43 @@ A full-stack application for managing property listings with image upload capabi
 
 3. Start the development server:
    ```bash
-   npm run dev
+   npm start
    ```
 
-## API Endpoints
+## Testing
 
-### Properties
-- `GET /api/properties` - Get all properties
-- `GET /api/properties/{id}` - Get property by ID
-- `POST /api/properties` - Create new property
-- `PUT /api/properties/{id}` - Update property
-- `DELETE /api/properties/{id}` - Delete property
+### Running Tests
 
-### Images
-- `POST /api/properties/{propertyId}/images` - Upload image for property
-- `GET /api/properties/{propertyId}/images` - Get all images for property
-- `DELETE /api/images/{id}` - Delete image
-- `GET /images/{filename}` - Serve image file
+#### Backend Tests
 
-## Environment Variables
+```bash
+cd backend
+./gradlew test
+```
 
-### Backend
-- `SPRING_DATASOURCE_URL` - Database URL
-- `SPRING_DATASOURCE_USERNAME` - Database username
-- `SPRING_DATASOURCE_PASSWORD` - Database password
-- `UPLOAD_PATH` - Path for storing uploaded images
+#### Frontend Tests
 
-### Frontend
-- `VITE_API_URL` - Backend API URL
+```bash
+cd frontend
+npm test
+```
 
-## Recent Changes
-- Added Spring Boot Actuator for health checks
-- Improved error handling with custom exceptions
-- Added input validation for properties and images
-- Enhanced logging throughout the application
-- Optimized CORS configuration
-- Removed redundant configuration settings
-- Added proper documentation
+### Test Coverage
+
+The project uses JaCoCo for test coverage reporting. Coverage reports are:
+- Generated automatically on every push to main
+- Available as artifacts in GitHub Actions
+- Published to GitHub Pages at: https://georgioskarametas.github.io/property-manager/coverage/
+- Added as a comment on every Pull Request
 
 ## Contributing
+
 1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Project Status
-
-![Tests](https://github.com/georgioskarametas/property-manager/actions/workflows/test.yml/badge.svg)
-![Coverage](https://img.shields.io/badge/coverage-0%25-red.svg)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
