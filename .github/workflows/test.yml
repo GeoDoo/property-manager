@@ -23,14 +23,48 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
-      - name: Run Tests with Coverage
-        run: |
-          docker compose -f docker-compose.test.yml run --rm test ./gradlew test jacocoTestReport --info
-          docker compose -f docker-compose.test.yml up test --build --abort-on-container-exit --force-recreate
+      - name: Run tests with Docker Compose
+        run: docker compose -f docker-compose.test.yml up test --build --abort-on-container-exit --force-recreate
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx2048m -XX:MaxMetaspaceSize=512m"
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: backend/build/reports/jacoco/test/html/
-          retention-days: 7 
+          retention-days: 7
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./backend/build/reports/jacoco/test/html
+          destination_dir: coverage
+
+      - name: Update coverage badge
+        if: github.ref == 'refs/heads/main'
+        run: |
+          COVERAGE=$(grep -oP '(?<=Total.*?)\d+(?=%)' backend/build/reports/jacoco/test/html/index.html)
+          echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
+          echo "::set-output name=coverage::$COVERAGE"
+          curl -s -o /dev/null -w "%{http_code}" -X PUT \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"schemaVersion\":1,\"label\":\"coverage\",\"message\":\"$COVERAGE%\",\"color\":\"green\"}" \
+            "https://api.shields.io/badge/coverage-$COVERAGE%25-green.svg" > /dev/null
+
+      - name: Add coverage link to PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const coverageUrl = `https://${context.repo.owner}.github.io/${context.repo.repo}/coverage/`;
+            const comment = `### Coverage Report 📊\n\nA new coverage report has been generated for this PR.\n\n🔍 [View Coverage Report](${coverageUrl})\n\n`;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            }); 

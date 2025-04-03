@@ -133,3 +133,8 @@ A full-stack application for managing property listings with image upload capabi
 
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Project Status
+
+![Tests](https://github.com/georgioskarametas/property-manager/actions/workflows/test.yml/badge.svg)
+![Coverage](https://img.shields.io/badge/coverage-0%25-red.svg)
