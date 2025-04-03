@@ -33,8 +33,6 @@ const PropertyList: React.FC = () => {
     size: parseInt(searchParams.get('size') || '12'),
   };
 
-  console.log('Current filters:', filters);
-
   const { data, isLoading, error } = useQuery({
     queryKey: ['properties', filters],
     queryFn: () => fetchProperties(filters),
@@ -80,8 +78,6 @@ const PropertyList: React.FC = () => {
       </Layout>
     );
   }
-
-  console.log('Rendering with data:', data);
 
   const properties = data?.content || [];
   const totalPages = data?.totalPages || 0;

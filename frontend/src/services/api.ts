@@ -32,13 +32,11 @@ export const fetchProperties = async (filters: Filters): Promise<Page<Property>>
   if (filters.page !== undefined) params.append('page', filters.page.toString());
   if (filters.size !== undefined) params.append('size', filters.size.toString());
 
-  console.log('Fetching properties with params:', params.toString());
   const response = await fetch(`${API_URL}/properties/search?${params.toString()}`);
   if (!response.ok) {
     throw new Error('Failed to fetch properties');
   }
   const data = await response.json();
-  console.log('Received properties data:', data);
 
   // If the response is an array, convert it to a Page object
   if (Array.isArray(data)) {
@@ -55,4 +53,14 @@ export const fetchProperties = async (filters: Filters): Promise<Page<Property>>
   }
 
   return data;
+};
+
+export const getProperties = async (params: URLSearchParams): Promise<PropertyResponse> => {
+    try {
+        const response = await fetch(`${API_URL}/api/properties?${params}`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        throw new Error('Failed to fetch properties');
+    }
 }; 
