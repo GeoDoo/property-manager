@@ -24,10 +24,10 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
     return (
         <div 
             onClick={handleViewDetails}
-            className="bg-white rounded-xl overflow-hidden shadow-none border-2 border-[#e5e5e5] hover:border-[#00deb6] transition-colors duration-300 cursor-pointer"
+            className="bg-white rounded-xl overflow-hidden shadow-none border-2 border-[#e5e5e5] hover:border-[#00deb6] transition-colors duration-300 cursor-pointer flex flex-col h-[500px]"
         >
             {/* Image Section */}
-            <div className="relative h-48 bg-gray-200">
+            <div className="relative h-48 bg-gray-200 flex-shrink-0">
                 {property.images && property.images.length > 0 ? (
                     <img
                         src={getFullImageUrl(property.images[0].url)}
@@ -50,9 +50,9 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
             </div>
 
             {/* Content Section */}
-            <div className="p-4">
+            <div className="p-4 flex flex-col flex-grow">
                 <div className="mb-2">
-                    <h3 className="text-xl font-bold text-[#262637] mb-2">{property.address}</h3>
+                    <h3 className="text-xl font-bold text-[#262637] mb-2 line-clamp-1">{property.address}</h3>
                     <p className="text-2xl font-bold text-[#00deb6]">
                         £{property.price.toLocaleString()}
                     </p>
@@ -88,7 +88,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
 
                 {/* Description Preview */}
                 {property.description && (
-                    <div className="mt-4 border-t border-gray-100 pt-4">
+                    <div className="mt-4 border-t border-gray-100 pt-4 flex-grow">
                         <p className="text-[#666666] text-sm line-clamp-2">
                             {property.description}
                         </p>
@@ -96,7 +96,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
                 )}
 
                 {/* View Details Button */}
-                <div className="mt-4 text-center">
+                <div className="mt-auto pt-4">
                     <button
                         onClick={handleViewDetails}
                         className="w-full bg-[#00deb6] text-white px-4 py-2 rounded-xl hover:bg-[#00c5a0] transition-colors duration-200"
