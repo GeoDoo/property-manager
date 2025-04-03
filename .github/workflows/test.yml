@@ -30,14 +30,27 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
-      - name: Create badges directory
-        run: mkdir -p .github/badges
+      - name: Create directories
+        run: |
+          mkdir -p .github/badges
+          mkdir -p backend/build/reports/jacoco/test
 
       - name: Run tests with Docker Compose
         run: |
-          docker compose -f docker-compose.test.yml up test --build --abort-on-container-exit --force-recreate --exit-code-from test
-          container_id=$(docker compose -f docker-compose.test.yml ps -q test)
-          docker cp $container_id:/app/build/reports/jacoco/test ./backend/build/reports/jacoco/
+          # Run the tests
+          docker compose -f docker-compose.test.yml up --build --abort-on-container-exit --exit-code-from test test postgres-test
+          
+          # Get the exit code
+          exit_code=$?
+          
+          # Try to copy reports regardless of test result
+          container_id=$(docker ps -aq -f name=property-manager-test)
+          if [ ! -z "$container_id" ]; then
+            docker cp $container_id:/app/build/reports/jacoco/. backend/build/reports/jacoco/ || true
+          fi
+          
+          # Exit with the original test exit code
+          exit $exit_code
         env:
           GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx2048m -XX:MaxMetaspaceSize=512m"
 
