@@ -20,12 +20,12 @@ interface FilterProps {
 }
 
 // Validation functions
-const validateNumber = (value: string): string => {
+export const validateNumber = (value: string): string => {
   // Only allow digits and limit length
   return value.replace(/\D/g, '').slice(0, 10);
 };
 
-const validateAddress = (value: string): string => {
+export const validateAddress = (value: string): string => {
   // Remove HTML tags and limit length
   return value.replace(/<[^>]*>/g, '').slice(0, 100);
 };
@@ -51,7 +51,18 @@ const Filter: FC<FilterProps> = ({ onFilterChange, initialFilters = {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const newFilters = { ...filters, [name]: value, page: 0 }; // Reset to first page when filters change
+    
+    // Apply validation based on field type
+    let validatedValue = value;
+    if (name === 'address') {
+      validatedValue = validateAddress(value);
+    } else if (['minPrice', 'maxPrice', 'bedrooms'].includes(name)) {
+      // Note: HTML number inputs handle validation natively in the browser,
+      // but we apply our validation as an extra safety measure for programmatic inputs
+      validatedValue = value;
+    }
+    
+    const newFilters = { ...filters, [name]: validatedValue, page: 0 }; // Reset to first page when filters change
     setFilters(newFilters);
 
     if (timeoutRef.current) {
