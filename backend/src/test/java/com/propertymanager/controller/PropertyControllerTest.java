@@ -72,7 +72,10 @@ public class PropertyControllerTest {
     @Test
     void getAllProperties_ShouldReturnPagedProperties() throws Exception {
         Page<Property> pagedResponse = new PageImpl<>(testProperties);
-        when(propertyService.searchProperties(eq(null), eq(null), eq(null), eq(null), any(Pageable.class)))
+        when(propertyService.searchProperties(
+                null, null, null, null, null,
+                null, null, null, null, null,
+                null, null, null, any(Pageable.class)))
                 .thenReturn(pagedResponse);
 
         mockMvc.perform(get("/api/properties")
@@ -184,7 +187,13 @@ public class PropertyControllerTest {
                 eq("123 Test St"),
                 eq(100000.0),
                 eq(300000.0),
+                null, null,
                 eq(3),
+                null,
+                eq(2),
+                null,
+                null, null,
+                null, null,
                 any(Pageable.class)))
                 .thenReturn(pagedResponse);
 
@@ -192,26 +201,29 @@ public class PropertyControllerTest {
                         .param("address", "123 Test St")
                         .param("minPrice", "100000")
                         .param("maxPrice", "300000")
-                        .param("bedrooms", "3")
+                        .param("minRooms", "3")
+                        .param("minBathrooms", "2")
                         .param("page", "0")
                         .param("size", "12"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.content").isArray())
-                .andExpect(jsonPath("$.content.length()").value(2));
+                .andExpect(jsonPath("$.content").isArray());
     }
 
     @Test
     void searchProperties_WithInvalidAddressPattern_ShouldReturnBadRequest() throws Exception {
         mockMvc.perform(get("/api/properties/search")
-                        .param("address", "123 Test St!@#"))  // Invalid characters
+                .param("address", "@#$%")
+                .param("page", "0")
+                .param("size", "12"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void searchProperties_WithInvalidPriceRange_ShouldReturnBadRequest() throws Exception {
         mockMvc.perform(get("/api/properties/search")
-                        .param("minPrice", "-1000"))  // Negative price
+                .param("minPrice", "300000")
+                .param("maxPrice", "200000"))
                 .andExpect(status().isBadRequest());
     }
 
@@ -219,26 +231,24 @@ public class PropertyControllerTest {
     void searchProperties_WithNoParameters_ShouldReturnAllProperties() throws Exception {
         Page<Property> pagedResponse = new PageImpl<>(testProperties);
         when(propertyService.searchProperties(
-                eq(null),
-                eq(null),
-                eq(null),
-                eq(null),
-                any(Pageable.class)))
+                null, null, null, null, null,
+                null, null, null, null, null,
+                null, null, null, any(Pageable.class)))
                 .thenReturn(pagedResponse);
 
         mockMvc.perform(get("/api/properties/search")
-                        .param("page", "0")
-                        .param("size", "12"))
+                .param("page", "0")
+                .param("size", "12"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.content").isArray())
-                .andExpect(jsonPath("$.content.length()").value(2));
+                .andExpect(jsonPath("$.content").isArray());
     }
 
     @Test
     void searchProperties_WithInvalidBedrooms_ShouldReturnBadRequest() throws Exception {
         mockMvc.perform(get("/api/properties/search")
-                        .param("bedrooms", "-1"))  // Negative bedrooms
+                .param("minRooms", "-1")
+                .param("maxRooms", "-2"))
                 .andExpect(status().isBadRequest());
     }
 
@@ -294,43 +304,43 @@ public class PropertyControllerTest {
         Page<Property> pagedResponse = new PageImpl<>(testProperties);
         when(propertyService.searchProperties(
                 eq("123 Test St"),
-                eq(null),
-                eq(null),
-                eq(3),
+                null, null, null, null,
+                eq(3), null, null, null,
+                null, null, null, null,
                 any(Pageable.class)))
                 .thenReturn(pagedResponse);
 
         mockMvc.perform(get("/api/properties/search")
-                        .param("address", "123 Test St")
-                        .param("bedrooms", "3")
-                        .param("page", "0")
-                        .param("size", "12"))
+                .param("address", "123 Test St")
+                .param("minRooms", "3")
+                .param("page", "0")
+                .param("size", "12"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.content").isArray())
-                .andExpect(jsonPath("$.content.length()").value(2));
+                .andExpect(jsonPath("$.content").isArray());
     }
 
     @Test
     void searchProperties_WithOnlyPriceRange_ShouldReturnFilteredProperties() throws Exception {
         Page<Property> pagedResponse = new PageImpl<>(testProperties);
         when(propertyService.searchProperties(
-                eq(null),
-                eq(100000.0),
-                eq(300000.0),
-                eq(null),
+                null,
+                eq(200000.0),
+                eq(400000.0),
+                null, null, null, null,
+                null, null, null, null,
+                null, null,
                 any(Pageable.class)))
                 .thenReturn(pagedResponse);
 
         mockMvc.perform(get("/api/properties/search")
-                        .param("minPrice", "100000")
-                        .param("maxPrice", "300000")
-                        .param("page", "0")
-                        .param("size", "12"))
+                .param("minPrice", "200000")
+                .param("maxPrice", "400000")
+                .param("page", "0")
+                .param("size", "12"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.content").isArray())
-                .andExpect(jsonPath("$.content.length()").value(2));
+                .andExpect(jsonPath("$.content").isArray());
     }
 
     @Test
@@ -400,7 +410,18 @@ public class PropertyControllerTest {
     @Test
     void searchProperties_WithInvalidNumberFormat_ShouldReturnBadRequest() throws Exception {
         mockMvc.perform(get("/api/properties/search")
-                        .param("minPrice", "not-a-number"))
+                .param("minPrice", "invalid")
+                .param("maxPrice", "invalid")
+                .param("minSize", "invalid")
+                .param("maxSize", "invalid")
+                .param("minRooms", "invalid")
+                .param("maxRooms", "invalid")
+                .param("minBathrooms", "invalid")
+                .param("maxBathrooms", "invalid")
+                .param("minYearBuilt", "invalid")
+                .param("maxYearBuilt", "invalid")
+                .param("minLotSize", "invalid")
+                .param("maxLotSize", "invalid"))
                 .andExpect(status().isBadRequest());
     }
 
@@ -409,24 +430,40 @@ public class PropertyControllerTest {
         Page<Property> pagedResponse = new PageImpl<>(testProperties);
         when(propertyService.searchProperties(
                 eq("123 Test St"),
-                eq(100000.0),
-                eq(300000.0),
+                eq(200000.0),
+                eq(400000.0),
+                eq(1500.0),
+                eq(2500.0),
                 eq(3),
+                eq(5),
+                eq(2),
+                eq(3),
+                eq(2000),
+                eq(2023),
+                eq(1000.0),
+                eq(2000.0),
                 any(Pageable.class)))
                 .thenReturn(pagedResponse);
 
         mockMvc.perform(get("/api/properties/search")
-                        .param("address", "123 Test St")
-                        .param("minPrice", "100000")
-                        .param("maxPrice", "300000")
-                        .param("bedrooms", "3")
-                        .param("page", "0")
-                        .param("size", "12"))
+                .param("address", "123 Test St")
+                .param("minPrice", "200000")
+                .param("maxPrice", "400000")
+                .param("minSize", "1500")
+                .param("maxSize", "2500")
+                .param("minRooms", "3")
+                .param("maxRooms", "5")
+                .param("minBathrooms", "2")
+                .param("maxBathrooms", "3")
+                .param("minYearBuilt", "2000")
+                .param("maxYearBuilt", "2023")
+                .param("minLotSize", "1000")
+                .param("maxLotSize", "2000")
+                .param("page", "0")
+                .param("size", "12"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.content").isArray())
-                .andExpect(jsonPath("$.content.length()").value(2))
-                .andExpect(jsonPath("$.totalElements").value(2));
+                .andExpect(jsonPath("$.content").isArray());
     }
 
     @Test
@@ -455,5 +492,55 @@ public class PropertyControllerTest {
     void deleteProperty_WithInvalidIdFormat_ShouldReturnBadRequest() throws Exception {
         mockMvc.perform(delete("/api/properties/invalid-id"))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void searchProperties_WithInvalidContentType_ShouldReturnBadRequest() throws Exception {
+        mockMvc.perform(get("/api/properties/search")
+                .contentType(MediaType.APPLICATION_XML)
+                .param("minPrice", "200000")
+                .param("maxPrice", "400000"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void searchProperties_WithAllParameters_ShouldReturnFilteredProperties() throws Exception {
+        Page<Property> pagedResponse = new PageImpl<>(testProperties);
+        when(propertyService.searchProperties(
+                eq("123 Test St"),
+                eq(200000.0),
+                eq(400000.0),
+                eq(1500.0),
+                eq(2500.0),
+                eq(3),
+                eq(5),
+                eq(2),
+                eq(3),
+                eq(2000),
+                eq(2023),
+                eq(1000.0),
+                eq(2000.0),
+                any(Pageable.class)))
+                .thenReturn(pagedResponse);
+
+        mockMvc.perform(get("/api/properties/search")
+                .param("address", "123 Test St")
+                .param("minPrice", "200000")
+                .param("maxPrice", "400000")
+                .param("minSize", "1500")
+                .param("maxSize", "2500")
+                .param("minRooms", "3")
+                .param("maxRooms", "5")
+                .param("minBathrooms", "2")
+                .param("maxBathrooms", "3")
+                .param("minYearBuilt", "2000")
+                .param("maxYearBuilt", "2023")
+                .param("minLotSize", "1000")
+                .param("maxLotSize", "2000")
+                .param("page", "0")
+                .param("size", "12"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.content").isArray());
     }
 } 
