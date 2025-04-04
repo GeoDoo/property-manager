@@ -1,10 +1,11 @@
-package com.propertymanager.service;
+package com.propertymanager.service.impl;
 
 import com.propertymanager.exception.ResourceNotFoundException;
 import com.propertymanager.model.Image;
 import com.propertymanager.model.Property;
 import com.propertymanager.repository.ImageRepository;
 import com.propertymanager.repository.PropertyRepository;
+import com.propertymanager.service.ImageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

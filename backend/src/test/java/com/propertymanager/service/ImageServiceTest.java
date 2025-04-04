@@ -5,6 +5,7 @@ import com.propertymanager.model.Image;
 import com.propertymanager.model.Property;
 import com.propertymanager.repository.ImageRepository;
 import com.propertymanager.repository.PropertyRepository;
+import com.propertymanager.service.impl.ImageServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

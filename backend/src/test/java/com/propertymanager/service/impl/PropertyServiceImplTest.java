@@ -232,10 +232,6 @@ class PropertyServiceImplTest {
                 5,              // maxRooms
                 2,              // minBathrooms
                 3,              // maxBathrooms
-                2000,           // minYearBuilt
-                2023,           // maxYearBuilt
-                1000.0,         // minLotSize
-                2000.0,         // maxLotSize
                 PageRequest.of(0, 12));
 
         // Assert
@@ -257,10 +253,6 @@ class PropertyServiceImplTest {
                 null,           // maxRooms
                 null,           // minBathrooms
                 null,           // maxBathrooms
-                null,           // minYearBuilt
-                null,           // maxYearBuilt
-                null,           // minLotSize
-                null,           // maxLotSize
                 PageRequest.of(0, 12)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Maximum price")
@@ -281,10 +273,6 @@ class PropertyServiceImplTest {
                 null,           // maxRooms
                 null,           // minBathrooms
                 null,           // maxBathrooms
-                null,           // minYearBuilt
-                null,           // maxYearBuilt
-                null,           // minLotSize
-                null,           // maxLotSize
                 PageRequest.of(0, 12)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("price")
@@ -305,10 +293,6 @@ class PropertyServiceImplTest {
                 null,           // maxRooms
                 null,           // minBathrooms
                 null,           // maxBathrooms
-                null,           // minYearBuilt
-                null,           // maxYearBuilt
-                null,           // minLotSize
-                null,           // maxLotSize
                 PageRequest.of(0, 12)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("bedrooms")
@@ -334,10 +318,6 @@ class PropertyServiceImplTest {
                 null,           // maxRooms
                 null,           // minBathrooms
                 null,           // maxBathrooms
-                null,           // minYearBuilt
-                null,           // maxYearBuilt
-                null,           // minLotSize
-                null,           // maxLotSize
                 PageRequest.of(0, 12));
 
         // Assert

@@ -63,8 +63,6 @@ public class PropertyServiceImpl implements PropertyService {
         existingProperty.setBedrooms(property.getBedrooms());
         existingProperty.setBathrooms(property.getBathrooms());
         existingProperty.setSquareFootage(property.getSquareFootage());
-        existingProperty.setYearBuilt(property.getYearBuilt());
-        existingProperty.setLotSize(property.getLotSize());
         
         return propertyRepository.save(existingProperty);
     }
@@ -90,13 +88,9 @@ public class PropertyServiceImpl implements PropertyService {
             Integer maxRooms,
             Integer minBathrooms,
             Integer maxBathrooms,
-            Integer minYearBuilt,
-            Integer maxYearBuilt,
-            Double minLotSize,
-            Double maxLotSize,
             Pageable pageable) {
-        logger.debug("Searching properties with criteria: address={}, price={}-{}, size={}-{}, rooms={}-{}, bathrooms={}-{}, yearBuilt={}-{}, lotSize={}-{}", 
-            address, minPrice, maxPrice, minSize, maxSize, minRooms, maxRooms, minBathrooms, maxBathrooms, minYearBuilt, maxYearBuilt, minLotSize, maxLotSize);
+        logger.debug("Searching properties with criteria: address={}, price={}-{}, size={}-{}, rooms={}-{}, bathrooms={}-{}", 
+            address, minPrice, maxPrice, minSize, maxSize, minRooms, maxRooms, minBathrooms, maxBathrooms);
         
         validateSearchParameters(minPrice, maxPrice, minRooms);
 
@@ -129,18 +123,6 @@ public class PropertyServiceImpl implements PropertyService {
             }
             if (maxBathrooms != null) {
                 predicates.add(cb.lessThanOrEqualTo(root.get("bathrooms"), maxBathrooms));
-            }
-            if (minYearBuilt != null) {
-                predicates.add(cb.greaterThanOrEqualTo(root.get("yearBuilt"), minYearBuilt));
-            }
-            if (maxYearBuilt != null) {
-                predicates.add(cb.lessThanOrEqualTo(root.get("yearBuilt"), maxYearBuilt));
-            }
-            if (minLotSize != null) {
-                predicates.add(cb.greaterThanOrEqualTo(root.get("lotSize"), minLotSize));
-            }
-            if (maxLotSize != null) {
-                predicates.add(cb.lessThanOrEqualTo(root.get("lotSize"), maxLotSize));
             }
             
             return cb.and(predicates.toArray(new Predicate[0]));

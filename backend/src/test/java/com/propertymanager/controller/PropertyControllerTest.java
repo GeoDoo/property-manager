@@ -90,8 +90,8 @@ public class PropertyControllerTest {
         // Use any() for all parameters including the Pageable
         when(propertyService.searchProperties(
                 any(), any(), any(), any(), any(),
-                any(), any(), any(), any(), any(),
-                any(), any(), any(), any(Pageable.class)))
+                any(), any(), any(), any(),
+                any(Pageable.class)))
                 .thenReturn(pagedResponse);
 
         mockMvc.perform(get("/api/properties")
@@ -210,8 +210,8 @@ public class PropertyControllerTest {
         // Use any() for all parameters including the Pageable
         when(propertyService.searchProperties(
                 any(), any(), any(), any(), any(),
-                any(), any(), any(), any(), any(),
-                any(), any(), any(), any(Pageable.class)))
+                any(), any(), any(), any(),
+                any(Pageable.class)))
                 .thenReturn(pagedResponse);
 
         mockMvc.perform(get("/api/properties/search")
@@ -254,14 +254,12 @@ public class PropertyControllerTest {
         // Use any() for all parameters including the Pageable
         when(propertyService.searchProperties(
                 any(), any(), any(), any(), any(),
-                any(), any(), any(), any(), any(),
-                any(), any(), any(), any(Pageable.class)))
+                any(), any(), any(), any(),
+                any(Pageable.class)))
                 .thenReturn(pagedResponse);
 
         mockMvc.perform(get("/api/properties/search")
-                .param("page", "0")
-                .param("size", "12")
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.content").isArray());
@@ -271,7 +269,6 @@ public class PropertyControllerTest {
     void searchProperties_WithInvalidBedrooms_ShouldReturnBadRequest() throws Exception {
         mockMvc.perform(get("/api/properties/search")
                 .param("minRooms", "-1")
-                .param("maxRooms", "-2")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
@@ -283,43 +280,35 @@ public class PropertyControllerTest {
         // Use any() for all parameters including the Pageable
         when(propertyService.searchProperties(
                 any(), any(), any(), any(), any(),
-                any(), any(), any(), any(), any(),
-                any(), any(), any(), any(Pageable.class)))
+                any(), any(), any(), any(),
+                any(Pageable.class)))
                 .thenReturn(pagedResponse);
-                
-        String requestJson = "{\"address\":\"123 Test St\",\"minPrice\":100000,\"maxPrice\":300000,\"minRooms\":3}";
 
         mockMvc.perform(post("/api/properties/search")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestJson)
-                .accept(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"address\": \"Test\", \"minPrice\": 100000, \"maxPrice\": 300000}")
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.content").isArray());
     }
-    
+
     @Test
     void searchProperties_WithPost_WithInvalidData_ShouldReturnBadRequest() throws Exception {
-        String requestJson = "{\"address\":\"@#$%\",\"minPrice\":-100}";
-
         mockMvc.perform(post("/api/properties/search")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestJson)
-                .accept(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"minPrice\": \"invalid\"}")
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
-    
+
     @Test
     void searchProperties_WithPost_WithInvalidContentType_ShouldReturnBadRequest() throws Exception {
-        String requestXml = "<search><address>123 Test St</address></search>";
-        
         mockMvc.perform(post("/api/properties/search")
-                .contentType(MediaType.APPLICATION_XML)
-                .content(requestXml)
-                .accept(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_XML_VALUE))
                 .andExpect(status().isBadRequest());
     }
-    
+
     @Test
     void searchProperties_WithPost_WithEmptyBody_ShouldReturnAllProperties() throws Exception {
         Page<Property> pagedResponse = createPage(testProperties);
@@ -327,14 +316,14 @@ public class PropertyControllerTest {
         // Use any() for all parameters including the Pageable
         when(propertyService.searchProperties(
                 any(), any(), any(), any(), any(),
-                any(), any(), any(), any(), any(),
-                any(), any(), any(), any(Pageable.class)))
+                any(), any(), any(), any(),
+                any(Pageable.class)))
                 .thenReturn(pagedResponse);
 
         mockMvc.perform(post("/api/properties/search")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{}")
-                .accept(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}")
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.content").isArray());

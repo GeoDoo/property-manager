@@ -46,12 +46,6 @@ public class Property {
     @Positive(message = "Square footage must be greater than 0")
     private Double squareFootage;
 
-    @Positive(message = "Year built must be greater than 0")
-    private Integer yearBuilt;
-
-    @Positive(message = "Lot size must be greater than 0")
-    private Double lotSize;
-
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Image> images = new ArrayList<>();
@@ -111,22 +105,6 @@ public class Property {
 
     public void setSquareFootage(Double squareFootage) {
         this.squareFootage = squareFootage;
-    }
-
-    public Integer getYearBuilt() {
-        return yearBuilt;
-    }
-
-    public void setYearBuilt(Integer yearBuilt) {
-        this.yearBuilt = yearBuilt;
-    }
-
-    public Double getLotSize() {
-        return lotSize;
-    }
-
-    public void setLotSize(Double lotSize) {
-        this.lotSize = lotSize;
     }
 
     public List<Image> getImages() {

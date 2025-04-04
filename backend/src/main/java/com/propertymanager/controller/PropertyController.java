@@ -32,7 +32,6 @@ public class PropertyController {
         Page<Property> properties = propertyService.searchProperties(
             null, null, null, null, null,
             null, null, null, null,
-            null, null, null, null,
             pageable);
         return ResponseEntity.ok(properties);
     }
@@ -72,10 +71,6 @@ public class PropertyController {
             @RequestParam(required = false) @PositiveOrZero(message = "Maximum rooms must be non-negative") Integer maxRooms,
             @RequestParam(required = false) @PositiveOrZero(message = "Minimum bathrooms must be non-negative") Integer minBathrooms,
             @RequestParam(required = false) @PositiveOrZero(message = "Maximum bathrooms must be non-negative") Integer maxBathrooms,
-            @RequestParam(required = false) @PositiveOrZero(message = "Minimum year built must be non-negative") Integer minYearBuilt,
-            @RequestParam(required = false) @PositiveOrZero(message = "Maximum year built must be non-negative") Integer maxYearBuilt,
-            @RequestParam(required = false) @PositiveOrZero(message = "Minimum lot size must be non-negative") Double minLotSize,
-            @RequestParam(required = false) @PositiveOrZero(message = "Maximum lot size must be non-negative") Double maxLotSize,
             @PageableDefault(size = 12) Pageable pageable) {
         // Validate price range
         if (minPrice != null && maxPrice != null && minPrice > maxPrice) {
@@ -84,7 +79,6 @@ public class PropertyController {
         Page<Property> results = propertyService.searchProperties(
             address, minPrice, maxPrice, minSize, maxSize,
             minRooms, maxRooms, minBathrooms, maxBathrooms,
-            minYearBuilt, maxYearBuilt, minLotSize, maxLotSize,
             pageable);
         
         return ResponseEntity.ok(results);
@@ -103,10 +97,6 @@ public class PropertyController {
         Integer maxRooms = searchCriteria != null ? parseInteger(searchCriteria.get("maxRooms")) : null;
         Integer minBathrooms = searchCriteria != null ? parseInteger(searchCriteria.get("minBathrooms")) : null;
         Integer maxBathrooms = searchCriteria != null ? parseInteger(searchCriteria.get("maxBathrooms")) : null;
-        Integer minYearBuilt = searchCriteria != null ? parseInteger(searchCriteria.get("minYearBuilt")) : null;
-        Integer maxYearBuilt = searchCriteria != null ? parseInteger(searchCriteria.get("maxYearBuilt")) : null;
-        Double minLotSize = searchCriteria != null ? parseDouble(searchCriteria.get("minLotSize")) : null;
-        Double maxLotSize = searchCriteria != null ? parseDouble(searchCriteria.get("maxLotSize")) : null;
         
         // Validate parameters
         validateParameters(address, minPrice, maxPrice, minRooms);
@@ -114,7 +104,6 @@ public class PropertyController {
         Page<Property> results = propertyService.searchProperties(
             address, minPrice, maxPrice, minSize, maxSize,
             minRooms, maxRooms, minBathrooms, maxBathrooms,
-            minYearBuilt, maxYearBuilt, minLotSize, maxLotSize,
             pageable);
             
         return ResponseEntity.ok(results);

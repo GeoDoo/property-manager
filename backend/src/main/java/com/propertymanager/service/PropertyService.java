@@ -22,9 +22,5 @@ public interface PropertyService {
         Integer maxRooms,
         Integer minBathrooms,
         Integer maxBathrooms,
-        Integer minYearBuilt,
-        Integer maxYearBuilt,
-        Double minLotSize,
-        Double maxLotSize,
         Pageable pageable);
 } 
