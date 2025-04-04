@@ -1,6 +1,6 @@
 # Property Manager
 
-![Tests](https://github.com/GeoDoo/property-manager/actions/workflows/test.yml/badge.svg)
+![Tests](https://github.com/GeoDoo/property-manager/actions/workflows/backend.yml/badge.svg)
 ![Coverage](https://github.com/GeoDoo/property-manager/blob/main/.github/badges/jacoco.svg)
 ![Branches](https://github.com/GeoDoo/property-manager/blob/main/.github/badges/branches.svg)
 
