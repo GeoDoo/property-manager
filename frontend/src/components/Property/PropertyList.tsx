@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
 import PropertyCard from './PropertyCard';
@@ -20,7 +20,7 @@ const sanitizeNumber = (str: string | null): string => {
   return str.replace(/\D/g, '');
 };
 
-const PropertyList: React.FC = () => {
+const PropertyList: FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   
   // Sanitize and validate URL parameters
