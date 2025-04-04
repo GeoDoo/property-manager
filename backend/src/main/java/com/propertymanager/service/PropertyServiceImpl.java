@@ -86,11 +86,23 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Property> searchProperties(String address, Double minPrice, Double maxPrice, Integer bedrooms, Pageable pageable) {
-        logger.debug("Searching properties with address: {}, minPrice: {}, maxPrice: {}, bedrooms: {}", 
-            address, minPrice, maxPrice, bedrooms);
-        
-        validateSearchParameters(minPrice, maxPrice, bedrooms);
+    public Page<Property> searchProperties(
+            String address,
+            Double minPrice,
+            Double maxPrice,
+            Double minSize,
+            Double maxSize,
+            Integer minRooms,
+            Integer maxRooms,
+            Integer minBathrooms,
+            Integer maxBathrooms,
+            Integer minYearBuilt,
+            Integer maxYearBuilt,
+            Double minLotSize,
+            Double maxLotSize,
+            Pageable pageable) {
+        logger.debug("Searching properties with criteria: address={}, price={}-{}, size={}-{}, rooms={}-{}, bathrooms={}-{}, yearBuilt={}-{}, lotSize={}-{}", 
+            address, minPrice, maxPrice, minSize, maxSize, minRooms, maxRooms, minBathrooms, maxBathrooms, minYearBuilt, maxYearBuilt, minLotSize, maxLotSize);
         
         // Create specifications for each filter
         Specification<Property> spec = Specification.where(null);
@@ -110,9 +122,54 @@ public class PropertyServiceImpl implements PropertyService {
                 cb.lessThanOrEqualTo(root.get("price"), maxPrice));
         }
 
-        if (bedrooms != null) {
+        if (minSize != null) {
             spec = spec.and((root, query, cb) -> 
-                cb.equal(root.get("bedrooms"), bedrooms));
+                cb.greaterThanOrEqualTo(root.get("squareFootage"), minSize));
+        }
+
+        if (maxSize != null) {
+            spec = spec.and((root, query, cb) -> 
+                cb.lessThanOrEqualTo(root.get("squareFootage"), maxSize));
+        }
+
+        if (minRooms != null) {
+            spec = spec.and((root, query, cb) -> 
+                cb.greaterThanOrEqualTo(root.get("bedrooms"), minRooms));
+        }
+
+        if (maxRooms != null) {
+            spec = spec.and((root, query, cb) -> 
+                cb.lessThanOrEqualTo(root.get("bedrooms"), maxRooms));
+        }
+
+        if (minBathrooms != null) {
+            spec = spec.and((root, query, cb) -> 
+                cb.greaterThanOrEqualTo(root.get("bathrooms"), minBathrooms));
+        }
+
+        if (maxBathrooms != null) {
+            spec = spec.and((root, query, cb) -> 
+                cb.lessThanOrEqualTo(root.get("bathrooms"), maxBathrooms));
+        }
+
+        if (minYearBuilt != null) {
+            spec = spec.and((root, query, cb) -> 
+                cb.greaterThanOrEqualTo(root.get("yearBuilt"), minYearBuilt));
+        }
+
+        if (maxYearBuilt != null) {
+            spec = spec.and((root, query, cb) -> 
+                cb.lessThanOrEqualTo(root.get("yearBuilt"), maxYearBuilt));
+        }
+
+        if (minLotSize != null) {
+            spec = spec.and((root, query, cb) -> 
+                cb.greaterThanOrEqualTo(root.get("lotSize"), minLotSize));
+        }
+
+        if (maxLotSize != null) {
+            spec = spec.and((root, query, cb) -> 
+                cb.lessThanOrEqualTo(root.get("lotSize"), maxLotSize));
         }
 
         return propertyRepository.findAll(spec, pageable);
