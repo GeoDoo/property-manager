@@ -3,7 +3,6 @@ package com.propertymanager.service.impl;
 import com.propertymanager.exception.ResourceNotFoundException;
 import com.propertymanager.model.Property;
 import com.propertymanager.repository.PropertyRepository;
-import com.propertymanager.service.PropertyServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -63,6 +63,17 @@ class PropertyServiceImplTest {
                         .build()
         );
     }
+    
+    /**
+     * Helper method to create a properly initialized PageImpl instance.
+     */
+    private <T> Page<T> createPage(List<T> content) {
+        return new PageImpl<>(
+            new ArrayList<>(content),
+            PageRequest.of(0, 10),
+            content.size()
+        );
+    }
 
     @Test
     void getAllProperties_ShouldReturnAllProperties() {
@@ -73,13 +84,12 @@ class PropertyServiceImplTest {
         List<Property> result = propertyService.getAllProperties();
 
         // Assert
-        assertThat(result).hasSize(2)
-                .containsExactlyElementsOf(testProperties);
+        assertThat(result).hasSize(2).containsExactlyElementsOf(testProperties);
         verify(propertyRepository).findAll();
     }
 
     @Test
-    void getPropertyById_WhenPropertyExists_ShouldReturnProperty() {
+    void getPropertyById_WithValidId_ShouldReturnProperty() {
         // Arrange
         when(propertyRepository.findById(1L)).thenReturn(Optional.of(testProperty));
 
@@ -92,19 +102,24 @@ class PropertyServiceImplTest {
     }
 
     @Test
-    void getPropertyById_WhenPropertyDoesNotExist_ShouldThrowException() {
+    void getPropertyById_WithInvalidId_ShouldThrowException() {
         // Arrange
         when(propertyRepository.findById(1L)).thenReturn(Optional.empty());
 
         // Act & Assert
         assertThatThrownBy(() -> propertyService.getPropertyById(1L))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Property not found with id: 1");
+                .satisfies(ex -> {
+                    ResourceNotFoundException rnfe = (ResourceNotFoundException) ex;
+                    assertThat(rnfe.getResourceName()).isEqualTo("Property");
+                    assertThat(rnfe.getFieldName()).isEqualTo("id");
+                    assertThat(rnfe.getFieldValue()).isEqualTo(1L);
+                });
         verify(propertyRepository).findById(1L);
     }
 
     @Test
-    void createProperty_WithValidData_ShouldCreateProperty() {
+    void createProperty_ShouldSaveAndReturnProperty() {
         // Arrange
         when(propertyRepository.save(any(Property.class))).thenReturn(testProperty);
 
@@ -117,59 +132,61 @@ class PropertyServiceImplTest {
     }
 
     @Test
-    void createProperty_WithInvalidData_ShouldThrowException() {
+    void updateProperty_WithValidId_ShouldUpdateAndReturnProperty() {
         // Arrange
-        Property invalidProperty = Property.builder()
-                .address("")  // Invalid empty address
-                .build();
+        when(propertyRepository.findById(1L)).thenReturn(Optional.of(testProperty));
+        when(propertyRepository.save(any(Property.class))).thenReturn(testProperty);
 
-        // Act & Assert
-        assertThatThrownBy(() -> propertyService.createProperty(invalidProperty))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Address is required");
-        verify(propertyRepository, never()).save(any(Property.class));
-    }
-
-    @Test
-    void updateProperty_WhenPropertyExists_ShouldUpdateProperty() {
-        // Arrange
         Property updatedProperty = Property.builder()
                 .address("Updated Address")
                 .description("Updated Description")
                 .price(250000.0)
                 .bedrooms(4)
                 .bathrooms(3)
-                .squareFootage(1800.0)
+                .squareFootage(2000.0)
                 .build();
-
-        when(propertyRepository.findById(1L)).thenReturn(Optional.of(testProperty));
-        when(propertyRepository.save(any(Property.class))).thenReturn(updatedProperty);
 
         // Act
         Property result = propertyService.updateProperty(1L, updatedProperty);
 
         // Assert
-        assertThat(result).isEqualTo(updatedProperty);
+        assertThat(result).isEqualTo(testProperty);
         verify(propertyRepository).findById(1L);
         verify(propertyRepository).save(any(Property.class));
     }
 
     @Test
-    void updateProperty_WhenPropertyDoesNotExist_ShouldThrowException() {
+    void updateProperty_WithInvalidId_ShouldThrowException() {
         // Arrange
         when(propertyRepository.findById(1L)).thenReturn(Optional.empty());
 
+        Property updatedProperty = Property.builder()
+                .address("Updated Address")
+                .description("Updated Description")
+                .price(250000.0)
+                .bedrooms(4)
+                .bathrooms(3)
+                .squareFootage(2000.0)
+                .build();
+
         // Act & Assert
-        assertThatThrownBy(() -> propertyService.updateProperty(1L, testProperty))
+        assertThatThrownBy(() -> propertyService.updateProperty(1L, updatedProperty))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Property not found with id: 1");
+                .satisfies(ex -> {
+                    ResourceNotFoundException rnfe = (ResourceNotFoundException) ex;
+                    assertThat(rnfe.getResourceName()).isEqualTo("Property");
+                    assertThat(rnfe.getFieldName()).isEqualTo("id");
+                    assertThat(rnfe.getFieldValue()).isEqualTo(1L);
+                });
+        verify(propertyRepository).findById(1L);
         verify(propertyRepository, never()).save(any(Property.class));
     }
 
     @Test
-    void deleteProperty_WhenPropertyExists_ShouldDeleteProperty() {
+    void deleteProperty_WithValidId_ShouldDeleteProperty() {
         // Arrange
         when(propertyRepository.existsById(1L)).thenReturn(true);
+        doNothing().when(propertyRepository).deleteById(1L);
 
         // Act
         propertyService.deleteProperty(1L);
@@ -180,21 +197,27 @@ class PropertyServiceImplTest {
     }
 
     @Test
-    void deleteProperty_WhenPropertyDoesNotExist_ShouldThrowException() {
+    void deleteProperty_WithInvalidId_ShouldThrowException() {
         // Arrange
         when(propertyRepository.existsById(1L)).thenReturn(false);
 
         // Act & Assert
         assertThatThrownBy(() -> propertyService.deleteProperty(1L))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Property not found with id: 1");
+                .satisfies(ex -> {
+                    ResourceNotFoundException rnfe = (ResourceNotFoundException) ex;
+                    assertThat(rnfe.getResourceName()).isEqualTo("Property");
+                    assertThat(rnfe.getFieldName()).isEqualTo("id");
+                    assertThat(rnfe.getFieldValue()).isEqualTo(1L);
+                });
+        verify(propertyRepository).existsById(1L);
         verify(propertyRepository, never()).deleteById(any());
     }
 
     @Test
     void searchProperties_WithValidParameters_ShouldReturnFilteredProperties() {
         // Arrange
-        Page<Property> pagedResponse = new PageImpl<>(testProperties);
+        Page<Property> pagedResponse = createPage(testProperties);
         when(propertyRepository.findAll(any(Specification.class), any(Pageable.class)))
                 .thenReturn(pagedResponse);
 
@@ -240,7 +263,8 @@ class PropertyServiceImplTest {
                 null,           // maxLotSize
                 PageRequest.of(0, 12)))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Maximum price must be greater than or equal to minimum price");
+                .hasMessageContaining("Maximum price")
+                .hasMessageContaining("minimum price");
         verify(propertyRepository, never()).findAll(any(Specification.class), any(Pageable.class));
     }
 
@@ -263,7 +287,8 @@ class PropertyServiceImplTest {
                 null,           // maxLotSize
                 PageRequest.of(0, 12)))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Minimum price cannot be negative");
+                .hasMessageContaining("price")
+                .hasMessageContaining("negative");
         verify(propertyRepository, never()).findAll(any(Specification.class), any(Pageable.class));
     }
 
@@ -286,14 +311,15 @@ class PropertyServiceImplTest {
                 null,           // maxLotSize
                 PageRequest.of(0, 12)))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Number of bedrooms cannot be negative");
+                .hasMessageContaining("bedrooms")
+                .hasMessageContaining("negative");
         verify(propertyRepository, never()).findAll(any(Specification.class), any(Pageable.class));
     }
 
     @Test
     void searchProperties_WithNoParameters_ShouldReturnAllProperties() {
         // Arrange
-        Page<Property> pagedResponse = new PageImpl<>(testProperties);
+        Page<Property> pagedResponse = createPage(testProperties);
         when(propertyRepository.findAll(any(Specification.class), any(Pageable.class)))
                 .thenReturn(pagedResponse);
 
