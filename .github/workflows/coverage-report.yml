@@ -14,7 +14,7 @@ on:
   workflow_dispatch:  # Allow manual triggering
 
 permissions:
-  contents: read
+  contents: write  # Changed from read to write to allow updating badges
   pages: write
   id-token: write
 
@@ -40,6 +40,27 @@ jobs:
         run: |
           cd backend
           ./gradlew jacocoTestReport
+
+      - name: Generate JaCoCo Badges
+        id: jacoco
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          jacoco-csv-file: backend/build/reports/jacoco/test/jacocoTestReport.csv
+          badges-directory: .github/badges
+          generate-branches-badge: true
+          generate-summary: true
+
+      - name: Log coverage percentage
+        run: |
+          echo "Coverage percentage: ${{ steps.jacoco.outputs.coverage }}"
+          echo "Branch coverage percentage: ${{ steps.jacoco.outputs.branches }}"
+
+      - name: Commit and push the badge if changed
+        if: github.ref == 'refs/heads/main'
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: 'Update code coverage badges'
+          add: '.github/badges/jacoco*.svg'
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
