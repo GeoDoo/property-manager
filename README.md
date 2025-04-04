@@ -7,10 +7,10 @@
 
 ## Frontend
 ![Frontend Tests](https://github.com/GeoDoo/property-manager/actions/workflows/frontend.yml/badge.svg)
-![Frontend Statements](https://github.com/GeoDoo/property-manager/blob/main/.github/badges/frontend/badge-statements.svg)
-![Frontend Branches](https://github.com/GeoDoo/property-manager/blob/main/.github/badges/frontend/badge-branches.svg)
-![Frontend Functions](https://github.com/GeoDoo/property-manager/blob/main/.github/badges/frontend/badge-functions.svg)
-![Frontend Lines](https://github.com/GeoDoo/property-manager/blob/main/.github/badges/frontend/badge-lines.svg)
+![Statements](https://raw.githubusercontent.com/GeoDoo/property-manager/main/.github/badges/frontend/badge-statements.svg)
+![Branches](https://raw.githubusercontent.com/GeoDoo/property-manager/main/.github/badges/frontend/badge-branches.svg)
+![Functions](https://raw.githubusercontent.com/GeoDoo/property-manager/main/.github/badges/frontend/badge-functions.svg)
+![Lines](https://raw.githubusercontent.com/GeoDoo/property-manager/main/.github/badges/frontend/badge-lines.svg)
 
 A full-stack application for managing real estate properties, built with Spring Boot and React.
 
