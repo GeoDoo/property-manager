@@ -200,10 +200,19 @@ class PropertyServiceImplTest {
 
         // Act
         Page<Property> result = propertyService.searchProperties(
-                "Test",
-                100000.0,
-                300000.0,
-                3,
+                "Test",          // address
+                100000.0,        // minPrice
+                300000.0,        // maxPrice
+                1500.0,          // minSize
+                2500.0,          // maxSize
+                3,              // minRooms
+                5,              // maxRooms
+                2,              // minBathrooms
+                3,              // maxBathrooms
+                2000,           // minYearBuilt
+                2023,           // maxYearBuilt
+                1000.0,         // minLotSize
+                2000.0,         // maxLotSize
                 PageRequest.of(0, 12));
 
         // Assert
@@ -216,10 +225,19 @@ class PropertyServiceImplTest {
     void searchProperties_WithInvalidPriceRange_ShouldThrowException() {
         // Act & Assert
         assertThatThrownBy(() -> propertyService.searchProperties(
-                null,
-                300000.0,
-                200000.0,  // maxPrice < minPrice
-                null,
+                null,           // address
+                300000.0,       // minPrice
+                200000.0,       // maxPrice
+                null,           // minSize
+                null,           // maxSize
+                null,           // minRooms
+                null,           // maxRooms
+                null,           // minBathrooms
+                null,           // maxBathrooms
+                null,           // minYearBuilt
+                null,           // maxYearBuilt
+                null,           // minLotSize
+                null,           // maxLotSize
                 PageRequest.of(0, 12)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Maximum price must be greater than or equal to minimum price");
@@ -230,10 +248,19 @@ class PropertyServiceImplTest {
     void searchProperties_WithNegativePrice_ShouldThrowException() {
         // Act & Assert
         assertThatThrownBy(() -> propertyService.searchProperties(
-                null,
-                -1000.0,  // negative minPrice
-                null,
-                null,
+                null,           // address
+                -1000.0,        // minPrice
+                null,           // maxPrice
+                null,           // minSize
+                null,           // maxSize
+                null,           // minRooms
+                null,           // maxRooms
+                null,           // minBathrooms
+                null,           // maxBathrooms
+                null,           // minYearBuilt
+                null,           // maxYearBuilt
+                null,           // minLotSize
+                null,           // maxLotSize
                 PageRequest.of(0, 12)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Minimum price cannot be negative");
@@ -244,10 +271,19 @@ class PropertyServiceImplTest {
     void searchProperties_WithNegativeBedrooms_ShouldThrowException() {
         // Act & Assert
         assertThatThrownBy(() -> propertyService.searchProperties(
-                null,
-                null,
-                null,
-                -1,  // negative bedrooms
+                null,           // address
+                null,           // minPrice
+                null,           // maxPrice
+                null,           // minSize
+                null,           // maxSize
+                -1,            // minRooms
+                null,           // maxRooms
+                null,           // minBathrooms
+                null,           // maxBathrooms
+                null,           // minYearBuilt
+                null,           // maxYearBuilt
+                null,           // minLotSize
+                null,           // maxLotSize
                 PageRequest.of(0, 12)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Number of bedrooms cannot be negative");
@@ -263,10 +299,19 @@ class PropertyServiceImplTest {
 
         // Act
         Page<Property> result = propertyService.searchProperties(
-                null,
-                null,
-                null,
-                null,
+                null,           // address
+                null,           // minPrice
+                null,           // maxPrice
+                null,           // minSize
+                null,           // maxSize
+                null,           // minRooms
+                null,           // maxRooms
+                null,           // minBathrooms
+                null,           // maxBathrooms
+                null,           // minYearBuilt
+                null,           // maxYearBuilt
+                null,           // minLotSize
+                null,           // maxLotSize
                 PageRequest.of(0, 12));
 
         // Assert

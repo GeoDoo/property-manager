@@ -255,7 +255,21 @@ public class PropertyControllerTest {
     @Test
     void getAllProperties_WithInvalidPageSize_ShouldUseDefaultSize() throws Exception {
         Page<Property> pagedResponse = new PageImpl<>(testProperties);
-        when(propertyService.searchProperties(eq(null), eq(null), eq(null), eq(null), any(Pageable.class)))
+        when(propertyService.searchProperties(
+                null,           // address
+                null,           // minPrice
+                null,           // maxPrice
+                null,           // minSize
+                null,           // maxSize
+                null,           // minRooms
+                null,           // maxRooms
+                null,           // minBathrooms
+                null,           // maxBathrooms
+                null,           // minYearBuilt
+                null,           // maxYearBuilt
+                null,           // minLotSize
+                null,           // maxLotSize
+                any(Pageable.class)))
                 .thenReturn(pagedResponse);
 
         mockMvc.perform(get("/api/properties")
@@ -357,10 +371,19 @@ public class PropertyControllerTest {
     void getAllProperties_WithNegativePage_ShouldUseFirstPage() throws Exception {
         Page<Property> pagedResponse = new PageImpl<>(testProperties);
         when(propertyService.searchProperties(
-                eq(null),
-                eq(null),
-                eq(null),
-                eq(null),
+                null,           // address
+                null,           // minPrice
+                null,           // maxPrice
+                null,           // minSize
+                null,           // maxSize
+                null,           // minRooms
+                null,           // maxRooms
+                null,           // minBathrooms
+                null,           // maxBathrooms
+                null,           // minYearBuilt
+                null,           // maxYearBuilt
+                null,           // minLotSize
+                null,           // maxLotSize
                 any(Pageable.class)))
                 .thenReturn(pagedResponse);
 
