@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, MouseEvent } from 'react';
 import { Image } from '../types/property';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { getFullImageUrl } from '../config/api';
@@ -10,21 +10,21 @@ interface ImageSliderProps {
 export function ImageSlider({ images = [] }: ImageSliderProps) {
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    const goToPrevious = (e: React.MouseEvent) => {
+    const goToPrevious = (e: MouseEvent) => {
         e.stopPropagation();
         const isFirstSlide = currentIndex === 0;
         const newIndex = isFirstSlide ? images.length - 1 : currentIndex - 1;
         setCurrentIndex(newIndex);
     };
 
-    const goToNext = (e: React.MouseEvent) => {
+    const goToNext = (e: MouseEvent) => {
         e.stopPropagation();
         const isLastSlide = currentIndex === images.length - 1;
         const newIndex = isLastSlide ? 0 : currentIndex + 1;
         setCurrentIndex(newIndex);
     };
 
-    const goToSlide = (e: React.MouseEvent, slideIndex: number) => {
+    const goToSlide = (e: MouseEvent, slideIndex: number) => {
         e.stopPropagation();
         setCurrentIndex(slideIndex);
     };

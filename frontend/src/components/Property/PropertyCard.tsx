@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC, MouseEvent } from 'react';
 import { Property } from '../../types/property';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../config/routes';
@@ -9,14 +9,14 @@ interface PropertyCardProps {
     property: Property;
 }
 
-const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
+const PropertyCard: FC<PropertyCardProps> = ({ property }) => {
     const navigate = useNavigate();
 
     const handleViewDetails = () => {
         navigate(ROUTES.PROPERTIES.DETAILS(property.id!));
     };
 
-    const handleEdit = (e: React.MouseEvent) => {
+    const handleEdit = (e: MouseEvent) => {
         e.stopPropagation();
         navigate(ROUTES.PROPERTIES.EDIT(property.id!));
     };
