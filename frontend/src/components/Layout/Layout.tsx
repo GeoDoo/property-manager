@@ -1,11 +1,11 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../Button';
 import { ROUTES } from '../../config/routes';
 import { Link } from 'react-router-dom';
 
 interface LayoutProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export function Layout({ children }: LayoutProps) {
