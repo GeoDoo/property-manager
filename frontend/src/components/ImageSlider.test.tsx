@@ -42,6 +42,14 @@ describe('ImageSlider Component', () => {
     expect(screen.queryByRole('img')).not.toBeInTheDocument();
   });
   
+  test('renders placeholder when images prop is omitted', () => {
+    // @ts-ignore - intentionally omitting the required prop to test default parameter
+    render(<ImageSlider />);
+    
+    expect(screen.getByText('No Images Available')).toBeInTheDocument();
+    expect(screen.queryByRole('img')).not.toBeInTheDocument();
+  });
+  
   test('renders error message when image URL is invalid', () => {
     const imagesWithInvalidUrl = [
       { id: 1, url: '', fileName: 'image1.jpg', contentType: 'image/jpeg' }
