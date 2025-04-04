@@ -14,7 +14,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository_owner | lower }}/property-manager/backend
+  IMAGE_NAME: ${{ format('{0}/property-manager/backend', github.repository_owner) }}
 
 jobs:
   build-and-test:
