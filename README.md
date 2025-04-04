@@ -100,19 +100,25 @@ docker-compose -f docker-compose.test.yml up --build test
 
 ## Code Coverage
 
-View our detailed code coverage report for the backend on [GitHub Pages](https://geodoo.github.io/property-manager/).
+View our detailed code coverage reports:
+- Backend: [GitHub Pages](https://geodoo.github.io/property-manager/)
+- Frontend: Available in the test artifacts of our GitHub Actions workflows
 
-The current coverage metrics:
-- Overall instruction coverage: 72%
-- Branch coverage: 42%
-- Package coverage:
-  - Config: 100%
-  - Exception: 88%
-  - Service implementations: 74%
-  - Controllers: 71%
-  - Models: 58%
+We monitor code coverage for both backend and frontend components to ensure high-quality code:
 
-The coverage report is automatically updated on every push to the main branch.
+### Backend Coverage Areas
+- Configuration
+- Exception handling
+- Service implementations
+- Controllers
+- Models
+
+### Frontend Coverage Areas
+- Components
+- Services
+- Utilities
+
+All coverage metrics are automatically updated with every push to the main branch and displayed in the badges at the top of this README.
 
 ## Project Structure
 
