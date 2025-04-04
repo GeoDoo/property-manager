@@ -67,10 +67,14 @@ const Filter: FC<FilterProps> = ({ onFilterChange, initialFilters = {
     <div className="py-3 mb-2">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label 
+            htmlFor="address-input" 
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Address
           </label>
           <input
+            id="address-input"
             type="text"
             name="address"
             value={filters.address}
@@ -81,10 +85,14 @@ const Filter: FC<FilterProps> = ({ onFilterChange, initialFilters = {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label 
+            htmlFor="min-price-input" 
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Min Price
           </label>
           <input
+            id="min-price-input"
             type="number"
             name="minPrice"
             value={filters.minPrice}
@@ -96,10 +104,14 @@ const Filter: FC<FilterProps> = ({ onFilterChange, initialFilters = {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label 
+            htmlFor="max-price-input" 
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Max Price
           </label>
           <input
+            id="max-price-input"
             type="number"
             name="maxPrice"
             value={filters.maxPrice}
@@ -111,10 +123,14 @@ const Filter: FC<FilterProps> = ({ onFilterChange, initialFilters = {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label 
+            htmlFor="bedrooms-input" 
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Bedrooms
           </label>
           <input
+            id="bedrooms-input"
             type="number"
             name="bedrooms"
             value={filters.bedrooms}
