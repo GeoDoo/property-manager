@@ -1,8 +1,14 @@
 # Property Manager
 
-![Tests](https://github.com/GeoDoo/property-manager/actions/workflows/backend.yml/badge.svg)
-![Coverage](https://github.com/GeoDoo/property-manager/blob/main/.github/badges/jacoco.svg)
-![Branches](https://github.com/GeoDoo/property-manager/blob/main/.github/badges/branches.svg)
+## Backend
+![Backend Tests](https://github.com/GeoDoo/property-manager/actions/workflows/backend.yml/badge.svg)
+![Backend Coverage](https://github.com/GeoDoo/property-manager/blob/main/.github/badges/jacoco.svg)
+![Backend Branches](https://github.com/GeoDoo/property-manager/blob/main/.github/badges/branches.svg)
+
+## Frontend
+![Frontend Tests](https://github.com/GeoDoo/property-manager/actions/workflows/frontend.yml/badge.svg)
+![Frontend Coverage](https://github.com/GeoDoo/property-manager/blob/main/.github/badges/frontend/coverage-statements.svg)
+![Frontend Branches](https://github.com/GeoDoo/property-manager/blob/main/.github/badges/frontend/coverage-branches.svg)
 
 A full-stack application for managing real estate properties, built with Spring Boot and React.
 
