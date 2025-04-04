@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { FC, useEffect, useRef, useState, ChangeEvent } from 'react';
 
 interface FilterProps {
   onFilterChange: (filters: {
@@ -30,7 +30,7 @@ const validateAddress = (value: string): string => {
   return value.replace(/<[^>]*>/g, '').slice(0, 100);
 };
 
-const Filter: React.FC<FilterProps> = ({ onFilterChange, initialFilters = {
+const Filter: FC<FilterProps> = ({ onFilterChange, initialFilters = {
   address: '',
   minPrice: '',
   maxPrice: '',
@@ -38,7 +38,7 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange, initialFilters = {
   page: 0,
   size: 10
 } }) => {
-  const [filters, setFilters] = React.useState(initialFilters);
+  const [filters, setFilters] = useState(initialFilters);
   const timeoutRef = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange, initialFilters = {
     };
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const newFilters = { ...filters, [name]: value, page: 0 }; // Reset to first page when filters change
     setFilters(newFilters);
