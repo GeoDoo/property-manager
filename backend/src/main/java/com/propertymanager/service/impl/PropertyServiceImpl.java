@@ -46,7 +46,6 @@ public class PropertyServiceImpl implements PropertyService {
         existingProperty.setBedrooms(property.getBedrooms());
         existingProperty.setBathrooms(property.getBathrooms());
         existingProperty.setSquareFootage(property.getSquareFootage());
-        existingProperty.setRooms(property.getRooms());
         existingProperty.setYearBuilt(property.getYearBuilt());
         existingProperty.setLotSize(property.getLotSize());
         return propertyRepository.save(existingProperty);
@@ -94,10 +93,10 @@ public class PropertyServiceImpl implements PropertyService {
                 predicates.add(cb.lessThanOrEqualTo(root.get("squareFootage"), maxSize));
             }
             if (minRooms != null) {
-                predicates.add(cb.greaterThanOrEqualTo(root.get("rooms"), minRooms));
+                predicates.add(cb.greaterThanOrEqualTo(root.get("bedrooms"), minRooms));
             }
             if (maxRooms != null) {
-                predicates.add(cb.lessThanOrEqualTo(root.get("rooms"), maxRooms));
+                predicates.add(cb.lessThanOrEqualTo(root.get("bedrooms"), maxRooms));
             }
             if (minBathrooms != null) {
                 predicates.add(cb.greaterThanOrEqualTo(root.get("bathrooms"), minBathrooms));

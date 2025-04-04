@@ -502,7 +502,7 @@ public class PropertyControllerTest {
         mockMvc.perform(put("/api/properties/1")
                         .contentType(MediaType.TEXT_PLAIN)
                         .content("invalid content"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnsupportedMediaType());
     }
 
     @Test

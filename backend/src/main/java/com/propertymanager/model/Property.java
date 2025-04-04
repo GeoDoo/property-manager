@@ -46,9 +46,6 @@ public class Property {
     @Positive(message = "Square footage must be greater than 0")
     private Double squareFootage;
 
-    @Positive(message = "Number of rooms must be greater than 0")
-    private Integer rooms;
-
     @Positive(message = "Year built must be greater than 0")
     private Integer yearBuilt;
 
@@ -114,14 +111,6 @@ public class Property {
 
     public void setSquareFootage(Double squareFootage) {
         this.squareFootage = squareFootage;
-    }
-
-    public Integer getRooms() {
-        return rooms;
-    }
-
-    public void setRooms(Integer rooms) {
-        this.rooms = rooms;
     }
 
     public Integer getYearBuilt() {
