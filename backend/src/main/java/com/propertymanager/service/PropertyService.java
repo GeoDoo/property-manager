@@ -12,5 +12,19 @@ public interface PropertyService {
     Property createProperty(Property property);
     Property updateProperty(Long id, Property property);
     void deleteProperty(Long id);
-    Page<Property> searchProperties(String address, Double minPrice, Double maxPrice, Integer bedrooms, Pageable pageable);
+    Page<Property> searchProperties(
+        String address,
+        Double minPrice,
+        Double maxPrice,
+        Double minSize,
+        Double maxSize,
+        Integer minRooms,
+        Integer maxRooms,
+        Integer minBathrooms,
+        Integer maxBathrooms,
+        Integer minYearBuilt,
+        Integer maxYearBuilt,
+        Double minLotSize,
+        Double maxLotSize,
+        Pageable pageable);
 } 

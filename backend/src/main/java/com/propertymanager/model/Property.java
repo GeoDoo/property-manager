@@ -11,6 +11,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "properties")
@@ -26,8 +27,8 @@ public class Property {
     private Long id;
 
     @NotNull(message = "Address is required")
+    @Size(max = 1000, message = "Address must not exceed 1000 characters")
     @Column(length = 1000)
-    @jakarta.validation.constraints.Size(max = 1000, message = "Address must not exceed 1000 characters")
     private String address;
 
     @Column(columnDefinition = "TEXT")
@@ -44,6 +45,15 @@ public class Property {
     
     @Positive(message = "Square footage must be greater than 0")
     private Double squareFootage;
+
+    @Positive(message = "Number of rooms must be greater than 0")
+    private Integer rooms;
+
+    @Positive(message = "Year built must be greater than 0")
+    private Integer yearBuilt;
+
+    @Positive(message = "Lot size must be greater than 0")
+    private Double lotSize;
 
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
@@ -104,6 +114,30 @@ public class Property {
 
     public void setSquareFootage(Double squareFootage) {
         this.squareFootage = squareFootage;
+    }
+
+    public Integer getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(Integer rooms) {
+        this.rooms = rooms;
+    }
+
+    public Integer getYearBuilt() {
+        return yearBuilt;
+    }
+
+    public void setYearBuilt(Integer yearBuilt) {
+        this.yearBuilt = yearBuilt;
+    }
+
+    public Double getLotSize() {
+        return lotSize;
+    }
+
+    public void setLotSize(Double lotSize) {
+        this.lotSize = lotSize;
     }
 
     public List<Image> getImages() {

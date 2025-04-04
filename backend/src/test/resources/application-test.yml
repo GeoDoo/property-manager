@@ -1,9 +1,4 @@
 spring:
-  datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    username: sa
-    password: 
-    driver-class-name: org.h2.Driver
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -11,23 +6,40 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.H2Dialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          batch_size: 25
+          batch_versioned_data: true
+        order_inserts: true
+        order_updates: true
+        generate_statistics: true
   flyway:
     enabled: false
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info
-  endpoint:
-    health:
-      show-details: always
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
+  test:
+    database:
+      replace: none
 
 logging:
   level:
+    root: INFO
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     com.propertymanager: DEBUG
     org.testcontainers: INFO
-    com.github.dockerjava: WARN 
+    com.github.dockerjava: WARN
+    org.hibernate.engine.jdbc: DEBUG
+    org.hibernate.stat: DEBUG
+    org.springframework.test: DEBUG
+    org.junit.jupiter: DEBUG
+    org.mockito: DEBUG
+    org.assertj: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: build/test-results/test.log 

@@ -15,6 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.context.annotation.Import;
+import com.propertymanager.exception.GlobalExceptionHandler;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,6 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(PropertyController.class)
+@Import(GlobalExceptionHandler.class)
 public class PropertyControllerTest {
 
     @Autowired
@@ -96,7 +99,7 @@ public class PropertyControllerTest {
     @Test
     void getPropertyById_WhenPropertyDoesNotExist_ShouldReturnNotFound() throws Exception {
         when(propertyService.getPropertyById(1L))
-                .thenThrow(new ResourceNotFoundException("Property", "id", 1L));
+                .thenThrow(new ResourceNotFoundException("Property", "id", "1"));
 
         mockMvc.perform(get("/api/properties/1"))
                 .andExpect(status().isNotFound());
@@ -147,7 +150,7 @@ public class PropertyControllerTest {
     @Test
     void updateProperty_WhenPropertyDoesNotExist_ShouldReturnNotFound() throws Exception {
         when(propertyService.updateProperty(eq(1L), any(Property.class)))
-                .thenThrow(new ResourceNotFoundException("Property", "id", 1L));
+                .thenThrow(new ResourceNotFoundException("Property", "id", "1"));
 
         mockMvc.perform(put("/api/properties/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -167,7 +170,7 @@ public class PropertyControllerTest {
 
     @Test
     void deleteProperty_WhenPropertyDoesNotExist_ShouldReturnNotFound() throws Exception {
-        doThrow(new ResourceNotFoundException("Property", "id", 1L))
+        doThrow(new ResourceNotFoundException("Property", "id", "1"))
                 .when(propertyService).deleteProperty(1L);
 
         mockMvc.perform(delete("/api/properties/1"))
@@ -362,18 +365,18 @@ public class PropertyControllerTest {
 
     @Test
     void createProperty_WithExcessiveLength_ShouldReturnBadRequest() throws Exception {
-        Property invalidProperty = Property.builder()
-                .address("a".repeat(256))  // Address too long
-                .description("Test Property")
-                .price(200000.0)
+        Property property = Property.builder()
+                .address("a".repeat(1001))  // Exceeds 1000 characters
+                .description("Test Description")
+                .price(500000.0)
                 .bedrooms(3)
                 .bathrooms(2)
-                .squareFootage(1500.0)
+                .squareFootage(2000.0)
                 .build();
 
         mockMvc.perform(post("/api/properties")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(invalidProperty)))
+                        .content(objectMapper.writeValueAsString(property)))
                 .andExpect(status().isBadRequest());
     }
 
@@ -431,7 +434,7 @@ public class PropertyControllerTest {
         mockMvc.perform(post("/api/properties")
                         .contentType(MediaType.TEXT_PLAIN)
                         .content("invalid content"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnsupportedMediaType());
     }
 
     @Test

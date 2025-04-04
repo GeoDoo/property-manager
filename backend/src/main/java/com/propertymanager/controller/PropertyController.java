@@ -8,6 +8,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,11 @@ public class PropertyController {
 
     @GetMapping
     public Page<Property> getAllProperties(@PageableDefault(size = 12) Pageable pageable) {
-        return propertyService.searchProperties(null, null, null, null, pageable);
+        return propertyService.searchProperties(
+            null, null, null, null, null,
+            null, null, null, null,
+            null, null, null, null,
+            pageable);
     }
 
     @GetMapping("/{id}")
@@ -36,12 +41,12 @@ public class PropertyController {
         return propertyService.getPropertyById(id);
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public Property createProperty(@Valid @RequestBody Property property) {
         return propertyService.createProperty(property);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Property updateProperty(@PathVariable Long id, @Valid @RequestBody Property property) {
         return propertyService.updateProperty(id, property);
     }
@@ -53,29 +58,25 @@ public class PropertyController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> searchProperties(
-            @RequestParam(required = false) 
-            @Pattern(regexp = "^[a-zA-Z0-9\\s,.-]*$", message = "Address can only contain letters, numbers, spaces, commas, periods, and hyphens")
-            String address,
-            
-            @RequestParam(required = false) 
-            @PositiveOrZero(message = "Minimum price must be a positive number")
-            Double minPrice,
-            
-            @RequestParam(required = false) 
-            @PositiveOrZero(message = "Maximum price must be a positive number")
-            Double maxPrice,
-            
-            @RequestParam(required = false) 
-            @PositiveOrZero(message = "Number of bedrooms must be a positive number")
-            Integer bedrooms,
-            
-            @PageableDefault(size = 12) Pageable pageable) {
-        try {
-            Page<Property> properties = propertyService.searchProperties(address, minPrice, maxPrice, bedrooms, pageable);
-            return ResponseEntity.ok(properties);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
-        }
+    public Page<Property> searchProperties(
+            @RequestParam(required = false) String address,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(required = false) Double minSize,
+            @RequestParam(required = false) Double maxSize,
+            @RequestParam(required = false) Integer minRooms,
+            @RequestParam(required = false) Integer maxRooms,
+            @RequestParam(required = false) Integer minBathrooms,
+            @RequestParam(required = false) Integer maxBathrooms,
+            @RequestParam(required = false) Integer minYearBuilt,
+            @RequestParam(required = false) Integer maxYearBuilt,
+            @RequestParam(required = false) Double minLotSize,
+            @RequestParam(required = false) Double maxLotSize,
+            Pageable pageable) {
+        return propertyService.searchProperties(
+            address, minPrice, maxPrice, minSize, maxSize,
+            minRooms, maxRooms, minBathrooms, maxBathrooms,
+            minYearBuilt, maxYearBuilt, minLotSize, maxLotSize,
+            pageable);
     }
 } 
