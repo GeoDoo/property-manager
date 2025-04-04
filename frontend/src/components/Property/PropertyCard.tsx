@@ -24,6 +24,7 @@ const PropertyCard: FC<PropertyCardProps> = ({ property }) => {
     return (
         <div 
             onClick={handleViewDetails}
+            data-testid="property-card"
             className="bg-white rounded-xl overflow-hidden shadow-none border-2 border-[#e5e5e5] hover:border-[#00deb6] transition-colors duration-300 cursor-pointer flex flex-col h-[500px]"
         >
             {/* Image Section */}
@@ -35,7 +36,7 @@ const PropertyCard: FC<PropertyCardProps> = ({ property }) => {
                         className="w-full h-full object-cover rounded-t-xl"
                     />
                 ) : (
-                    <div className="flex items-center justify-center h-full bg-gray-200 rounded-t-xl">
+                    <div data-testid="property-placeholder" className="flex items-center justify-center h-full bg-gray-200 rounded-t-xl">
                         <FaHome className="text-4xl text-gray-400" />
                     </div>
                 )}

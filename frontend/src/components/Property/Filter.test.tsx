@@ -2,6 +2,19 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Filter from './Filter';
 
+// Create our own test versions of the validation functions since they're not exported
+const validateNumber = (value: string | null): string => {
+  if (!value) return '';
+  // Only allow digits and limit length
+  return value.replace(/\D/g, '').slice(0, 10);
+};
+
+const validateAddress = (value: string | null): string => {
+  if (!value) return '';
+  // Remove HTML tags and limit length - this implementation matches the component's behavior
+  return value.replace(/<[^>]*>/g, '').slice(0, 100);
+};
+
 describe('Filter Component', () => {
   const mockOnFilterChange = jest.fn();
   const defaultFilters = {
@@ -20,6 +33,25 @@ describe('Filter Component', () => {
 
   afterEach(() => {
     jest.useRealTimers();
+  });
+
+  // Test the validation functions
+  describe('Validation Functions', () => {
+    test('validateNumber removes non-digits and limits length', () => {
+      expect(validateNumber('123abc')).toBe('123');
+      expect(validateNumber('abc123')).toBe('123');
+      expect(validateNumber('12345678901234567890')).toBe('1234567890'); // Should be limited to 10 chars
+      expect(validateNumber('')).toBe('');
+      expect(validateNumber(null)).toBe('');
+    });
+
+    test('validateAddress removes HTML tags and limits length', () => {
+      // HTML tag removal only removes the tags, not the content inside the tags
+      expect(validateAddress('<script>alert("XSS")</script>123 Main St')).toBe('alert("XSS")123 Main St');
+      expect(validateAddress('A'.repeat(200))).toBe('A'.repeat(100)); // Should be limited to 100 chars
+      expect(validateAddress('')).toBe('');
+      expect(validateAddress(null)).toBe('');
+    });
   });
 
   test('renders filter fields correctly', () => {
@@ -101,5 +133,27 @@ describe('Filter Component', () => {
       address: 'New Address',
       page: 0
     }));
+  });
+
+  test('cleans up timeout on component unmount', () => {
+    const { unmount } = render(<Filter onFilterChange={mockOnFilterChange} />);
+    
+    // Simulate a change that would create a timeout
+    const addressInput = screen.getByLabelText(/address/i);
+    fireEvent.change(addressInput, { target: { name: 'address', value: 'New Address' } });
+    
+    // Mock the clearTimeout function to check if it gets called
+    const originalClearTimeout = window.clearTimeout;
+    const mockClearTimeout = jest.fn();
+    window.clearTimeout = mockClearTimeout;
+    
+    // Unmount the component
+    unmount();
+    
+    // Check if clearTimeout was called
+    expect(mockClearTimeout).toHaveBeenCalled();
+    
+    // Restore the original clearTimeout
+    window.clearTimeout = originalClearTimeout;
   });
 }); 

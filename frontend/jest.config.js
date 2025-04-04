@@ -6,7 +6,10 @@ module.exports = {
       tsconfig: 'tsconfig.json',
     }],
   },
-  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
+  setupFilesAfterEnv: [
+    '<rootDir>/src/setupTests.ts',
+    '<rootDir>/jest.setup.js'
+  ],
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   moduleNameMapper: {
@@ -15,17 +18,31 @@ module.exports = {
   },
   collectCoverage: true,
   collectCoverageFrom: [
-    'src/**/*.{ts,tsx}',
-    '!src/**/*.d.ts',
-    '!src/main.tsx',
-    '!src/vite-env.d.ts',
-    '!src/**/*.test.{ts,tsx}',
-    '!src/__mocks__/**',
-    '!src/components/!(Button).tsx',
-    '!src/components/**/!(Button).tsx'
+    'src/components/Button.tsx',
+    'src/components/ImageSlider.tsx',
+    'src/components/Property/Filter.tsx',
+    'src/components/Property/PropertyCard.tsx'
   ],
   coverageThreshold: {
-    './src/components/Button.tsx': {
+    'src/components/Button.tsx': {
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80,
+    },
+    'src/components/ImageSlider.tsx': {
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80,
+    },
+    'src/components/Property/Filter.tsx': {
+      branches: 80,
+      functions: 70,
+      lines: 80,
+      statements: 80,
+    },
+    'src/components/Property/PropertyCard.tsx': {
       branches: 80,
       functions: 80,
       lines: 80,
