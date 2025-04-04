@@ -21,7 +21,8 @@ module.exports = {
     'src/components/Button.tsx',
     'src/components/ImageSlider.tsx',
     'src/components/Property/Filter.tsx',
-    'src/components/Property/PropertyCard.tsx'
+    'src/components/Property/PropertyCard.tsx',
+    'src/components/Layout/Layout.tsx'
   ],
   coverageThreshold: {
     'src/components/Button.tsx': {
@@ -43,6 +44,12 @@ module.exports = {
       statements: 80,
     },
     'src/components/Property/PropertyCard.tsx': {
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80,
+    },
+    'src/components/Layout/Layout.tsx': {
       branches: 80,
       functions: 80,
       lines: 80,
