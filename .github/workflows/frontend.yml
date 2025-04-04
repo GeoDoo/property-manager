@@ -52,7 +52,6 @@ jobs:
         uses: jpb06/jest-badges-action@latest
         with:
           coverage-summary-path: frontend/coverage/coverage-summary.json
-          branches: main
           target-directory: '.github/badges/frontend'
 
       - name: Log coverage percentage

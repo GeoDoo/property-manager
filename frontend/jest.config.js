@@ -25,6 +25,7 @@ module.exports = {
     'src/components/Layout/Layout.tsx',
     'src/components/Property/PropertyDetails.tsx'
   ],
+  coverageReporters: ['json', 'lcov', 'text', 'clover', 'json-summary'],
   coverageThreshold: {
     'src/components/Button.tsx': {
       branches: 80,
