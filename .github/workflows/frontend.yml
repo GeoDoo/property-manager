@@ -49,22 +49,27 @@ jobs:
           npm test -- --coverage --watchAll=false
 
       - name: Generate coverage badges
-        uses: jpb06/jest-badges-action@latest
+        uses: jaywcjlove/coverage-badges-cli@main
         with:
-          coverage-summary-path: frontend/coverage/coverage-summary.json
-          target-directory: '.github/badges/frontend'
-
+          source: frontend/coverage/coverage-summary.json
+          output: frontend-badges.svg
+          
+      - name: Move badge to badges directory
+        run: |
+          mkdir -p .github/badges
+          mv frontend-badges.svg .github/badges/
+          
       - name: Log coverage percentage
         run: |
           cat frontend/coverage/coverage-summary.json
-          echo "Coverage badges generated in .github/badges/frontend"
+          echo "Coverage badges generated in .github/badges/frontend-badges.svg"
 
       - name: Commit and push the badge if changed
         if: github.ref == 'refs/heads/main'
         uses: EndBug/add-and-commit@v9
         with:
           message: 'Update frontend code coverage badges'
-          add: '.github/badges/frontend/*.svg'
+          add: '.github/badges/frontend-badges.svg'
 
       - name: Upload test results
         if: always()
