@@ -15,6 +15,15 @@ dist-ssr/
 .env*.local
 .env
 
+# Testing
+coverage/
+.nyc_output/
+*.lcov
+frontend/coverage/
+backend/coverage/
+frontend/.cache/
+jest-*.js
+
 # IDEs and editors
 .idea/
 .vscode/
