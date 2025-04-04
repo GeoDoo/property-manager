@@ -81,13 +81,6 @@ Run tests in a Docker container:
 docker-compose -f docker-compose.test.yml up --build test
 ```
 
-### API Documentation
-
-The API documentation is available when the application is running:
-
-- Swagger UI: http://localhost:8080/swagger-ui.html
-- OpenAPI Spec: http://localhost:8080/v3/api-docs
-
 ## Recent Updates
 
 - **Property Model**: Simplified property model by removing redundant fields
