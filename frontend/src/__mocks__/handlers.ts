@@ -41,7 +41,23 @@ export const mockProperties = {
 // API handlers
 export const handlers = [
   // Get all properties
-  http.get(`${API_URL}/properties`, () => {
+  http.get(`${API_URL}/properties`, ({ request }) => {
+    // Parse the URL to extract query parameters
+    const url = new URL(request.url);
+    const bedrooms = url.searchParams.get('bedrooms');
+    
+    // If bedrooms parameter exists, filter properties by exact match
+    if (bedrooms) {
+      const bedroomCount = parseInt(bedrooms);
+      // Filter mock data for exact bedroom match
+      const filteredProperties = {
+        ...mockProperties,
+        content: mockProperties.content.filter(p => p.bedrooms === bedroomCount)
+      };
+      return HttpResponse.json(filteredProperties);
+    }
+    
+    // Return all properties if no bedroom filter
     return HttpResponse.json(mockProperties);
   }),
 
