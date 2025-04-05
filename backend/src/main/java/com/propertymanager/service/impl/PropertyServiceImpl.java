@@ -84,15 +84,15 @@ public class PropertyServiceImpl implements PropertyService {
             Double maxPrice,
             Double minSize,
             Double maxSize,
-            Integer minRooms,
+            Integer bedrooms,
             Integer maxRooms,
             Integer minBathrooms,
             Integer maxBathrooms,
             Pageable pageable) {
-        logger.debug("Searching properties with criteria: address={}, price={}-{}, size={}-{}, rooms={}-{}, bathrooms={}-{}", 
-            address, minPrice, maxPrice, minSize, maxSize, minRooms, maxRooms, minBathrooms, maxBathrooms);
+        logger.debug("Searching properties with criteria: address={}, price={}-{}, size={}-{}, bedrooms={}, maxRooms={}, bathrooms={}-{}", 
+            address, minPrice, maxPrice, minSize, maxSize, bedrooms, maxRooms, minBathrooms, maxBathrooms);
         
-        validateSearchParameters(minPrice, maxPrice, minRooms);
+        validateSearchParameters(minPrice, maxPrice, bedrooms);
 
         Specification<Property> spec = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -112,8 +112,8 @@ public class PropertyServiceImpl implements PropertyService {
             if (maxSize != null) {
                 predicates.add(cb.lessThanOrEqualTo(root.get("squareFootage"), maxSize));
             }
-            if (minRooms != null) {
-                predicates.add(cb.greaterThanOrEqualTo(root.get("bedrooms"), minRooms));
+            if (bedrooms != null) {
+                predicates.add(cb.equal(root.get("bedrooms"), bedrooms));
             }
             if (maxRooms != null) {
                 predicates.add(cb.lessThanOrEqualTo(root.get("bedrooms"), maxRooms));

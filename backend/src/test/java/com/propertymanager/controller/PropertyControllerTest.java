@@ -169,11 +169,4 @@ public class PropertyControllerTest {
         mockMvc.perform(delete("/api/properties/1"))
                 .andExpect(status().isNotFound());
     }
-
-    @Test
-    void searchProperties_WithPost_WithInvalidContentType_ShouldReturnBadRequest() throws Exception {
-        mockMvc.perform(post("/api/properties/search")
-                        .contentType(MediaType.APPLICATION_XML))
-                .andExpect(status().isBadRequest());
-    }
 } 

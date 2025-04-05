@@ -14,8 +14,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
 @RequestMapping("/api/properties")
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
@@ -29,10 +27,42 @@ public class PropertyController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<Property>> getAllProperties(@PageableDefault(size = 12) Pageable pageable) {
+    public ResponseEntity<Page<Property>> getAllProperties(
+            @RequestParam(required = false) String address,
+            @RequestParam(required = false) String minPrice,
+            @RequestParam(required = false) String maxPrice,
+            @RequestParam(required = false) String minSize,
+            @RequestParam(required = false) String maxSize,
+            @RequestParam(required = false) String bedrooms,
+            @RequestParam(required = false) String maxRooms,
+            @RequestParam(required = false) String minBathrooms,
+            @RequestParam(required = false) String maxBathrooms,
+            @PageableDefault(size = 12) Pageable pageable) {
+        
+        // Convert string parameters to appropriate types
+        Double minPriceValue = parseDouble(minPrice);
+        Double maxPriceValue = parseDouble(maxPrice);
+        Double minSizeValue = parseDouble(minSize);
+        Double maxSizeValue = parseDouble(maxSize);
+        Integer bedroomsValue = parseInteger(bedrooms);
+        Integer maxRoomsValue = parseInteger(maxRooms);
+        Integer minBathroomsValue = parseInteger(minBathrooms);
+        Integer maxBathroomsValue = parseInteger(maxBathrooms);
+        
+        // Validate price range
+        if (minPriceValue != null && maxPriceValue != null && minPriceValue > maxPriceValue) {
+            throw new IllegalArgumentException("Maximum price must be greater than or equal to minimum price");
+        }
+        
+        // Log the received parameters for debugging
+        System.out.println("Received parameters: address=" + address + 
+                         ", minPrice=" + minPrice + "(" + minPriceValue + ")" +
+                         ", maxPrice=" + maxPrice + "(" + maxPriceValue + ")" +
+                         ", bedrooms=" + bedrooms + "(" + bedroomsValue + ")");
+        
         Page<Property> properties = propertyService.searchProperties(
-            null, null, null, null, null,
-            null, null, null, null,
+            address, minPriceValue, maxPriceValue, minSizeValue, maxSizeValue,
+            bedroomsValue, maxRoomsValue, minBathroomsValue, maxBathroomsValue,
             pageable);
         return ResponseEntity.ok(properties);
     }
@@ -66,104 +96,59 @@ public class PropertyController {
 
     @GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Page<Property>> searchProperties(
-            @RequestParam(required = false) @Pattern(regexp = "^[a-zA-Z0-9\\s\\-\\.,#/'()&]*$", message = "Invalid address pattern") String address,
-            @RequestParam(required = false) @PositiveOrZero(message = "Minimum price must be non-negative") Double minPrice,
-            @RequestParam(required = false) @PositiveOrZero(message = "Maximum price must be non-negative") Double maxPrice,
-            @RequestParam(required = false) @PositiveOrZero(message = "Minimum size must be non-negative") Double minSize,
-            @RequestParam(required = false) @PositiveOrZero(message = "Maximum size must be non-negative") Double maxSize,
-            @RequestParam(required = false) @PositiveOrZero(message = "Minimum rooms must be non-negative") Integer minRooms,
-            @RequestParam(required = false) @PositiveOrZero(message = "Maximum rooms must be non-negative") Integer maxRooms,
-            @RequestParam(required = false) @PositiveOrZero(message = "Minimum bathrooms must be non-negative") Integer minBathrooms,
-            @RequestParam(required = false) @PositiveOrZero(message = "Maximum bathrooms must be non-negative") Integer maxBathrooms,
+            @RequestParam(required = false) String address,
+            @RequestParam(required = false) String minPrice,
+            @RequestParam(required = false) String maxPrice,
+            @RequestParam(required = false) String minSize,
+            @RequestParam(required = false) String maxSize,
+            @RequestParam(required = false) String bedrooms,
+            @RequestParam(required = false) String maxRooms,
+            @RequestParam(required = false) String minBathrooms,
+            @RequestParam(required = false) String maxBathrooms,
             @PageableDefault(size = 12) Pageable pageable) {
+        
+        // Convert string parameters to appropriate types
+        Double minPriceValue = parseDouble(minPrice);
+        Double maxPriceValue = parseDouble(maxPrice);
+        Double minSizeValue = parseDouble(minSize);
+        Double maxSizeValue = parseDouble(maxSize);
+        Integer bedroomsValue = parseInteger(bedrooms);
+        Integer maxRoomsValue = parseInteger(maxRooms);
+        Integer minBathroomsValue = parseInteger(minBathrooms);
+        Integer maxBathroomsValue = parseInteger(maxBathrooms);
+        
         // Validate price range
-        if (minPrice != null && maxPrice != null && minPrice > maxPrice) {
+        if (minPriceValue != null && maxPriceValue != null && minPriceValue > maxPriceValue) {
             throw new IllegalArgumentException("Maximum price must be greater than or equal to minimum price");
         }
+        
         Page<Property> results = propertyService.searchProperties(
-            address, minPrice, maxPrice, minSize, maxSize,
-            minRooms, maxRooms, minBathrooms, maxBathrooms,
+            address, minPriceValue, maxPriceValue, minSizeValue, maxSizeValue,
+            bedroomsValue, maxRoomsValue, minBathroomsValue, maxBathroomsValue,
             pageable);
         
         return ResponseEntity.ok(results);
     }
-
-    @PostMapping(path = "/search", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<Property>> searchPropertiesPost(@RequestBody(required = false) Map<String, Object> searchCriteria, 
-                                                @PageableDefault(size = 12) Pageable pageable) {
-        // Extract parameters from searchCriteria if present
-        String address = searchCriteria != null ? (String) searchCriteria.get("address") : null;
-        Double minPrice = searchCriteria != null ? parseDouble(searchCriteria.get("minPrice")) : null;
-        Double maxPrice = searchCriteria != null ? parseDouble(searchCriteria.get("maxPrice")) : null;
-        Double minSize = searchCriteria != null ? parseDouble(searchCriteria.get("minSize")) : null;
-        Double maxSize = searchCriteria != null ? parseDouble(searchCriteria.get("maxSize")) : null;
-        Integer minRooms = searchCriteria != null ? parseInteger(searchCriteria.get("minRooms")) : null;
-        Integer maxRooms = searchCriteria != null ? parseInteger(searchCriteria.get("maxRooms")) : null;
-        Integer minBathrooms = searchCriteria != null ? parseInteger(searchCriteria.get("minBathrooms")) : null;
-        Integer maxBathrooms = searchCriteria != null ? parseInteger(searchCriteria.get("maxBathrooms")) : null;
-        
-        // Validate parameters
-        validateParameters(address, minPrice, maxPrice, minRooms);
-        
-        Page<Property> results = propertyService.searchProperties(
-            address, minPrice, maxPrice, minSize, maxSize,
-            minRooms, maxRooms, minBathrooms, maxBathrooms,
-            pageable);
-            
-        return ResponseEntity.ok(results);
-    }
     
-    @PostMapping(path = "/search", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<Property>> searchPropertiesPostXml() {
-        // This endpoint only exists to test content type validation
-        // In a real application, we would handle XML input here
-        return ResponseEntity.badRequest().build();
-    }
-    
-    private Double parseDouble(Object value) {
-        if (value == null) return null;
-        if (value instanceof Number) {
-            return ((Number) value).doubleValue();
+    private Double parseDouble(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            return null;
         }
         try {
-            return Double.parseDouble(value.toString());
+            return Double.parseDouble(value);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid number format: " + value);
+            return null; // Just ignore invalid number formats
         }
     }
     
-    private Integer parseInteger(Object value) {
-        if (value == null) return null;
-        if (value instanceof Number) {
-            return ((Number) value).intValue();
+    private Integer parseInteger(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            return null;
         }
         try {
-            return Integer.parseInt(value.toString());
+            return Integer.parseInt(value);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid number format: " + value);
-        }
-    }
-    
-    private void validateParameters(String address, Double minPrice, Double maxPrice, Integer bedrooms) {
-        // Validate address pattern if provided
-        if (address != null && !address.matches("^[a-zA-Z0-9\\s\\-\\.,#/'()&]*$")) {
-            throw new IllegalArgumentException("Invalid address pattern");
-        }
-        
-        // Validate price range
-        if (minPrice != null && minPrice < 0) {
-            throw new IllegalArgumentException("Minimum price cannot be negative");
-        }
-        if (maxPrice != null && maxPrice < 0) {
-            throw new IllegalArgumentException("Maximum price cannot be negative");
-        }
-        if (minPrice != null && maxPrice != null && minPrice > maxPrice) {
-            throw new IllegalArgumentException("Maximum price must be greater than or equal to minimum price");
-        }
-        
-        // Validate bedrooms
-        if (bedrooms != null && bedrooms < 0) {
-            throw new IllegalArgumentException("Number of bedrooms cannot be negative");
+            return null; // Just ignore invalid number formats
         }
     }
 } 
