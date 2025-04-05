@@ -15,6 +15,7 @@ services:
       - TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal
       - SPRING_PROFILES_ACTIVE=test
       - TESTCONTAINERS_RYUK_DISABLED=true
+      - JWT_SECRET=test_jwt_secret_not_for_production
     network_mode: host
     privileged: true
     command: ./gradlew test --info --stacktrace 

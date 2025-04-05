@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Script to copy the AI prompt template to clipboard
+echo "Copying AI prompt template to clipboard..."
+
+cat <<EOF | pbcopy
+Working on Property Manager (see TECH_STACK.md for standards). Please read and follow our AI_GUIDELINES.md.
+
+[Your specific question/task here]
+
+Remember: 
+- Backend: Java 17, Spring Boot, Gradle only
+- Frontend: React+TS, TailwindCSS, React Query (no Redux)
+- Security: ALWAYS USE .env FOR SECRETS AND SENSITIVE DATA
+- Never introduce technologies not in TECH_STACK.md
+EOF
+
+echo "Template copied! Paste it at the beginning of your AI conversation." 

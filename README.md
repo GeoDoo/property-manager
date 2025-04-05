@@ -39,6 +39,8 @@ A full-stack application for managing real estate properties, built with Spring 
 - React Router
 - Axios
 
+For more detailed information about our technology choices and standards, please refer to [TECH_STACK.md](./TECH_STACK.md).
+
 ## Getting Started
 
 ### Prerequisites
@@ -55,7 +57,13 @@ A full-stack application for managing real estate properties, built with Spring 
    cd property-manager
    ```
 
-2. Start the application using Docker Compose:
+2. Set up Git hooks:
+   ```bash
+   git config core.hooksPath .githooks
+   ```
+   This enables pre-commit hooks that enforce our technology standards.
+
+3. Start the application using Docker Compose:
    ```bash
    docker-compose up
    ```
@@ -138,7 +146,40 @@ property-manager/
 
 ## Contributing
 
-1. Run tests before committing
-2. Ensure code coverage remains above 70%
-3. Follow existing code conventions
-4. Add documentation for new features
+1. Always consult TECH_STACK.md before introducing new libraries or tools
+2. Run tests before committing
+3. Ensure code coverage remains above 70%
+4. Follow existing code conventions
+5. Add documentation for new features
+
+## Security Standards
+
+This project follows strict security practices:
+
+1. **ALWAYS USE .env FILES FOR SECRETS AND SENSITIVE DATA**
+   - Never hardcode credentials in application files
+   - All sensitive information must be passed through environment variables
+   - Use the provided .env.example as a template
+
+2. **Environment Variable Usage**
+   - Backend: Access via `${VARIABLE_NAME}` in application.properties
+   - Frontend: Access via `import.meta.env.VITE_VARIABLE_NAME` in code
+   - Always provide a secure default: `${JWT_SECRET:secure_default}`
+
+3. **Secret Management**
+   - JWT authentication secrets are managed via environment variables
+   - Database credentials are managed via environment variables
+   - Production secrets should be rotated regularly
+
+## Working with AI Assistants
+
+When asking AI tools for help with this project, use the provided command-line tool to ensure consistency:
+
+```bash
+# Copy the standardized AI prompt template to your clipboard
+aip  # Short alias for ai-prompt
+```
+
+This will copy a template to your clipboard that you can paste at the beginning of your conversation with any AI assistant. The template reminds the AI about our technology constraints and standards.
+
+For more details on AI guidelines, see `.github/AI_GUIDELINES.md` and `.github/AI_PROMPT_TEMPLATE.md`.
