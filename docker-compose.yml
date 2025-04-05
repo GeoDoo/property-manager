@@ -11,6 +11,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    command: ["postgres", "-c", "log_statement=all"]
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
       interval: 5s
@@ -32,6 +33,7 @@ services:
       SPRING_FLYWAY_LOCATIONS: "classpath:db/migration"
       SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
       SPRING_FLYWAY_VALIDATE_ON_MIGRATE: "true"
+      SPRING_FLYWAY_REPAIR_ON_MIGRATE: "true"
       JWT_SECRET: ${JWT_SECRET}
     volumes:
       - ./backend:/app

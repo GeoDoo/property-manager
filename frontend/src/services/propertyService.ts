@@ -30,8 +30,23 @@ export const propertyService = {
     },
 
     getById: async (id: number) => {
-        const response = await axios.get<Property>(`/properties/${id}`);
-        return response.data;
+        try {
+            // Try the paginated endpoint first
+            const response = await axios.get<Property>(`/properties/${id}`);
+            return response.data;
+        } catch (error) {
+            console.error("Failed to get property by ID from /properties/:id", error);
+            
+            // Fallback to get it from the list
+            const allProperties = await axios.get<any>('/properties');
+            const property = allProperties.data.content.find((p: Property) => p.id === id);
+            
+            if (!property) {
+                throw new Error(`Property with ID ${id} not found`);
+            }
+            
+            return property;
+        }
     },
 
     create: async (property: Property) => {

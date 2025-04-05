@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../Button';
 import { ROUTES } from '../../config/routes';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 interface LayoutProps {
   children: ReactNode;
@@ -11,6 +12,7 @@ interface LayoutProps {
 export function Layout({ children }: LayoutProps) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isAdmin } = useAuth();
   const isHomePage = location.pathname === ROUTES.HOME;
 
   return (
@@ -21,7 +23,7 @@ export function Layout({ children }: LayoutProps) {
             <Link to={ROUTES.HOME} className="text-2xl font-bold text-[#00deb6]">
               Property Manager
             </Link>
-            {isHomePage && (
+            {isHomePage && isAdmin() && (
               <Link
                 to={ROUTES.PROPERTIES.NEW}
                 className="bg-white text-[#00deb6] border-2 border-[#00deb6] hover:border-[#00c5a0] hover:text-[#00c5a0] px-4 py-2 rounded-xl transition-colors"

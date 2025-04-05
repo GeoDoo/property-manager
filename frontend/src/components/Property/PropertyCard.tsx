@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../config/routes';
 import { FaBed, FaBath, FaRulerCombined, FaHome } from 'react-icons/fa';
 import { getFullImageUrl } from '../../config/api';
+import { useAuth } from '../../context/AuthContext';
 
 interface PropertyCardProps {
     property: Property;
@@ -11,6 +12,7 @@ interface PropertyCardProps {
 
 const PropertyCard: FC<PropertyCardProps> = ({ property }) => {
     const navigate = useNavigate();
+    const { isAdmin } = useAuth();
 
     const handleViewDetails = () => {
         navigate(ROUTES.PROPERTIES.DETAILS(property.id!));
@@ -40,14 +42,16 @@ const PropertyCard: FC<PropertyCardProps> = ({ property }) => {
                         <FaHome className="text-4xl text-gray-400" />
                     </div>
                 )}
-                <div className="absolute top-4 right-4">
-                    <button
-                        onClick={handleEdit}
-                        className="bg-white text-[#262637] px-4 py-2 rounded-full text-sm font-medium border-2 border-[#e5e5e5] hover:border-[#00deb6] transition-colors duration-200"
-                    >
-                        Edit
-                    </button>
-                </div>
+                {isAdmin() && (
+                    <div className="absolute top-4 right-4">
+                        <button
+                            onClick={handleEdit}
+                            className="bg-white text-[#262637] px-4 py-2 rounded-full text-sm font-medium border-2 border-[#e5e5e5] hover:border-[#00deb6] transition-colors duration-200"
+                        >
+                            Edit
+                        </button>
+                    </div>
+                )}
             </div>
 
             {/* Content Section */}

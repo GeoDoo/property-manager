@@ -3,13 +3,11 @@ package com.propertymanager.controller;
 import com.propertymanager.model.User;
 import com.propertymanager.repository.UserRepository;
 import com.propertymanager.security.JwtTokenUtil;
-import com.propertymanager.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class AuthController {
 
     @Autowired
@@ -42,7 +41,8 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Invalid username or password");
         }
 
-        User user = userRepository.findByUsername(loginRequest.getUsername()).orElseThrow();
+        User user = userRepository.findByUsername(loginRequest.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
         
         String token = jwtTokenUtil.generateToken(user.getUsername(), user.isAdmin());
         

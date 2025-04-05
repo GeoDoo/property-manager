@@ -4,6 +4,8 @@ import PropertyList from './components/Property/PropertyList';
 import { PropertyForm } from './components/Property/PropertyForm';
 import { PropertyDetails } from './components/Property/PropertyDetails';
 import { ROUTES } from './config/routes';
+import Login from './components/Login';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const RootLayout = () => {
     return (
@@ -25,8 +27,16 @@ export const routes: RouteObject[] = [
                 element: <PropertyList />
             },
             {
+                path: ROUTES.PROPERTIES.LIST,
+                element: <PropertyList />
+            },
+            {
                 path: ROUTES.PROPERTIES.NEW,
-                element: <PropertyForm />
+                element: (
+                    <ProtectedRoute requireAdmin>
+                        <PropertyForm />
+                    </ProtectedRoute>
+                )
             },
             {
                 path: ROUTES.PROPERTIES.DETAILS(':id'),
@@ -34,7 +44,15 @@ export const routes: RouteObject[] = [
             },
             {
                 path: ROUTES.PROPERTIES.EDIT(':id'),
-                element: <PropertyForm />
+                element: (
+                    <ProtectedRoute requireAdmin>
+                        <PropertyForm />
+                    </ProtectedRoute>
+                )
+            },
+            {
+                path: '/login',
+                element: <Login />
             }
         ]
     }

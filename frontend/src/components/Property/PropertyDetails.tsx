@@ -7,16 +7,28 @@ import { Layout } from '../Layout/Layout';
 import { Button } from '../Button';
 import { ROUTES } from '../../config/routes';
 import { FaBed, FaBath, FaRulerCombined } from 'react-icons/fa';
+import { useAuth } from '../../context/AuthContext';
 
 export function PropertyDetails() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { isAdmin } = useAuth();
 
-  const { data: property, isLoading } = useQuery<Property>({
+  const { data: property, isLoading, error } = useQuery<Property>({
     queryKey: ['property', id],
     queryFn: () => propertyService.getById(Number(id)),
     enabled: !!id,
+    retry: 2,
+    retryDelay: 1000,
+    // Use any matching property data we already have while loading
+    initialData: () => {
+      const allProperties = queryClient.getQueryData<any>(['properties']);
+      if (allProperties?.content) {
+        return allProperties.content.find((p: Property) => p.id === Number(id));
+      }
+      return undefined;
+    }
   });
 
   const deleteMutation = useMutation({
@@ -33,8 +45,36 @@ export function PropertyDetails() {
     }
   };
 
-  if (isLoading) return <div>Loading...</div>;
-  if (!property) return <div>Property not found</div>;
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-500"></div>
+        </div>
+      </Layout>
+    );
+  }
+  
+  if (error) {
+    console.error('Error loading property details:', error);
+    return (
+      <Layout>
+        <div className="text-center text-red-500 p-4">
+          Error loading property details. Please try again later.
+        </div>
+      </Layout>
+    );
+  }
+
+  if (!property) {
+    return (
+      <Layout>
+        <div className="text-center p-4">
+          Property not found. <Button onClick={() => navigate('/')}>Go back to properties</Button>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -51,22 +91,24 @@ export function PropertyDetails() {
                 {property.address}
               </p>
             </div>
-            <div className="flex gap-2">
-              <Button
-                onClick={() => navigate(ROUTES.PROPERTIES.EDIT(property.id!))}
-                variant="primary"
-                className="rounded-xl"
-              >
-                Edit property
-              </Button>
-              <Button
-                variant="danger"
-                onClick={handleDelete}
-                className="rounded-xl"
-              >
-                Delete
-              </Button>
-            </div>
+            {isAdmin() && (
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => navigate(ROUTES.PROPERTIES.EDIT(property.id!))}
+                  variant="primary"
+                  className="rounded-xl"
+                >
+                  Edit property
+                </Button>
+                <Button
+                  variant="danger"
+                  onClick={handleDelete}
+                  className="rounded-xl"
+                >
+                  Delete
+                </Button>
+              </div>
+            )}
           </div>
         </div>
 
