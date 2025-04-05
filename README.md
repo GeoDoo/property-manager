@@ -59,7 +59,8 @@ For more detailed information about our technology choices and standards, please
 
 2. Set up Git hooks:
    ```bash
-   git config core.hooksPath .githooks
+   cp .githooks/pre-commit .git/hooks/pre-commit
+   chmod +x .git/hooks/pre-commit
    ```
    This enables pre-commit hooks that enforce our technology standards.
 

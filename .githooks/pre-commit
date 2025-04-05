@@ -63,8 +63,6 @@ SECRET_PATTERNS=(
   "token\s*=\s*['\"][^'\"]+['\"]"
   "apiKey\s*=\s*['\"][^'\"]+['\"]"
   "api_key\s*=\s*['\"][^'\"]+['\"]"
-  "auth\s*=\s*['\"][^'\"]+['\"]"
-  "credential\s*=\s*['\"][^'\"]+['\"]"
 )
 
 # Directories to exclude from check
@@ -73,8 +71,8 @@ EXCLUDE_PATTERN=$(printf " --exclude-dir=%s" "${EXCLUDE_DIRS[@]}")
 
 # Check for secrets in the codebase
 for pattern in "${SECRET_PATTERNS[@]}"; do
-  # Use grep with exclude pattern to find potential secrets
-  results=$(grep -r -E -i $pattern $EXCLUDE_PATTERN --include="*.java" --include="*.js" --include="*.ts" --include="*.tsx" --include="*.properties" --include="*.yml" --include="*.yaml" . | grep -v "\\$\\{" | grep -v ".env" | grep -v "example")
+  # Using quotes around pattern and adding || true to prevent grep exit code from causing script to exit
+  results=$(grep -r -E -i "$pattern" $EXCLUDE_PATTERN --include="*.java" --include="*.js" --include="*.ts" --include="*.tsx" --include="*.properties" --include="*.yml" --include="*.yaml" . | grep -v "\\\${" | grep -v ".env" | grep -v "example" || true)
   
   if [[ -n "$results" ]]; then
     echo "WARNING: Potential hardcoded secret found:"

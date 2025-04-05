@@ -62,10 +62,50 @@ application-local.properties
 .env.*
 !.env.example
 
-# IDE files
+# Git hooks - these are installed per-developer but not tracked
+.git/hooks/
+
+# Generated JWT secrets and tokens
+*.jks
+*.p12
+*.der
+*.pem
+*.key
+jwt-*.txt
+
+# Temporary files
+*.tmp
+*~
+.temp/
+**/temp/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IntelliJ IDEA
 .idea/
-.vscode/
 *.iml
+*.iws
+*.ipr
+*.iml
+.idea_modules/
+out/
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# VS Code
+.vscode/
+*.code-workspace
+.history/
 
 # Build directories
 **/target/
