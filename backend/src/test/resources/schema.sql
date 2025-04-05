@@ -1,6 +1,19 @@
 -- Drop existing tables if they exist
 DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS properties;
+DROP TABLE IF EXISTS users;
+
+-- Create users table
+CREATE TABLE users (
+    id BIGSERIAL PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL,
+    is_admin BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+-- Insert admin user for testing
+INSERT INTO users (username, password, is_admin)
+VALUES ('admin', '$2a$10$rBV2JDeWW3.vKyeQplBd3O4ihQoO4.4./aJjFJsYY6K8zH.76Jce2', true);
 
 -- Create properties table
 CREATE TABLE properties (
@@ -12,7 +25,9 @@ CREATE TABLE properties (
     bathrooms INTEGER NOT NULL,
     square_footage DECIMAL(10,2) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_by BIGINT REFERENCES users(id),
+    last_modified_by BIGINT REFERENCES users(id)
 );
 
 -- Create images table

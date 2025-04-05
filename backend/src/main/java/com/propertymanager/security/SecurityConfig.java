@@ -1,6 +1,7 @@
 package com.propertymanager.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +19,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -26,21 +28,36 @@ public class SecurityConfig {
 
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
+    
+    @Value("${app.auth.enabled:true}")
+    private boolean authEnabled;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .cors().and().csrf().disable()
-            .authorizeHttpRequests()
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/properties").permitAll() // GET properties is public
-                .requestMatchers("/api/health").permitAll()
-                .requestMatchers("/api/properties/**").hasRole("ADMIN") // POST, PUT, DELETE requires ADMIN
-                .anyRequest().authenticated()
-            .and()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        // Basic security setup allowing CORS and disabling CSRF
+        http.cors(withDefaults())
+            .csrf(csrf -> csrf.disable());
+        
+        if (authEnabled) {
+            // Apply JWT security when authentication is enabled
+            http.authorizeHttpRequests(auth -> auth
+                    .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/api/properties").permitAll() // GET properties is public
+                    .requestMatchers("/api/health").permitAll()
+                    .requestMatchers("/api/properties/**").hasRole("ADMIN") // POST, PUT, DELETE requires ADMIN
+                    .anyRequest().authenticated()
+                )
+                .sessionManagement(session -> session
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                );
 
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+            http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        } else {
+            // When authentication is disabled, permit all requests
+            http.authorizeHttpRequests(auth -> auth
+                    .anyRequest().permitAll()
+                );
+        }
         
         return http.build();
     }

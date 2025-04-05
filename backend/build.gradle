@@ -22,6 +22,7 @@ configurations.all {
         cacheDynamicVersionsFor 0, 'seconds'
         force 'org.springframework.boot:spring-boot-starter-web:3.2.0'
         force 'org.springframework.boot:spring-boot-starter-data-jpa:3.2.0'
+        force 'org.springframework.boot:spring-boot-starter-security:3.2.0'
     }
 }
 
@@ -41,6 +42,7 @@ dependencies {
 
     // Test dependencies
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.testcontainers:testcontainers:1.19.7'
     testImplementation 'org.testcontainers:junit-jupiter:1.19.7'
     testImplementation 'org.testcontainers:postgresql:1.19.7'
@@ -50,6 +52,18 @@ test {
     useJUnitPlatform()
     finalizedBy jacocoTestReport
     systemProperty 'spring.profiles.active', 'test'
+    
+    // Run all tests
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
+    
+    // Increase timeout for TestContainers
+    systemProperty 'junit.jupiter.execution.timeout.default', '60s'
+    
+    // Set higher memory limits for Gradle test JVM
+    maxHeapSize = "512m"
 }
 
 jacocoTestReport {

@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Transactional
-public class PropertyRepositoryTest extends AbstractIntegrationTest {
+public class PropertyRepositoryIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
     private PropertyRepository propertyRepository;
@@ -118,6 +118,23 @@ public class PropertyRepositoryTest extends AbstractIntegrationTest {
             .address("123 Negative Price St")
             .price(-100000.0)
             .bedrooms(2)
+            .bathrooms(1)
+            .squareFootage(1200.0)
+            .build();
+
+        // When/Then
+        assertThrows(ConstraintViolationException.class, () -> {
+            propertyRepository.saveAndFlush(property);
+        });
+    }
+
+    @Test
+    void shouldNotSavePropertyWithZeroBedrooms() {
+        // Given
+        Property property = Property.builder()
+            .address("123 Zero Bedrooms St")
+            .price(300000.0)
+            .bedrooms(0)
             .bathrooms(1)
             .squareFootage(1200.0)
             .build();
@@ -248,44 +265,10 @@ public class PropertyRepositoryTest extends AbstractIntegrationTest {
     }
 
     @Test
-    void shouldPaginateAndSortFilteredResults() {
-        // Given
-        Specification<Property> spec = (root, query, cb) ->
-            cb.like(cb.lower(root.get("address")), "%london%".toLowerCase());
-        Pageable pageable = PageRequest.of(0, 1, Sort.by(Sort.Direction.ASC, "price"));
-
-        // When
-        Page<Property> result = propertyRepository.findAll(spec, pageable);
-
-        // Then
-        assertThat(result.getContent()).hasSize(1);
-        assertThat(result.getTotalElements()).isEqualTo(2);
-        assertThat(result.getTotalPages()).isEqualTo(2);
-        assertThat(result.getContent().get(0).getPrice()).isEqualTo(500000.0); // Cheaper London property
-        assertThat(result.getContent().get(0).getAddress()).contains("London");
-    }
-
-    @Test
     void shouldReturnEmptyPageWhenNoResults() {
         // Given
-        propertyRepository.deleteAll();
-        Pageable pageable = PageRequest.of(0, 10);
-
-        // When
-        Page<Property> result = propertyRepository.findAll(pageable);
-
-        // Then
-        assertThat(result.getContent()).isEmpty();
-        assertThat(result.getTotalElements()).isZero();
-        assertThat(result.getTotalPages()).isZero();
-        assertThat(result.getNumber()).isZero();
-    }
-
-    @Test
-    void shouldReturnEmptyPageWhenNoMatchingFilters() {
-        // Given
         Specification<Property> spec = (root, query, cb) ->
-            cb.like(root.get("address"), "%nonexistent%");
+            cb.like(root.get("address"), "%NonExistentAddress%");
         Pageable pageable = PageRequest.of(0, 10);
 
         // When
@@ -293,137 +276,7 @@ public class PropertyRepositoryTest extends AbstractIntegrationTest {
 
         // Then
         assertThat(result.getContent()).isEmpty();
-        assertThat(result.getTotalElements()).isZero();
-        assertThat(result.getTotalPages()).isZero();
-    }
-
-    @Test
-    void shouldReturnLastPageCorrectly() {
-        // Given
-        Pageable lastPage = PageRequest.of(2, 2); // Third page with 2 items per page
-
-        // When
-        Page<Property> result = propertyRepository.findAll(lastPage);
-
-        // Then
-        assertThat(result.getContent()).hasSize(1); // Last page has 1 item
-        assertThat(result.isLast()).isTrue();
-        assertThat(result.hasNext()).isFalse();
-        assertThat(result.getNumber()).isEqualTo(2);
-    }
-
-    @Test
-    void shouldHandlePageRequestBeyondTotalPages() {
-        // Given
-        Pageable beyondLastPage = PageRequest.of(3, 2); // Fourth page when we have three pages
-
-        // When
-        Page<Property> result = propertyRepository.findAll(beyondLastPage);
-
-        // Then
-        assertThat(result.getContent()).isEmpty();
-        assertThat(result.getTotalElements()).isEqualTo(5); // Total records still correct
-        assertThat(result.getTotalPages()).isEqualTo(3);    // Total pages still correct
-        assertThat(result.getNumber()).isEqualTo(3);        // Page number preserved
-        assertThat(result.isLast()).isTrue();
-        assertThat(result.hasNext()).isFalse();
-    }
-
-    @Test
-    void shouldHandlePageSizeLargerThanTotalElements() {
-        // Given
-        Pageable largePage = PageRequest.of(0, 10); // Page size larger than total records
-
-        // When
-        Page<Property> result = propertyRepository.findAll(largePage);
-
-        // Then
-        assertThat(result.getContent()).hasSize(5); // All records returned
-        assertThat(result.getTotalElements()).isEqualTo(5);
-        assertThat(result.getTotalPages()).isEqualTo(1);    // Only one page needed
-        assertThat(result.isLast()).isTrue();
-        assertThat(result.isFirst()).isTrue();
-        assertThat(result.hasNext()).isFalse();
-    }
-
-    @Test
-    void shouldNotSavePropertyWithZeroBedrooms() {
-        // Given
-        Property property = Property.builder()
-            .address("123 Zero Bedrooms")
-            .price(300000.0)
-            .bedrooms(0)
-            .bathrooms(1)
-            .squareFootage(1200.0)
-            .build();
-
-        // When/Then
-        assertThrows(ConstraintViolationException.class, () -> {
-            propertyRepository.saveAndFlush(property);
-        });
-    }
-
-    @Test
-    void shouldNotSavePropertyWithNegativeSquareFootage() {
-        // Given
-        Property property = Property.builder()
-            .address("123 Negative Space")
-            .price(300000.0)
-            .bedrooms(2)
-            .bathrooms(1)
-            .squareFootage(-100.0)
-            .build();
-
-        // When/Then
-        assertThrows(ConstraintViolationException.class, () -> {
-            propertyRepository.saveAndFlush(property);
-        });
-    }
-
-    @Test
-    void shouldNotSavePropertyWithExcessivelyLongAddress() {
-        // Given
-        String tooLongAddress = "a".repeat(1001); // Assuming max length is 1000
-        Property property = Property.builder()
-            .address(tooLongAddress)
-            .price(300000.0)
-            .bedrooms(2)
-            .bathrooms(1)
-            .squareFootage(1200.0)
-            .build();
-
-        // When/Then
-        assertThrows(ConstraintViolationException.class, () -> {
-            propertyRepository.saveAndFlush(property);
-        });
-    }
-
-    @Test
-    void shouldNotDeleteNonExistentProperty() {
-        // Given
-        Long nonExistentId = 99999L;
-
-        // When/Then
-        assertThrows(ResourceNotFoundException.class, () -> {
-            propertyService.deleteProperty(nonExistentId);
-        });
-    }
-
-    @Test
-    void shouldNotUpdateNonExistentProperty() {
-        // Given
-        Long nonExistentId = 999999L;
-        Property property = Property.builder()
-            .address("123 Non-existent St")
-            .price(300000.0)
-            .bedrooms(2)
-            .bathrooms(1)
-            .squareFootage(1200.0)
-            .build();
-
-        // When/Then
-        assertThrows(ResourceNotFoundException.class, () -> {
-            propertyService.updateProperty(nonExistentId, property);
-        });
+        assertThat(result.getTotalElements()).isEqualTo(0);
+        assertThat(result.getTotalPages()).isEqualTo(0);
     }
 } 

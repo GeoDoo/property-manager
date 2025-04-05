@@ -24,6 +24,7 @@ import jakarta.validation.constraints.Size;
 public class Property {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(columnDefinition = "BIGINT")
     private Long id;
 
     @NotNull(message = "Address is required")
@@ -49,6 +50,14 @@ public class Property {
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Image> images = new ArrayList<>();
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by")
+    private User createdBy;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "last_modified_by")
+    private User lastModifiedBy;
 
     // Getters and Setters
     public Long getId() {
@@ -123,5 +132,21 @@ public class Property {
     public void removeImage(Image image) {
         images.remove(image);
         image.setProperty(null);
+    }
+    
+    public User getCreatedBy() {
+        return createdBy;
+    }
+    
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+    }
+    
+    public User getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+    
+    public void setLastModifiedBy(User lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
     }
 } 

@@ -1,18 +1,27 @@
 spring:
+  datasource:
+    url: jdbc:tc:postgresql:16-alpine:///test?TC_DAEMON=true
+    username: test
+    password: test
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    hikari:
+      maximum-pool-size: 3
+      minimum-idle: 1
+      connection-timeout: 30000
+      idle-timeout: 10000
+      max-lifetime: 30000
+      connection-test-query: SELECT 1
+      validation-timeout: 5000
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: create-drop
-    show-sql: true
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        jdbc:
-          batch_size: 25
-          batch_versioned_data: true
-        order_inserts: true
-        order_updates: true
-        generate_statistics: true
+        connection:
+          provider_disables_autocommit: false
+        generate_statistics: false
   flyway:
     enabled: false
   mvc:
@@ -23,21 +32,27 @@ spring:
   test:
     database:
       replace: none
+  security:
+    user:
+      name: admin
+      password: admin
+      roles: ADMIN
 
 logging:
   level:
     root: INFO
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.hibernate.SQL: INFO
+    org.hibernate.type.descriptor.sql.BasicBinder: INFO
     com.propertymanager: DEBUG
     org.testcontainers: INFO
     com.github.dockerjava: WARN
-    org.hibernate.engine.jdbc: DEBUG
-    org.hibernate.stat: DEBUG
-    org.springframework.test: DEBUG
-    org.junit.jupiter: DEBUG
-    org.mockito: DEBUG
-    org.assertj: DEBUG
+    org.hibernate.engine.jdbc: INFO
+    org.hibernate.stat: INFO
+    org.springframework.test: INFO
+    org.junit.jupiter: INFO
+    org.mockito: INFO
+    org.assertj: INFO
+    org.springframework.security: INFO
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
