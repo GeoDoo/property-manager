@@ -1,4 +1,6 @@
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import PropertyCard from './PropertyCard';
 import { Property } from '../../types/property';
 import { BrowserRouter } from 'react-router-dom';

@@ -1,3 +1,4 @@
+import React from 'react';
 import { FC, MouseEvent } from 'react';
 import { Property } from '../../types/property';
 import { useNavigate } from 'react-router-dom';
