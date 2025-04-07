@@ -44,6 +44,7 @@ public class SecurityConfig {
                     .requestMatchers("/api/auth/**").permitAll()
                     .requestMatchers("/api/properties").permitAll() // GET properties is public
                     .requestMatchers("/api/health/**").permitAll() // Health check endpoints are public
+                    .requestMatchers("/api/images/**").permitAll() // Allow public access to images
                     .requestMatchers("/api/properties/**").hasRole("ADMIN") // POST, PUT, DELETE requires ADMIN
                     .anyRequest().authenticated()
                 )

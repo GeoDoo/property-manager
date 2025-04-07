@@ -46,6 +46,14 @@ api.interceptors.response.use(
 
 export const getFullImageUrl = (imageUrl: string) => {
     if (!imageUrl) return '';
+    
+    // If it's already a full URL, use it as is
     if (imageUrl.startsWith('http')) return imageUrl;
-    return `${API_URL}${imageUrl.replace(/^\/api/, '')}`;
+    
+    // Extract the filename from /images/filename.jpg pattern
+    const parts = imageUrl.split('/');
+    const filename = parts[parts.length - 1];
+    
+    // Return the full API URL to the image endpoint with the filename
+    return `${API_URL}/images/${filename}`;
 }; 
