@@ -30,6 +30,7 @@ module.exports = {
     "<rootDir>/src/components/ErrorBoundary/ErrorBoundary.tsx",
     "<rootDir>/src/components/ErrorBoundary/withErrorBoundary.tsx"
   ],
+  coverageReporters: ["lcov", "text", "json-summary"],
   coverageThreshold: {
     "src/components/Property/PropertyDetails.tsx": {
       branches: 80,
