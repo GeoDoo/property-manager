@@ -1,78 +1,50 @@
 module.exports = {
-  testEnvironment: 'jsdom',
-  roots: ['<rootDir>/src'],
-  transform: {
-    '^.+\\.(ts|tsx|js|jsx)$': 'babel-jest'
-  },
-  setupFiles: ['<rootDir>/src/__mocks__/viteEnvMock.js'],
-  setupFilesAfterEnv: [
-    '<rootDir>/src/setupTests.ts',
-    '<rootDir>/jest.setup.js'
-  ],
-  testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  testEnvironment: "jsdom",
   moduleNameMapper: {
-    '^.+\\.(css|less|scss)$': 'identity-obj-proxy',
-    '^.+\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/src/__mocks__/fileMock.js'
+    "^.+\\.(css|less|scss)$": "identity-obj-proxy",
+    "\\.(jpg|jpeg|png|gif|webp|svg)$": "<rootDir>/src/__mocks__/fileMock.js",
+    "@/(.*)$": "<rootDir>/src/$1",
+    "^@fontsource/.*$": "identity-obj-proxy",
+    "^.+\\.mp4$": "<rootDir>/src/__mocks__/fileMock.js",
+    "^\\$app/(.*)$": "<rootDir>/src/__mocks__/app/$1.js",
+    "^\\$env/(.*)$": "<rootDir>/src/__mocks__/env/$1.js",
+    "^virtual:(.*)$": "identity-obj-proxy",
+    "^src/(.*)$": "<rootDir>/src/$1",
+    "^store/(.*)$": "<rootDir>/src/store/$1"
   },
-  transformIgnorePatterns: ['/node_modules/(?!(@tanstack/react-query))'],
-  globals: {
-    'ts-jest': {
-      useESM: true,
-    },
-    'import.meta': {
-      env: {
-        VITE_API_URL: 'http://localhost:8081/api',
-        VITE_AUTH_ENABLED: 'true'
-      }
-    }
+  transform: {
+    "^.+\\.(ts|tsx|js|jsx)$": "babel-jest"
   },
-  collectCoverage: true,
-  collectCoverageFrom: [
-    'src/components/Button.tsx',
-    'src/components/ImageSlider.tsx',
-    'src/components/Property/Filter.tsx',
-    'src/components/Property/PropertyCard.tsx',
-    'src/components/Layout/Layout.tsx',
-    'src/components/Property/PropertyDetails.tsx'
+  transformIgnorePatterns: [
+    "/node_modules/(?!(@fontsource|@dnd-kit|uuid)/)"
   ],
-  coverageReporters: ['json', 'lcov', 'text', 'clover', 'json-summary'],
+  collectCoverageFrom: [
+    "<rootDir>/src/**/*.{js,jsx,ts,tsx}",
+    "!<rootDir>/src/**/*.d.ts",
+    "!<rootDir>/src/**/*.stories.{js,jsx,ts,tsx}",
+    "!<rootDir>/src/**/*.mock.{js,jsx,ts,tsx}",
+    "!<rootDir>/src/**/*.test.{js,jsx,ts,tsx}",
+    "!<rootDir>/src/test/**/*",
+    "!<rootDir>/src/services/**/*",
+    "!<rootDir>/src/mocks/**/*",
+    "!<rootDir>/src/__mocks__/**/*",
+    "!<rootDir>/src/vite-env.d.ts",
+    "!<rootDir>/src/main.tsx",
+    "!<rootDir>/src/App.tsx"
+  ],
   coverageThreshold: {
-    'src/components/Button.tsx': {
+    "src/components/Property/PropertyDetails.tsx": {
       branches: 80,
       functions: 80,
       lines: 80,
-      statements: 80,
+      statements: 80
     },
-    'src/components/ImageSlider.tsx': {
+    global: {
       branches: 80,
       functions: 80,
       lines: 80,
-      statements: 80,
-    },
-    'src/components/Property/Filter.tsx': {
-      branches: 80,
-      functions: 70,
-      lines: 80,
-      statements: 80,
-    },
-    'src/components/Property/PropertyCard.tsx': {
-      branches: 80,
-      functions: 80,
-      lines: 80,
-      statements: 80,
-    },
-    'src/components/Layout/Layout.tsx': {
-      branches: 80,
-      functions: 80,
-      lines: 80,
-      statements: 80,
-    },
-    'src/components/Property/PropertyDetails.tsx': {
-      branches: 80,
-      functions: 80,
-      lines: 80,
-      statements: 80,
-    },
-  },
+      statements: 80
+    }
+  }
 }; 

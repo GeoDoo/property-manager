@@ -8,6 +8,9 @@ import React from 'react';
 // @ts-ignore
 global.React = React;
 
+// Import MSW server for API mocks
+import { server } from './__mocks__/server';
+
 // Mock localStorage for tests
 class LocalStorageMock {
   store: Record<string, string> = {};
@@ -27,6 +30,15 @@ class LocalStorageMock {
 
 // @ts-ignore
 global.localStorage = new LocalStorageMock();
+
+// Start MSW server before all tests
+beforeAll(() => server.listen({ onUnhandledRequest: 'warn' }));
+
+// Reset handlers after each test
+afterEach(() => server.resetHandlers());
+
+// Close server after all tests are done
+afterAll(() => server.close());
 
 // We'll add MSW setup later when we need to test API calls
 // For now, let's focus on component tests 
