@@ -12,7 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,24 +41,40 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody AuthRequest request) {
         try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-            );
-            
+            // Find user in the database
             User user = userRepository.findByUsername(request.getUsername())
                     .orElseThrow(() -> new BadCredentialsException("Invalid username or password"));
+                    
+            // Check password
+            if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Invalid username or password"));
+            }
             
-            String token = jwtTokenUtil.generateToken(user.getUsername(), 
-                    user.getRole().equals("ROLE_ADMIN"));
+            // Create authentication
+            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                    user.getUsername(), null, null);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
             
-            Map<String, String> response = new HashMap<>();
+            // Check if user has admin role
+            boolean isAdmin = user.getRole() != null && user.getRole().equals("ROLE_ADMIN");
+            
+            // Generate JWT token
+            String token = jwtTokenUtil.generateToken(user.getUsername(), isAdmin);
+            
+            // Create response
+            Map<String, Object> response = new HashMap<>();
             response.put("token", token);
             response.put("username", user.getUsername());
+            response.put("isAdmin", isAdmin);
             
             return ResponseEntity.ok(response);
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("error", "Invalid username or password"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Internal server error"));
         }
     }
 
