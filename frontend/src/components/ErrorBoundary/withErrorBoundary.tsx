@@ -1,3 +1,4 @@
+import React from 'react';
 import { ComponentType, ReactNode } from 'react';
 import { ErrorBoundary } from './ErrorBoundary';
 import { Link } from 'react-router-dom';
