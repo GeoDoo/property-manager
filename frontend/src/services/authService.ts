@@ -1,7 +1,4 @@
-import axios from 'axios';
-
-// Set a constant API URL to ensure it works with Jest
-const API_URL = 'http://localhost:8081/api';
+import { api } from '../config/apiClient';
 
 export interface LoginRequest {
   username: string;
@@ -16,7 +13,8 @@ export interface AuthResponse {
 
 export const login = async (credentials: { username: string; password: string }): Promise<boolean> => {
   try {
-    const response = await axios.post(`${API_URL}/auth/login`, credentials);
+    // Use api instance directly for /auth/login
+    const response = await api.post(`/auth/login`, credentials);
     
     if (response.data.token) {
       localStorage.setItem('token', response.data.token);
@@ -44,7 +42,7 @@ export const getCurrentUser = (): { username: string; isAdmin: boolean } | null 
   
   try {
     return JSON.parse(userStr);
-  } catch (e) {
+  } catch {
     logout();
     return null;
   }
