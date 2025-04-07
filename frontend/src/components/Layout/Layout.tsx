@@ -29,7 +29,7 @@ export function Layout({ children }: LayoutProps) {
               Property Manager
             </Link>
             <div className="flex items-center gap-2">
-              {isHomePage && isAdmin() && (
+              {isHomePage && isAdmin && (
                 <Link
                   to={ROUTES.PROPERTIES.NEW}
                   className="bg-white text-[#00deb6] border-2 border-[#00deb6] hover:border-[#00c5a0] hover:text-[#00c5a0] px-4 py-2 rounded-xl transition-colors"

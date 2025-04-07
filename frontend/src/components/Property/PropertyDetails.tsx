@@ -91,7 +91,7 @@ export function PropertyDetails() {
                 {property.address}
               </p>
             </div>
-            {isAdmin() && (
+            {isAdmin && (
               <div className="flex gap-2">
                 <Button
                   onClick={() => navigate(ROUTES.PROPERTIES.EDIT(property.id!))}

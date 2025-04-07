@@ -42,7 +42,7 @@ const PropertyCard: FC<PropertyCardProps> = ({ property }) => {
                         <FaHome className="text-4xl text-gray-400" />
                     </div>
                 )}
-                {isAdmin() && (
+                {isAdmin && (
                     <div className="absolute top-4 right-4">
                         <button
                             onClick={handleEdit}

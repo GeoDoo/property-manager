@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8081/api';
+// Set a constant API URL to ensure it works with Jest
+const API_URL = 'http://localhost:8081/api';
 
 export interface LoginRequest {
   username: string;
@@ -13,18 +14,23 @@ export interface AuthResponse {
   isAdmin: boolean;
 }
 
-export const login = async (credentials: LoginRequest): Promise<AuthResponse> => {
-  const response = await axios.post(`${API_URL}/auth/login`, credentials);
-  
-  if (response.data.token) {
-    localStorage.setItem('token', response.data.token);
-    localStorage.setItem('user', JSON.stringify({
-      username: response.data.username,
-      isAdmin: response.data.isAdmin
-    }));
+export const login = async (credentials: { username: string; password: string }): Promise<boolean> => {
+  try {
+    const response = await axios.post(`${API_URL}/auth/login`, credentials);
+    
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify({
+        username: response.data.username,
+        isAdmin: response.data.isAdmin
+      }));
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error('Login error:', error);
+    return false;
   }
-  
-  return response.data;
 };
 
 export const logout = (): void => {
@@ -60,4 +66,16 @@ export const authHeader = (): Record<string, string> => {
     return { Authorization: `Bearer ${token}` };
   }
   return {};
-}; 
+};
+
+// Create a default export with all the auth service functions
+const authService = {
+  login,
+  logout,
+  getCurrentUser,
+  isAdmin,
+  getToken,
+  authHeader
+};
+
+export default authService; 

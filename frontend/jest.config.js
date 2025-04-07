@@ -2,10 +2,9 @@ module.exports = {
   testEnvironment: 'jsdom',
   roots: ['<rootDir>/src'],
   transform: {
-    '^.+\\.(ts|tsx)$': ['ts-jest', {
-      tsconfig: 'tsconfig.json',
-    }],
+    '^.+\\.(ts|tsx|js|jsx)$': 'babel-jest'
   },
+  setupFiles: ['<rootDir>/src/__mocks__/viteEnvMock.js'],
   setupFilesAfterEnv: [
     '<rootDir>/src/setupTests.ts',
     '<rootDir>/jest.setup.js'
@@ -15,6 +14,18 @@ module.exports = {
   moduleNameMapper: {
     '^.+\\.(css|less|scss)$': 'identity-obj-proxy',
     '^.+\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/src/__mocks__/fileMock.js'
+  },
+  transformIgnorePatterns: ['/node_modules/(?!(@tanstack/react-query))'],
+  globals: {
+    'ts-jest': {
+      useESM: true,
+    },
+    'import.meta': {
+      env: {
+        VITE_API_URL: 'http://localhost:8081/api',
+        VITE_AUTH_ENABLED: 'true'
+      }
+    }
   },
   collectCoverage: true,
   collectCoverageFrom: [

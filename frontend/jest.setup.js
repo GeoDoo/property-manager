@@ -9,6 +9,31 @@ global.Request = require('node-fetch').Request;
 global.Response = require('node-fetch').Response;
 global.Headers = require('node-fetch').Headers;
 
+// Mock localStorage
+class LocalStorageMock {
+  constructor() {
+    this.store = {};
+  }
+
+  clear() {
+    this.store = {};
+  }
+
+  getItem(key) {
+    return this.store[key] || null;
+  }
+
+  setItem(key, value) {
+    this.store[key] = String(value);
+  }
+
+  removeItem(key) {
+    delete this.store[key];
+  }
+}
+
+global.localStorage = new LocalStorageMock();
+
 // Mock BroadcastChannel for MSW
 global.BroadcastChannel = class {
   constructor() {

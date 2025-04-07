@@ -2,7 +2,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import PropertyCard from './PropertyCard';
 import { Property } from '../../types/property';
 import { BrowserRouter } from 'react-router-dom';
-import { getFullImageUrl } from '../../config/api';
 
 // Mock the react-router-dom useNavigate hook
 const mockNavigate = jest.fn();
@@ -19,6 +18,24 @@ jest.mock('react-router-dom', () => {
 jest.mock('../../config/api', () => ({
   getFullImageUrl: jest.fn((url) => `https://mocked-url.com/${url}`)
 }));
+
+// Mock the auth context
+jest.mock('../../context/AuthContext', () => {
+  const originalModule = jest.requireActual('../../context/AuthContext');
+  return {
+    ...originalModule,
+    useAuth: () => ({
+      isAuthenticated: true,
+      isAdmin: false, // Default for most tests
+      user: { username: 'testuser', isAdmin: false },
+      login: jest.fn(),
+      logout: jest.fn(),
+      loading: false,
+      error: null
+    }),
+    AuthProvider: ({ children }: { children: React.ReactNode }) => children
+  };
+});
 
 describe('PropertyCard Component', () => {
   const mockProperty: Property = {
@@ -96,13 +113,24 @@ describe('PropertyCard Component', () => {
   });
 
   test('navigates to edit page when edit button is clicked', () => {
+    // Override the useAuth mock for this test only
+    jest.spyOn(require('../../context/AuthContext'), 'useAuth').mockImplementation(() => ({
+      isAuthenticated: true,
+      isAdmin: true, // Set admin to true for this test
+      user: { username: 'admin', isAdmin: true },
+      login: jest.fn(),
+      logout: jest.fn(),
+      loading: false,
+      error: null
+    }));
+
     render(
       <BrowserRouter>
         <PropertyCard property={mockProperty} />
       </BrowserRouter>
     );
 
-    // Click the edit button
+    // Click the edit button which is now visible
     const editButton = screen.getByText('Edit');
     fireEvent.click(editButton);
 

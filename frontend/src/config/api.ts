@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { authHeader, getToken } from '../services/authService';
 
-export const API_URL = import.meta.env.VITE_API_URL;
+// Set API URL directly to work in both environments
+export const API_URL = 'http://localhost:8081/api';
 
 // Create an axios instance with default config
 export const api = axios.create({

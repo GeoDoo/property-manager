@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { Layout } from './Layout';
 import { BrowserRouter } from 'react-router-dom';
 import { ROUTES } from '../../config/routes';
+import { AuthProvider } from '../../context/AuthContext';
 
 // Mock the react-router-dom hooks
 const mockNavigate = jest.fn();
@@ -27,18 +28,37 @@ jest.mock('../../config/routes', () => ({
   }
 }));
 
+// Mock the auth context
+jest.mock('../../context/AuthContext', () => ({
+  useAuth: () => ({
+    isAdmin: true,
+    user: { username: 'admin', isAdmin: true },
+    logout: jest.fn()
+  }),
+  AuthProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>
+}));
+
+const renderWithProviders = (ui: React.ReactElement) => {
+  return render(
+    <BrowserRouter>
+      <AuthProvider>
+        {ui}
+      </AuthProvider>
+    </BrowserRouter>
+  );
+};
+
 describe('Layout Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockLocation.pathname = '/';
   });
 
   test('renders the header with logo', () => {
-    render(
-      <BrowserRouter>
-        <Layout>
-          <div data-testid="child-content">Test content</div>
-        </Layout>
-      </BrowserRouter>
+    renderWithProviders(
+      <Layout>
+        <div data-testid="child-content">Test content</div>
+      </Layout>
     );
 
     expect(screen.getByText('Property Manager')).toBeInTheDocument();
@@ -46,27 +66,23 @@ describe('Layout Component', () => {
   });
 
   test('renders children content', () => {
-    render(
-      <BrowserRouter>
-        <Layout>
-          <div data-testid="child-content">Test content</div>
-        </Layout>
-      </BrowserRouter>
+    renderWithProviders(
+      <Layout>
+        <div data-testid="child-content">Test content</div>
+      </Layout>
     );
 
     expect(screen.getByTestId('child-content')).toBeInTheDocument();
     expect(screen.getByText('Test content')).toBeInTheDocument();
   });
 
-  test('renders Add Property button when on home page', () => {
+  test('renders Add Property button when on home page and user is admin', () => {
     mockLocation.pathname = ROUTES.HOME;
 
-    render(
-      <BrowserRouter>
-        <Layout>
-          <div>Content</div>
-        </Layout>
-      </BrowserRouter>
+    renderWithProviders(
+      <Layout>
+        <div>Content</div>
+      </Layout>
     );
 
     const addPropertyLink = screen.getByText('Add Property');
@@ -75,31 +91,44 @@ describe('Layout Component', () => {
   });
 
   test('does not render Add Property button when not on home page', () => {
-    // Change the mock location to a non-home route
     mockLocation.pathname = '/properties/123';
 
-    render(
-      <BrowserRouter>
-        <Layout>
-          <div>Content</div>
-        </Layout>
-      </BrowserRouter>
+    renderWithProviders(
+      <Layout>
+        <div>Content</div>
+      </Layout>
+    );
+
+    expect(screen.queryByText('Add Property')).not.toBeInTheDocument();
+  });
+
+  test('does not render Add Property button when user is not admin', () => {
+    // Override the auth mock for this test
+    jest.spyOn(require('../../context/AuthContext'), 'useAuth').mockImplementation(() => ({
+      isAdmin: false,
+      user: { username: 'user', isAdmin: false },
+      logout: jest.fn()
+    }));
+
+    mockLocation.pathname = ROUTES.HOME;
+
+    renderWithProviders(
+      <Layout>
+        <div>Content</div>
+      </Layout>
     );
 
     expect(screen.queryByText('Add Property')).not.toBeInTheDocument();
   });
 
   test('applies correct styles to layout container', () => {
-    render(
-      <BrowserRouter>
-        <Layout>
-          <div>Content</div>
-        </Layout>
-      </BrowserRouter>
+    renderWithProviders(
+      <Layout>
+        <div>Content</div>
+      </Layout>
     );
 
-    // Check that the main layout container has the expected classes
-    const container = screen.getByText('Content').closest('div.min-h-screen');
+    const container = screen.getByText('Content').closest('.min-h-screen');
     expect(container).toHaveClass('min-h-screen');
     expect(container).toHaveClass('pb-8');
   });
