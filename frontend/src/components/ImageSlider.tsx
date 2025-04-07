@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState, MouseEvent } from 'react';
 import { Image } from '../types/property';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';

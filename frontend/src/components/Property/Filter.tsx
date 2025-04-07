@@ -1,3 +1,4 @@
+import React from 'react';
 import { FC, useEffect, useRef, useState, ChangeEvent } from 'react';
 
 interface FilterProps {

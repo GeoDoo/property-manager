@@ -1,4 +1,6 @@
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import { ImageSlider } from './ImageSlider';
 import { Image } from '../types/property';
 import { getFullImageUrl } from '../config/api';
