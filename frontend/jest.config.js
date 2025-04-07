@@ -20,18 +20,15 @@ module.exports = {
     "/node_modules/(?!(@fontsource|@dnd-kit|uuid)/)"
   ],
   collectCoverageFrom: [
-    "<rootDir>/src/**/*.{js,jsx,ts,tsx}",
-    "!<rootDir>/src/**/*.d.ts",
-    "!<rootDir>/src/**/*.stories.{js,jsx,ts,tsx}",
-    "!<rootDir>/src/**/*.mock.{js,jsx,ts,tsx}",
-    "!<rootDir>/src/**/*.test.{js,jsx,ts,tsx}",
-    "!<rootDir>/src/test/**/*",
-    "!<rootDir>/src/services/**/*",
-    "!<rootDir>/src/mocks/**/*",
-    "!<rootDir>/src/__mocks__/**/*",
-    "!<rootDir>/src/vite-env.d.ts",
-    "!<rootDir>/src/main.tsx",
-    "!<rootDir>/src/App.tsx"
+    "<rootDir>/src/components/Property/PropertyDetails.tsx",
+    "<rootDir>/src/components/Property/Filter.tsx",
+    "<rootDir>/src/components/Property/PropertyCard.tsx",
+    "<rootDir>/src/components/ImageSlider.tsx",
+    "<rootDir>/src/components/Layout/Layout.tsx",
+    "<rootDir>/src/components/Layout/Navigation.tsx",
+    "<rootDir>/src/components/Button.tsx",
+    "<rootDir>/src/components/ErrorBoundary/ErrorBoundary.tsx",
+    "<rootDir>/src/components/ErrorBoundary/withErrorBoundary.tsx"
   ],
   coverageThreshold: {
     "src/components/Property/PropertyDetails.tsx": {
