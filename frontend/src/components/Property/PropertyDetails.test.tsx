@@ -4,12 +4,11 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { PropertyDetails } from './PropertyDetails';
 import { propertyService } from '../../services/propertyService';
 import { useAuth } from '../../context/AuthContext';
-import type { Property } from '../../types/property';
 
 // Mock dependencies
 jest.mock('react-router-dom', () => ({
   useParams: jest.fn(),
-  useNavigate: jest.fn()
+  useNavigate: jest.fn(() => jest.fn())
 }));
 
 jest.mock('../../context/AuthContext', () => ({
@@ -64,10 +63,13 @@ const renderWithQueryClient = (ui: React.ReactElement) => {
 };
 
 describe('PropertyDetails Component', () => {
+  const mockNavigate = jest.fn();
+  
   beforeEach(() => {
     (useParams as jest.Mock).mockReturnValue({ id: '1' });
-    (useNavigate as jest.Mock).mockReturnValue(jest.fn());
+    (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
     (useAuth as jest.Mock).mockReturnValue({ user: { username: 'admin', isAdmin: true } });
+    jest.clearAllMocks();
   });
 
   it('renders loading state initially', () => {
@@ -126,5 +128,51 @@ describe('PropertyDetails Component', () => {
 
     // Check image slider
     expect(screen.getByTestId('mock-image-slider')).toHaveTextContent('1 images mocked');
+  });
+
+  it('handles property with missing data gracefully', async () => {
+    const propertyWithMissingData = {
+      ...mockProperty,
+      description: undefined,
+      squareFootage: 0,
+      images: []
+    };
+    
+    (propertyService.getById as jest.Mock).mockResolvedValue(propertyWithMissingData);
+    renderWithQueryClient(<PropertyDetails />);
+
+    // Wait for property to load
+    await waitFor(() => {
+      expect(screen.getByText('£250,000')).toBeInTheDocument();
+    });
+
+    // Should show 0 for square footage
+    expect(screen.getByText(/0 sq ft/i)).toBeInTheDocument();
+    expect(screen.getByText(/0 sq m/i)).toBeInTheDocument();
+
+    // Should show "No description available" for missing description
+    expect(screen.getByText(/no description available/i)).toBeInTheDocument();
+
+    // Should handle empty images array
+    expect(screen.getByTestId('mock-image-slider')).toHaveTextContent('0 images mocked');
+  });
+
+  it('shows error message when property id is invalid', async () => {
+    // Set an invalid ID
+    (useParams as jest.Mock).mockReturnValue({ id: 'invalid' });
+    (propertyService.getById as jest.Mock).mockRejectedValue(new Error('Invalid property ID'));
+    
+    // Suppress console errors
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+    
+    renderWithQueryClient(<PropertyDetails />);
+    
+    await waitFor(() => {
+      const errorElement = screen.getByText(/error loading property details/i);
+      expect(errorElement).toBeInTheDocument();
+    }, { timeout: 3000 });
+    
+    // Restore console
+    (console.error as jest.Mock).mockRestore();
   });
 }); 

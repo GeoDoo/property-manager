@@ -18,12 +18,21 @@ const Login: React.FC = () => {
       return;
     }
 
+    console.log('Attempting login with:', { username, password });
+
     try {
       setLoading(true);
       setError(null);
-      await login({ username, password });
-      navigate('/'); // Redirect to home page after successful login
+      const result = await login(username, password);
+      console.log('Login result:', result);
+      
+      if (result) {
+        navigate('/'); // Redirect to home page after successful login
+      } else {
+        setError('Login failed. Please check your credentials.');
+      }
     } catch (err) {
+      console.error('Login error caught in component:', err);
       if (err instanceof Error) {
         setError(err.message);
       } else {
