@@ -1,4 +1,6 @@
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Navigation } from './Navigation';
 import { useAuth } from '../../context/AuthContext';

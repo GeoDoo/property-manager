@@ -1,3 +1,4 @@
+import React from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { ROUTES } from '../../config/routes';
 import { useAuth } from '../../context/AuthContext';
