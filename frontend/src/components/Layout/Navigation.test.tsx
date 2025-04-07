@@ -87,15 +87,13 @@ describe('Navigation Component', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/');
   });
 
-  it('renders Add Property link when user is admin and on homepage', () => {
+  it('renders Add Property link when user is admin', () => {
     (useAuth as jest.Mock).mockReturnValue({
       user: { username: 'admin', isAdmin: true },
       isAdmin: true,
       logout: mockLogout
     });
     
-    (useLocation as jest.Mock).mockReturnValue({ pathname: '/' });
-
     render(<Navigation />);
     
     // Check Add Property link is shown
@@ -105,20 +103,22 @@ describe('Navigation Component', () => {
     expect(addPropertyLink).toHaveAttribute('href', '/properties/new');
   });
 
-  it('does not render Add Property link when user is admin but not on homepage', () => {
+  it('renders Add Property link when user is admin on any page', () => {
     (useAuth as jest.Mock).mockReturnValue({
       user: { username: 'admin', isAdmin: true },
       isAdmin: true,
       logout: mockLogout
     });
     
+    // Set a non-home page path
     (useLocation as jest.Mock).mockReturnValue({ pathname: '/properties/1' });
 
     render(<Navigation />);
     
-    // Check Add Property link is not shown
+    // Check Add Property link is shown even on non-home pages
     const links = screen.getAllByTestId('mock-link');
     const addPropertyLink = links.find(link => link.textContent === 'Add Property');
-    expect(addPropertyLink).toBeUndefined();
+    expect(addPropertyLink).toBeInTheDocument();
+    expect(addPropertyLink).toHaveAttribute('href', '/properties/new');
   });
 }); 
