@@ -88,6 +88,25 @@ class ImageServiceTest {
         assertThat(savedImage.getProperty()).isEqualTo(testProperty);
         verify(imageRepository).save(any(Image.class));
     }
+    
+    @Test
+    void saveImage_ShouldCreateUploadDirectoryIfNotExists() throws IOException {
+        // Given
+        Path nonExistentPath = tempDir.resolve("nonexistent");
+        ReflectionTestUtils.setField(imageService, "uploadPath", nonExistentPath.toString());
+        
+        when(propertyRepository.findById(1L)).thenReturn(Optional.of(testProperty));
+        when(imageRepository.save(any(Image.class))).thenReturn(testImage);
+
+        // When
+        Image savedImage = imageService.saveImage(testFile, 1L);
+
+        // Then
+        assertThat(savedImage).isNotNull();
+        assertThat(Files.exists(nonExistentPath)).isTrue();
+        assertThat(Files.isDirectory(nonExistentPath)).isTrue();
+        verify(imageRepository).save(any(Image.class));
+    }
 
     @Test
     void saveImage_WithInvalidProperty_ShouldThrowException() {
@@ -113,6 +132,28 @@ class ImageServiceTest {
         assertThrows(IllegalArgumentException.class, () ->
             imageService.saveImage(invalidFile, 1L));
     }
+    
+    @Test
+    void saveImage_WithNullFile_ShouldThrowException() {
+        // When/Then
+        assertThrows(IllegalArgumentException.class, () ->
+            imageService.saveImage(null, 1L));
+    }
+    
+    @Test
+    void saveImage_WithEmptyFile_ShouldThrowException() {
+        // Given
+        MockMultipartFile emptyFile = new MockMultipartFile(
+            "file",
+            "empty.jpg",
+            "image/jpeg",
+            new byte[0]
+        );
+
+        // When/Then
+        assertThrows(IllegalArgumentException.class, () ->
+            imageService.saveImage(emptyFile, 1L));
+    }
 
     @Test
     void deleteImage_ShouldDeleteSuccessfully() throws IOException {
@@ -128,7 +169,19 @@ class ImageServiceTest {
         verify(imageRepository).delete(testImage);
         assertThat(Files.exists(imagePath)).isFalse();
     }
+    
+    @Test
+    void deleteImage_WhenFileNotFound_ShouldStillDeleteFromDb() throws IOException {
+        // Given - file doesn't exist on disk but exists in DB
+        when(imageRepository.findById(1L)).thenReturn(Optional.of(testImage));
 
+        // When
+        imageService.deleteImage(1L);
+
+        // Then
+        verify(imageRepository).delete(testImage);
+    }
+    
     @Test
     void deleteImage_WithNonExistentImage_ShouldThrowException() {
         // Given
@@ -176,6 +229,48 @@ class ImageServiceTest {
         // Then
         assertThat(response.getStatusCodeValue()).isEqualTo(200);
         assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.IMAGE_JPEG);
+    }
+    
+    @Test
+    void serveImage_WithPngFile_ShouldReturnPngContentType() throws IOException {
+        // Given
+        Path imagePath = tempDir.resolve("test.png");
+        Files.write(imagePath, "test content".getBytes());
+
+        // When
+        ResponseEntity<Resource> response = imageService.serveImage("test.png");
+
+        // Then
+        assertThat(response.getStatusCodeValue()).isEqualTo(200);
+        assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.IMAGE_PNG);
+    }
+    
+    @Test
+    void serveImage_WithGifFile_ShouldReturnGifContentType() throws IOException {
+        // Given
+        Path imagePath = tempDir.resolve("test.gif");
+        Files.write(imagePath, "test content".getBytes());
+
+        // When
+        ResponseEntity<Resource> response = imageService.serveImage("test.gif");
+
+        // Then
+        assertThat(response.getStatusCodeValue()).isEqualTo(200);
+        assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.IMAGE_GIF);
+    }
+    
+    @Test
+    void serveImage_WithWebPFile_ShouldReturnWebPContentType() throws IOException {
+        // Given
+        Path imagePath = tempDir.resolve("test.webp");
+        Files.write(imagePath, "test content".getBytes());
+
+        // When
+        ResponseEntity<Resource> response = imageService.serveImage("test.webp");
+
+        // Then
+        assertThat(response.getStatusCodeValue()).isEqualTo(200);
+        assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.parseMediaType("image/webp"));
     }
 
     @Test

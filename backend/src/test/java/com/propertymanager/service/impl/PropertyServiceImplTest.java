@@ -325,4 +325,336 @@ class PropertyServiceImplTest {
                 .containsExactlyElementsOf(testProperties);
         verify(propertyRepository).findAll(any(Specification.class), any(Pageable.class));
     }
+    
+    @Test
+    void createProperty_WithEmptyAddress_ShouldThrowException() {
+        // Arrange
+        Property invalidProperty = Property.builder()
+                .address("")  // Empty address
+                .description("Test Property")
+                .price(200000.0)
+                .bedrooms(3)
+                .bathrooms(2)
+                .squareFootage(1500.0)
+                .build();
+                
+        // Act & Assert
+        assertThatThrownBy(() -> propertyService.createProperty(invalidProperty))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Address is required");
+                
+        verify(propertyRepository, never()).save(any(Property.class));
+    }
+    
+    @Test
+    void createProperty_WithNullAddress_ShouldThrowException() {
+        // Arrange
+        Property invalidProperty = Property.builder()
+                .address(null)  // Null address
+                .description("Test Property")
+                .price(200000.0)
+                .bedrooms(3)
+                .bathrooms(2)
+                .squareFootage(1500.0)
+                .build();
+                
+        // Act & Assert
+        assertThatThrownBy(() -> propertyService.createProperty(invalidProperty))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Address is required");
+                
+        verify(propertyRepository, never()).save(any(Property.class));
+    }
+    
+    @Test
+    void createProperty_WithZeroPrice_ShouldThrowException() {
+        // Arrange
+        Property invalidProperty = Property.builder()
+                .address("123 Test St")
+                .description("Test Property")
+                .price(0.0)  // Zero price
+                .bedrooms(3)
+                .bathrooms(2)
+                .squareFootage(1500.0)
+                .build();
+                
+        // Act & Assert
+        assertThatThrownBy(() -> propertyService.createProperty(invalidProperty))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Price must be greater than 0");
+                
+        verify(propertyRepository, never()).save(any(Property.class));
+    }
+    
+    @Test
+    void createProperty_WithNegativePrice_ShouldThrowException() {
+        // Arrange
+        Property invalidProperty = Property.builder()
+                .address("123 Test St")
+                .description("Test Property")
+                .price(-100000.0)  // Negative price
+                .bedrooms(3)
+                .bathrooms(2)
+                .squareFootage(1500.0)
+                .build();
+                
+        // Act & Assert
+        assertThatThrownBy(() -> propertyService.createProperty(invalidProperty))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Price must be greater than 0");
+                
+        verify(propertyRepository, never()).save(any(Property.class));
+    }
+    
+    @Test
+    void createProperty_WithZeroBedrooms_ShouldThrowException() {
+        // Arrange
+        Property invalidProperty = Property.builder()
+                .address("123 Test St")
+                .description("Test Property")
+                .price(200000.0)
+                .bedrooms(0)  // Zero bedrooms
+                .bathrooms(2)
+                .squareFootage(1500.0)
+                .build();
+                
+        // Act & Assert
+        assertThatThrownBy(() -> propertyService.createProperty(invalidProperty))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("bedrooms must be greater than 0");
+                
+        verify(propertyRepository, never()).save(any(Property.class));
+    }
+    
+    @Test
+    void createProperty_WithZeroBathrooms_ShouldThrowException() {
+        // Arrange
+        Property invalidProperty = Property.builder()
+                .address("123 Test St")
+                .description("Test Property")
+                .price(200000.0)
+                .bedrooms(3)
+                .bathrooms(0)  // Zero bathrooms
+                .squareFootage(1500.0)
+                .build();
+                
+        // Act & Assert
+        assertThatThrownBy(() -> propertyService.createProperty(invalidProperty))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("bathrooms must be greater than 0");
+                
+        verify(propertyRepository, never()).save(any(Property.class));
+    }
+    
+    @Test
+    void createProperty_WithZeroSquareFootage_ShouldThrowException() {
+        // Arrange
+        Property invalidProperty = Property.builder()
+                .address("123 Test St")
+                .description("Test Property")
+                .price(200000.0)
+                .bedrooms(3)
+                .bathrooms(2)
+                .squareFootage(0.0)  // Zero square footage
+                .build();
+                
+        // Act & Assert
+        assertThatThrownBy(() -> propertyService.createProperty(invalidProperty))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Square footage must be greater than 0");
+                
+        verify(propertyRepository, never()).save(any(Property.class));
+    }
+    
+    @Test
+    void searchProperties_WithOnlyAddressFilter_ShouldReturnFilteredProperties() {
+        // Arrange
+        Page<Property> pagedResponse = createPage(testProperties);
+        when(propertyRepository.findAll(any(Specification.class), any(Pageable.class)))
+                .thenReturn(pagedResponse);
+
+        // Act - test with only address parameter
+        Page<Property> result = propertyService.searchProperties(
+                "Test St",      // address
+                null,           // minPrice
+                null,           // maxPrice
+                null,           // minSize
+                null,           // maxSize
+                null,           // minRooms
+                null,           // maxRooms
+                null,           // minBathrooms
+                null,           // maxBathrooms
+                PageRequest.of(0, 12));
+
+        // Assert
+        assertThat(result.getContent()).hasSize(2)
+                .containsExactlyElementsOf(testProperties);
+        verify(propertyRepository).findAll(any(Specification.class), any(Pageable.class));
+    }
+    
+    @Test
+    void searchProperties_WithSizeRangeFilter_ShouldReturnFilteredProperties() {
+        // Arrange
+        Page<Property> pagedResponse = createPage(testProperties);
+        when(propertyRepository.findAll(any(Specification.class), any(Pageable.class)))
+                .thenReturn(pagedResponse);
+
+        // Act - test with min and max size parameters
+        Page<Property> result = propertyService.searchProperties(
+                null,           // address
+                null,           // minPrice
+                null,           // maxPrice
+                1000.0,         // minSize
+                2500.0,         // maxSize
+                null,           // minRooms
+                null,           // maxRooms
+                null,           // minBathrooms
+                null,           // maxBathrooms
+                PageRequest.of(0, 12));
+
+        // Assert
+        assertThat(result.getContent()).hasSize(2)
+                .containsExactlyElementsOf(testProperties);
+        verify(propertyRepository).findAll(any(Specification.class), any(Pageable.class));
+    }
+    
+    @Test
+    void searchProperties_WithBathroomRangeFilter_ShouldReturnFilteredProperties() {
+        // Arrange
+        Page<Property> pagedResponse = createPage(testProperties);
+        when(propertyRepository.findAll(any(Specification.class), any(Pageable.class)))
+                .thenReturn(pagedResponse);
+
+        // Act - test with min and max bathrooms parameters
+        Page<Property> result = propertyService.searchProperties(
+                null,           // address
+                null,           // minPrice
+                null,           // maxPrice
+                null,           // minSize
+                null,           // maxSize
+                null,           // minRooms
+                null,           // maxRooms
+                1,              // minBathrooms
+                3,              // maxBathrooms
+                PageRequest.of(0, 12));
+
+        // Assert
+        assertThat(result.getContent()).hasSize(2)
+                .containsExactlyElementsOf(testProperties);
+        verify(propertyRepository).findAll(any(Specification.class), any(Pageable.class));
+    }
+    
+    @Test
+    void updateProperty_ShouldCopyAllPropertiesFromUpdatedToExisting() {
+        // Arrange
+        when(propertyRepository.findById(1L)).thenReturn(Optional.of(testProperty));
+        when(propertyRepository.save(any(Property.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Property updatedProperty = Property.builder()
+                .address("987 Updated St")
+                .description("Updated Description")
+                .price(400000.0)
+                .bedrooms(5)
+                .bathrooms(4)
+                .squareFootage(3000.0)
+                .build();
+
+        // Act
+        Property result = propertyService.updateProperty(1L, updatedProperty);
+
+        // Assert
+        assertThat(result.getAddress()).isEqualTo("987 Updated St");
+        assertThat(result.getDescription()).isEqualTo("Updated Description");
+        assertThat(result.getPrice()).isEqualTo(400000.0);
+        assertThat(result.getBedrooms()).isEqualTo(5);
+        assertThat(result.getBathrooms()).isEqualTo(4);
+        assertThat(result.getSquareFootage()).isEqualTo(3000.0);
+        verify(propertyRepository).save(testProperty);
+    }
+    
+    @Test
+    void validateProperty_WithNullProperties_ShouldThrowExceptions() {
+        // Arrange
+        Property invalidProperty = Property.builder()
+                .address("123 Test St")
+                .description("Test Property")
+                .price(null)         // Null price
+                .bedrooms(null)      // Null bedrooms
+                .bathrooms(null)     // Null bathrooms
+                .squareFootage(null) // Null square footage
+                .build();
+                
+        // Act & Assert - test null price
+        assertThatThrownBy(() -> propertyService.createProperty(invalidProperty))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Price must be greater than 0");
+                
+        // Update property to test next null value
+        invalidProperty.setPrice(200000.0);
+        
+        // Test null bedrooms
+        assertThatThrownBy(() -> propertyService.createProperty(invalidProperty))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("bedrooms must be greater than 0");
+                
+        // Update property to test next null value
+        invalidProperty.setBedrooms(3);
+        
+        // Test null bathrooms
+        assertThatThrownBy(() -> propertyService.createProperty(invalidProperty))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("bathrooms must be greater than 0");
+                
+        // Update property to test last null value
+        invalidProperty.setBathrooms(2);
+        
+        // Test null square footage
+        assertThatThrownBy(() -> propertyService.createProperty(invalidProperty))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Square footage must be greater than 0");
+    }
+    
+    @Test
+    void validateSearchParameters_WithNegativeMaxPrice_ShouldThrowException() {
+        // Act & Assert
+        assertThatThrownBy(() -> propertyService.searchProperties(
+                null,           // address
+                null,           // minPrice
+                -200000.0,      // maxPrice (negative)
+                null,           // minSize
+                null,           // maxSize
+                null,           // minRooms
+                null,           // maxRooms
+                null,           // minBathrooms
+                null,           // maxBathrooms
+                PageRequest.of(0, 12)))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Maximum price cannot be negative");
+    }
+    
+    @Test
+    void searchProperties_WithUnsupportedPagination_ShouldHandleGracefully() {
+        // Arrange
+        Page<Property> pagedResponse = createPage(testProperties);
+        when(propertyRepository.findAll(any(Specification.class), any(Pageable.class)))
+                .thenReturn(pagedResponse);
+
+        // Act - test with extreme pagination values
+        Page<Property> result = propertyService.searchProperties(
+                null,           // address
+                null,           // minPrice
+                null,           // maxPrice
+                null,           // minSize
+                null,           // maxSize
+                null,           // minRooms
+                null,           // maxRooms
+                null,           // minBathrooms
+                null,           // maxBathrooms
+                PageRequest.of(100, 1000)); // Unreasonable pagination
+
+        // Assert - should still work without throwing exceptions
+        assertThat(result.getContent()).hasSize(2)
+                .containsExactlyElementsOf(testProperties);
+        verify(propertyRepository).findAll(any(Specification.class), any(Pageable.class));
+    }
 } 
