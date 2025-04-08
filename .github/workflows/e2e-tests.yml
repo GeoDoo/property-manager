@@ -78,13 +78,15 @@ jobs:
           cd frontend
           npm ci
           npm install cypress --save-dev
+          npm install wait-on --save-dev
       
       - name: Start frontend
         run: |
           cd frontend
-          npm run build
-          npx serve -s dist &
-          sleep 10  # Wait for frontend to start
+          npx vite --host 0.0.0.0 &
+          echo "Waiting for frontend to start..."
+          # Wait for the server to be available
+          npx wait-on http://localhost:5173 -t 60000
       
       # Run Cypress tests
       - name: Cypress run
