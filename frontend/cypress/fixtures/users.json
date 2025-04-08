@@ -1,0 +1,18 @@
+{
+  "admin": {
+    "username": "admin",
+    "password": "admin123",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYxNjc2NzA3OCwiZXhwIjoxNjE2ODUzNDc4LCJyb2xlcyI6WyJST0xFX0FETUlOIl19.KZkW9x3bNMDJnMNHIZRhcZkEw4WJhp8SoYQy2ZiS2Hk",
+    "isAdmin": true
+  },
+  "user": {
+    "username": "user",
+    "password": "user123",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNjE2NzY3MDc4LCJleHAiOjE2MTY4NTM0NzgsInJvbGVzIjpbIlJPTEVfVVNFUiJdfQ.GUAcMvJ9LAFm3lJxmM6hJypEbzJJyLH2tBxl-gJ8iy0",
+    "isAdmin": false
+  },
+  "invalidUser": {
+    "username": "invalid",
+    "password": "wrongpassword"
+  }
+} 

@@ -1,0 +1,55 @@
+{
+  "content": [
+    {
+      "id": 1,
+      "address": "1 Kensington Gardens, London W8 4PX",
+      "description": "Luxury apartment in the heart of Kensington",
+      "price": 1250000,
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "squareFootage": 1800,
+      "images": [
+        {
+          "id": 1,
+          "fileName": "test-image-1.jpg",
+          "contentType": "image/jpeg",
+          "url": "/images/test-image-1.jpg"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "address": "15 Chelsea Harbour, London SW10 0XG",
+      "description": "Modern penthouse with river views",
+      "price": 2350000,
+      "bedrooms": 4,
+      "bathrooms": 3,
+      "squareFootage": 2400,
+      "images": [
+        {
+          "id": 2,
+          "fileName": "test-image-2.jpg",
+          "contentType": "image/jpeg",
+          "url": "/images/test-image-2.jpg"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "address": "22 Notting Hill Gate, London W11 3JE",
+      "description": "Charming townhouse in trendy Notting Hill",
+      "price": 1850000,
+      "bedrooms": 4,
+      "bathrooms": 2,
+      "squareFootage": 2100,
+      "images": []
+    }
+  ],
+  "totalElements": 3,
+  "totalPages": 1,
+  "size": 10,
+  "number": 0,
+  "first": true,
+  "last": true,
+  "empty": false
+} 
