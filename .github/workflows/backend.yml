@@ -45,7 +45,7 @@ jobs:
           TESTCONTAINERS_RYUK_DISABLED: true
         run: |
           cd backend
-          ./gradlew test jacocoTestReport --info
+          ./gradlew test jacocoTestReport jacocoTestCoverageVerification --info
 
       - name: Generate JaCoCo Badges
         id: jacoco
@@ -82,6 +82,20 @@ jobs:
         with:
           name: jacoco-report
           path: backend/build/reports/jacoco/
+          retention-days: 30
+          
+      - name: Upload test coverage improvement plan
+        if: always()
+        run: |
+          cd backend
+          ./gradlew testCoverageImprovementPlan
+
+      - name: Upload improvement plan
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-improvement-plan
+          path: backend/build/reports/test-coverage-improvement-plan.md
           retention-days: 30
 
   deploy-pages:

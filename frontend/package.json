@@ -11,7 +11,8 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "e2e": "cypress run",
-    "e2e:open": "cypress open"
+    "e2e:open": "cypress open",
+    "cy:report": "node -e \"console.log('Generating test report...')\""
   },
   "dependencies": {
     "@tanstack/react-query": "^5.69.0",

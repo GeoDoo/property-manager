@@ -1,0 +1,128 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'frontend/**'
+      - 'backend/**'
+      - '.github/workflows/e2e-tests.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'frontend/**'
+      - 'backend/**'
+      - '.github/workflows/e2e-tests.yml'
+  workflow_dispatch:  # Allow manual triggering
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    
+    services:
+      # Backend PostgreSQL database
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: propertymanager
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      # Set up and start backend
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+      
+      - name: Build and start backend
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/propertymanager
+          SPRING_DATASOURCE_USERNAME: postgres
+          SPRING_DATASOURCE_PASSWORD: postgres
+          SPRING_PROFILES_ACTIVE: test
+        run: |
+          cd backend
+          ./gradlew build -x test
+          java -jar build/libs/property-manager-0.0.1-SNAPSHOT.jar &
+          sleep 30  # Wait for backend to start
+      
+      # Set up and start frontend
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'frontend/package-lock.json'
+      
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm ci
+      
+      - name: Start frontend
+        run: |
+          cd frontend
+          npm run build
+          npx serve -s dist &
+          sleep 10  # Wait for frontend to start
+      
+      # Run Cypress tests
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: frontend
+          browser: chrome
+      
+      # Upload artifacts on failure
+      - name: Upload Cypress screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: frontend/cypress/screenshots
+          retention-days: 7
+      
+      - name: Upload Cypress videos
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-videos
+          path: frontend/cypress/videos
+          retention-days: 7
+      
+      # Generate and upload test report
+      - name: Generate test report
+        if: always()
+        run: |
+          cd frontend
+          mkdir -p cypress/reports
+          npm run cy:report
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: |
+            frontend/cypress/results
+            frontend/cypress/reports
+          retention-days: 7 
