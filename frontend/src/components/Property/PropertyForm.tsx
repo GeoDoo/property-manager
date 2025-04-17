@@ -3,7 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { propertyService, ValidationError } from '../../services/propertyService';
 import { Property, Image } from '../../types/property';
-import { Layout } from '../Layout/Layout';
 import { ROUTES } from '../../config/routes';
 import { getFullImageUrl } from '../../config/api';
 
@@ -178,75 +177,160 @@ export function PropertyForm() {
 
   if (isLoadingProperty && id) {
     return (
-      <Layout>
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#262637]"></div>
-        </div>
-      </Layout>
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#262637]"></div>
+      </div>
     );
   }
 
   return (
-    <Layout>
-      <div className="rounded-xl overflow-hidden">
-        <div className="py-6">
-          <div className="flex justify-between items-start mb-6">
-            <h1 className="text-2xl font-bold text-[#262637]">
-              {id ? 'Edit Property' : 'Add New Property'}
-            </h1>
-          </div>
+    <div className="rounded-xl overflow-hidden">
+      <div className="py-6">
+        <div className="flex justify-between items-start mb-6">
+          <h1 className="text-2xl font-bold text-[#262637]">
+            {id ? 'Edit Property' : 'Add New Property'}
+          </h1>
+        </div>
 
-          {error && (
-            <div className="border-2 border-red-500 p-4 mt-6 rounded-xl">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg className="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm text-red-700">{error}</p>
-                </div>
+        {error && (
+          <div className="border-2 border-red-500 p-4 mt-6 rounded-xl">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <svg className="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <p className="text-sm text-red-700">{error}</p>
               </div>
             </div>
-          )}
+          </div>
+        )}
 
-          <form onSubmit={handleSubmit} className="mt-6">
-            <div className="space-y-6">
+        <form onSubmit={handleSubmit} className="mt-6">
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-[#262637] mb-2">Address</label>
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                className={`block w-full rounded-xl border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
+                  validationErrors.address ? 'border-red-500' : 'border-[#e5e5e5] focus:border-[#00deb6]'
+                }`}
+                required
+              />
+              {validationErrors.address && (
+                <p className="mt-1 text-sm text-red-600">{validationErrors.address}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-[#262637] mb-2">Description</label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                rows={4}
+                className={`block w-full rounded-xl border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
+                  validationErrors.description ? 'border-red-500' : 'border-[#e5e5e5] focus:border-[#00deb6]'
+                }`}
+                required
+              />
+              {validationErrors.description && (
+                <p className="mt-1 text-sm text-red-600">{validationErrors.description}</p>
+              )}
+            </div>
+
+            <div className="grid grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-[#262637] mb-2">Address</label>
+                <label className="block text-sm font-medium text-[#262637] mb-2">Price</label>
                 <input
-                  type="text"
-                  name="address"
-                  value={formData.address}
+                  type="number"
+                  name="price"
+                  value={formData.price}
                   onChange={handleChange}
+                  min="0"
                   className={`block w-full rounded-xl border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
-                    validationErrors.address ? 'border-red-500' : 'border-[#e5e5e5] focus:border-[#00deb6]'
+                    validationErrors.price ? 'border-red-500' : 'border-[#e5e5e5] focus:border-[#00deb6]'
                   }`}
                   required
                 />
-                {validationErrors.address && (
-                  <p className="mt-1 text-sm text-red-600">{validationErrors.address}</p>
+                {validationErrors.price && (
+                  <p className="mt-1 text-sm text-red-600">{validationErrors.price}</p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[#262637] mb-2">Description</label>
-                <textarea
-                  name="description"
-                  value={formData.description}
+                <label className="block text-sm font-medium text-[#262637] mb-2">Square Footage</label>
+                <input
+                  type="number"
+                  name="squareFootage"
+                  value={formData.squareFootage}
                   onChange={handleChange}
-                  rows={4}
+                  min="0"
                   className={`block w-full rounded-xl border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
-                    validationErrors.description ? 'border-red-500' : 'border-[#e5e5e5] focus:border-[#00deb6]'
+                    validationErrors.squareFootage ? 'border-red-500' : 'border-[#e5e5e5] focus:border-[#00deb6]'
                   }`}
                   required
                 />
-                {validationErrors.description && (
-                  <p className="mt-1 text-sm text-red-600">{validationErrors.description}</p>
+                {validationErrors.squareFootage && (
+                  <p className="mt-1 text-sm text-red-600">{validationErrors.squareFootage}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-[#262637] mb-2">Bedrooms</label>
+                <input
+                  type="number"
+                  name="bedrooms"
+                  value={formData.bedrooms}
+                  onChange={handleChange}
+                  min="0"
+                  className={`block w-full rounded-xl border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
+                    validationErrors.bedrooms ? 'border-red-500' : 'border-[#e5e5e5] focus:border-[#00deb6]'
+                  }`}
+                  required
+                />
+                {validationErrors.bedrooms && (
+                  <p className="mt-1 text-sm text-red-600">{validationErrors.bedrooms}</p>
                 )}
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-[#262637] mb-2">Bathrooms</label>
+                <input
+                  type="number"
+                  name="bathrooms"
+                  value={formData.bathrooms}
+                  onChange={handleChange}
+                  min="0"
+                  className={`block w-full rounded-xl border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
+                    validationErrors.bathrooms ? 'border-red-500' : 'border-[#e5e5e5] focus:border-[#00deb6]'
+                  }`}
+                  required
+                />
+                {validationErrors.bathrooms && (
+                  <p className="mt-1 text-sm text-red-600">{validationErrors.bathrooms}</p>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-[#262637] mb-2">Images</label>
+              {formData.images.length > 0 && (
+                <div className="mb-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {formData.images.map((image, index) => (
+                    <div key={index} className="relative group">
+                      <img
+                        src={getFullImageUrl(image.url)}
+                        alt={`Property image ${index + 1}`}
+                        className="w-full h-32 object-cover rounded-xl"
+                      />
+                      <button
               <div className="grid grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-[#262637] mb-2">Price</label>

@@ -6,7 +6,6 @@ import PropertyCard from './PropertyCard';
 import Filter from './Filter';
 import { Property } from '../../types/property';
 import { fetchProperties } from '../../services/api';
-import { Layout } from '../Layout/Layout';
 
 // Validation and sanitization functions
 const sanitizeString = (str: string | null): string => {
@@ -61,22 +60,18 @@ const PropertyList: FC = () => {
 
   if (isLoading) {
     return (
-      <Layout>
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-500"></div>
-        </div>
-      </Layout>
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-500"></div>
+      </div>
     );
   }
 
   if (error) {
     console.error('Error loading properties:', error);
     return (
-      <Layout>
-        <div className="text-center text-red-500 p-4">
-          Error loading properties. Please try again later.
-        </div>
-      </Layout>
+      <div className="text-center text-red-500 p-4">
+        Error loading properties. Please try again later.
+      </div>
     );
   }
 
@@ -85,7 +80,7 @@ const PropertyList: FC = () => {
   const currentPage = data?.number || 0;
 
   return (
-    <Layout>
+    <>
       <div className="py-6">
         <Filter onFilterChange={handleFilterChange} initialFilters={filters} />
       </div>
@@ -125,7 +120,7 @@ const PropertyList: FC = () => {
           </nav>
         </div>
       )}
-    </Layout>
+    </>
   );
 };
 

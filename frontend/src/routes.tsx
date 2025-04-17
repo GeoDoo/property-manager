@@ -7,14 +7,15 @@ import { ROUTES } from './config/routes';
 import Login from './components/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import { withErrorBoundary } from './components/ErrorBoundary/withErrorBoundary';
+import { Layout } from './components/Layout/Layout';
 
 const RootLayout = () => {
     return (
         <>
             <ScrollRestoration />
-            <div>
+            <Layout>
                 <Outlet />
-            </div>
+            </Layout>
         </>
     );
 };
