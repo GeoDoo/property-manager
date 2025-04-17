@@ -331,119 +331,30 @@ export function PropertyForm() {
                         className="w-full h-32 object-cover rounded-xl"
                       />
                       <button
-              <div className="grid grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-[#262637] mb-2">Price</label>
-                  <input
-                    type="number"
-                    name="price"
-                    value={formData.price}
-                    onChange={handleChange}
-                    min="0"
-                    className={`block w-full rounded-xl border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
-                      validationErrors.price ? 'border-red-500' : 'border-[#e5e5e5] focus:border-[#00deb6]'
-                    }`}
-                    required
-                  />
-                  {validationErrors.price && (
-                    <p className="mt-1 text-sm text-red-600">{validationErrors.price}</p>
-                  )}
+                        type="button"
+                        onClick={() => handleRemoveImage(image)}
+                        className="absolute top-2 right-2 bg-[#e60000] text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                        </svg>
+                      </button>
+                    </div>
+                  ))}
                 </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-[#262637] mb-2">Square Footage</label>
-                  <input
-                    type="number"
-                    name="squareFootage"
-                    value={formData.squareFootage}
-                    onChange={handleChange}
-                    min="0"
-                    className={`block w-full rounded-xl border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
-                      validationErrors.squareFootage ? 'border-red-500' : 'border-[#e5e5e5] focus:border-[#00deb6]'
-                    }`}
-                    required
-                  />
-                  {validationErrors.squareFootage && (
-                    <p className="mt-1 text-sm text-red-600">{validationErrors.squareFootage}</p>
-                  )}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-[#262637] mb-2">Bedrooms</label>
-                  <input
-                    type="number"
-                    name="bedrooms"
-                    value={formData.bedrooms}
-                    onChange={handleChange}
-                    min="0"
-                    className={`block w-full rounded-xl border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
-                      validationErrors.bedrooms ? 'border-red-500' : 'border-[#e5e5e5] focus:border-[#00deb6]'
-                    }`}
-                    required
-                  />
-                  {validationErrors.bedrooms && (
-                    <p className="mt-1 text-sm text-red-600">{validationErrors.bedrooms}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-[#262637] mb-2">Bathrooms</label>
-                  <input
-                    type="number"
-                    name="bathrooms"
-                    value={formData.bathrooms}
-                    onChange={handleChange}
-                    min="0"
-                    className={`block w-full rounded-xl border-2 px-4 py-3 text-[#262637] focus:ring-0 transition-colors ${
-                      validationErrors.bathrooms ? 'border-red-500' : 'border-[#e5e5e5] focus:border-[#00deb6]'
-                    }`}
-                    required
-                  />
-                  {validationErrors.bathrooms && (
-                    <p className="mt-1 text-sm text-red-600">{validationErrors.bathrooms}</p>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-[#262637] mb-2">Images</label>
-                {formData.images.length > 0 && (
-                  <div className="mb-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {formData.images.map((image, index) => (
-                      <div key={index} className="relative group">
-                        <img
-                          src={getFullImageUrl(image.url)}
-                          alt={`Property image ${index + 1}`}
-                          className="w-full h-32 object-cover rounded-xl"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveImage(image)}
-                          className="absolute top-2 right-2 bg-[#e60000] text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                          </svg>
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                <input
-                  type="file"
-                  onChange={handleFileChange}
-                  multiple
-                  accept="image/*"
-                  className="block w-full text-sm text-[#666666]
-                    file:mr-4 file:py-3 file:px-4
-                    file:rounded-xl file:border-0
-                    file:text-sm file:font-medium
-                    file:bg-[#00deb6] file:text-white
-                    hover:file:bg-[#00c5a0]"
-                />
-              </div>
+              )}
+              <input
+                type="file"
+                onChange={handleFileChange}
+                multiple
+                accept="image/*"
+                className="block w-full text-sm text-[#666666]
+                  file:mr-4 file:py-3 file:px-4
+                  file:rounded-xl file:border-0
+                  file:text-sm file:font-medium
+                  file:bg-[#00deb6] file:text-white
+                  hover:file:bg-[#00c5a0]"
+              />
             </div>
 
             <div className="mt-8 flex items-center justify-end space-x-4">
@@ -462,9 +373,9 @@ export function PropertyForm() {
                 {propertyMutation.isPending || uploadProgress ? 'Saving...' : id ? 'Update Property' : 'Add Property'}
               </button>
             </div>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
-    </Layout>
+    </div>
   );
 } 
