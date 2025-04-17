@@ -170,7 +170,7 @@ export function PropertyForm() {
         ...prev,
         images: prev.images.filter(img => img.id !== imageToRemove.id)
       }));
-    } catch (error) {
+    } catch {
       // Error is handled by the mutation
     }
   };
