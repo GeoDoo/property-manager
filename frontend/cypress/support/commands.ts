@@ -18,6 +18,7 @@ declare global {
       forceClick(selector: string): Chainable<void>;
       waitForPage(): Chainable<void>;
       login(): Chainable<void>;
+      loginAsAdmin(): Chainable<void>;
     }
   }
 }
@@ -70,6 +71,14 @@ Cypress.Commands.add('login', () => {
   
   // Wait for page load but don't fail if we're still on login page
   cy.waitForPage();
+});
+
+Cypress.Commands.add('loginAsAdmin', () => {
+  cy.visit('/login');
+  cy.get('[data-testid="username-input"]').type('admin');
+  cy.get('[data-testid="password-input"]').type('admin123');
+  cy.get('[data-testid="login-button"]').click();
+  cy.url().should('not.include', '/login');
 });
 
 // Empty export to make TypeScript happy

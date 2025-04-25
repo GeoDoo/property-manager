@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { propertyService } from '../../services/propertyService';
@@ -8,12 +8,15 @@ import { Button } from '../Button';
 import { ROUTES } from '../../config/routes';
 import { FaBed, FaBath, FaRulerCombined } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
+import { DeleteConfirmationDialog } from './DeleteConfirmationDialog';
 
 export function PropertyDetails() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { isAdmin } = useAuth();
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const { data: property, isLoading, error } = useQuery<Property>({
     queryKey: ['property', id],
@@ -23,9 +26,9 @@ export function PropertyDetails() {
     retryDelay: 1000,
     // Use any matching property data we already have while loading
     initialData: () => {
-      const allProperties = queryClient.getQueryData<any>(['properties']);
+      const allProperties = queryClient.getQueryData<{ content: Property[] }>(['properties']);
       if (allProperties?.content) {
-        return allProperties.content.find((p: Property) => p.id === Number(id));
+        return allProperties.content.find(p => p.id === Number(id));
       }
       return undefined;
     }
@@ -35,14 +38,24 @@ export function PropertyDetails() {
     mutationFn: propertyService.delete,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['properties'] });
-      navigate(ROUTES.HOME);
+      setSuccessMessage('Property deleted successfully');
+      setTimeout(() => {
+        navigate(ROUTES.HOME);
+      }, 1500);
     },
   });
 
   const handleDelete = () => {
-    if (window.confirm('Are you sure you want to delete this property?')) {
-      deleteMutation.mutate(Number(id));
-    }
+    setShowDeleteDialog(true);
+  };
+
+  const handleConfirmDelete = () => {
+    deleteMutation.mutate(Number(id));
+    setShowDeleteDialog(false);
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteDialog(false);
   };
 
   if (isLoading) {
@@ -71,16 +84,16 @@ export function PropertyDetails() {
   }
 
   return (
-    <div className="rounded-xl overflow-hidden">
+    <div className="rounded-xl overflow-hidden" data-testid="property-details">
       <ImageSlider images={property.images || []} />
       
       <div className="py-6">
         <div className="flex justify-between items-start">
           <div>
-            <h1 className="text-3xl font-bold text-[#262637]">
+            <h1 className="text-3xl font-bold text-[#262637]" data-testid="property-price">
               £{property.price.toLocaleString()}
             </h1>
-            <p className="text-xl text-[#262637] mt-2">
+            <p className="text-xl text-[#262637] mt-2" data-testid="property-address">
               {property.address}
             </p>
           </div>
@@ -90,6 +103,7 @@ export function PropertyDetails() {
                 onClick={() => navigate(ROUTES.PROPERTIES.EDIT(property.id!))}
                 variant="primary"
                 className="rounded-xl"
+                data-testid="edit-property-button"
               >
                 Edit property
               </Button>
@@ -97,6 +111,7 @@ export function PropertyDetails() {
                 variant="danger"
                 onClick={handleDelete}
                 className="rounded-xl"
+                data-testid="delete-property-button"
               >
                 Delete
               </Button>
@@ -136,10 +151,25 @@ export function PropertyDetails() {
 
       <div className="py-6">
         <h2 className="text-xl font-bold text-[#262637] mb-4">PROPERTY DETAILS</h2>
-        <p className="text-[#6a6a6a] leading-relaxed whitespace-pre-line">
+        <p className="text-[#6a6a6a] leading-relaxed whitespace-pre-line" data-testid="property-description">
           {property.description || 'No description available'}
         </p>
       </div>
+
+      {successMessage && (
+        <div 
+          className="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg"
+          data-testid="success-message"
+        >
+          {successMessage}
+        </div>
+      )}
+
+      <DeleteConfirmationDialog
+        isOpen={showDeleteDialog}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
     </div>
   );
 } 

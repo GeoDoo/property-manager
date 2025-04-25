@@ -60,7 +60,7 @@ const PropertyList: FC = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-64">
+      <div data-testid="loading-state" className="flex justify-center items-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-teal-500"></div>
       </div>
     );
@@ -69,7 +69,7 @@ const PropertyList: FC = () => {
   if (error) {
     console.error('Error loading properties:', error);
     return (
-      <div className="text-center text-red-500 p-4">
+      <div data-testid="error-state" className="text-center text-red-500 p-4">
         Error loading properties. Please try again later.
       </div>
     );
@@ -80,19 +80,19 @@ const PropertyList: FC = () => {
   const currentPage = data?.number || 0;
 
   return (
-    <>
-      <div className="py-6">
+    <div data-testid="property-list-container">
+      <div data-testid="property-filters" className="py-6">
         <Filter onFilterChange={handleFilterChange} initialFilters={filters} />
       </div>
 
-      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div data-testid="property-grid" className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {properties.map((property: Property) => (
           <PropertyCard key={property.id} property={property} />
         ))}
       </div>
 
       {!isLoading && (!data || data.empty) && (
-        <div className="text-center text-gray-500 py-4">
+        <div data-testid="no-results" className="text-center text-gray-500 py-4">
           No properties found matching your criteria.
         </div>
       )}
@@ -120,7 +120,7 @@ const PropertyList: FC = () => {
           </nav>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
