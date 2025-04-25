@@ -75,10 +75,12 @@ Cypress.Commands.add('login', () => {
 
 Cypress.Commands.add('loginAsAdmin', () => {
   cy.visit('/login');
-  cy.get('[data-testid="username-input"]').type('admin');
-  cy.get('[data-testid="password-input"]').type('admin123');
-  cy.get('[data-testid="login-button"]').click();
-  cy.url().should('not.include', '/login');
+  cy.get('[data-testid="username-input"]', { timeout: 10000 }).should('be.visible').type('admin');
+  cy.get('[data-testid="password-input"]', { timeout: 10000 }).should('be.visible').type('admin123');
+  cy.get('[data-testid="login-button"]', { timeout: 10000 }).should('be.visible').click();
+  cy.url({ timeout: 10000 }).should('not.include', '/login');
+  // Wait for any post-login data loading
+  cy.wait(1000);
 });
 
 // Empty export to make TypeScript happy
